@@ -1,5 +1,7 @@
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.grammarkit.tasks.GenerateLexer
+import org.jetbrains.grammarkit.tasks.GenerateParser
 
 fun properties(key: String) = project.findProperty(key).toString()
 
@@ -14,6 +16,8 @@ plugins {
     id("org.jetbrains.changelog") version "1.3.0"
     // Gradle Qodana Plugin
     id("org.jetbrains.qodana") version "0.1.12"
+    // Gradle GrammarKit Plugin
+    id("org.jetbrains.grammarkit") version "2021.1.3"
 }
 
 group = properties("pluginGroup")
@@ -23,6 +27,8 @@ version = properties("pluginVersion")
 repositories {
     mavenCentral()
 }
+
+sourceSets["main"].java.srcDirs("src/main/gen")
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
 intellij {
@@ -64,6 +70,21 @@ tasks {
 
     wrapper {
         gradleVersion = properties("gradleVersion")
+    }
+
+    register<GenerateLexer>("generateFsdLexer") {
+        source = "src/main/kotlin/io/github/facilityapi/intellij/lexer/_FsdLexer.flex"
+        targetDir = "src/main/gen/io/github/facilityapi/intellij/lexer/"
+        targetClass = "FsdLexer"
+        purgeOldFiles = true
+    }
+
+    register<GenerateParser>("generateFsdParser") {
+        source = "src/main/kotlin/io/github/facilityapi/intellij/fsd.bnf"
+        targetRoot = "src/main/gen/"
+        pathToParser = "io/github/facilityapi/intellij/parser/FsdParser.java"
+        pathToPsiRoot = "io/github/facilityapi/intellij/psi"
+        purgeOldFiles = true
     }
 
     patchPluginXml {

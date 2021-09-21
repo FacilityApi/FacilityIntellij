@@ -1,0 +1,63 @@
+{
+  parserClass="io.github.facilityapi.intellij.parser.FsdParser"
+
+  psiClassPrefix="Fsd"
+  psiImplClassSuffix="Impl"
+  psiPackage="io.github.facilityapi.intellij.psi"
+  psiImplPackage="io.github.facilityapi.intellij.psi.impl"
+
+  elementTypeHolderClass="io.github.facilityapi.intellij.psi.FsdTypes"
+  elementTypePrefix=""
+  elementTypeClass="io.github.facilityapi.intellij.psi.FsdElementType"
+  tokenTypeClass="io.github.facilityapi.intellij.psi.FsdElementType"
+
+  tokens = [
+    LEFT_PAREN='('
+    RIGHT_PAREN=')'
+    LEFT_BRACE='{'
+    RIGHT_BRACE='}'
+    LEFT_BRACKET='['
+    RIGHT_BRACKET=']'
+    LEFT_ANGLE='<'
+    RIGHT_ANGLE='>'
+    COMMA=','
+    SEMI=';'
+    COLON=':'
+
+    comment='regexp://([^\r\n]*)(\r\n?|\n|\$)'
+    space='regexp:\s+'
+    identifier='regexp:\w+'
+    typename='regexp:\w+'
+    attributename='regexp:\w+'
+    attributeparametervalue='regexp:"(([^"\\]+|\\["\\/bfnrt]|\\u[0-9a-fA-f]{4})*)"|([0-9a-zA-Z.+_-]+)'
+    number='regexp:[0-9]+(\.[0-9]*)?'
+    markdownheading='regexp:#[^\r\n]*'
+    markdowntext='regexp:.+'
+  ]
+}
+
+// Maybe comments are unnecessary to specify. GrammarKit docs suggest they are skipped.
+definition ::= service_spec comment* markdown_remarks*
+service_spec ::= comment* attribute_list* comment* service identifier service_items
+service_items ::= '{' service_item* '}' | service_item?
+private service_item ::= enum_spec | dto_spec | method_spec | error_set_spec
+
+method_spec ::= comment* attribute_list* comment* method identifier '{' field* '}' ':' '{' field* '}'
+
+dto_spec ::= comment* attribute_list* comment* data identifier '{' field* '}'
+
+field ::= comment* attribute_list* comment* identifier ':' type ';'
+type ::= (string | boolean | int32 | int64 | double | decimal | bytes | object | map | result | error | typename) [ '<' type '>' ] [ ('['']')* ]
+enum_spec ::= comment* attribute_list* comment* enum identifier enum_value_list
+enum_value_list ::= '{' enum_value (',' (enum_value | &'}'))* '}' {pin(".*")=1}
+enum_value ::= comment* attribute_list* comment* identifier
+
+error_set_spec ::= comment* attribute_list* comment* errors identifier error_list
+error_list ::= '{' error_spec (',' (error_spec | &'}'))* '}' {pin(".*")=1}
+error_spec ::= comment* attribute_list* comment* identifier
+
+attribute_list ::= '[' attribute (',' attribute)* ']'
+attribute ::= attributename [ '(' attribute_parameter (',' attribute_parameter)* ')' ]
+attribute_parameter ::= identifier ':' (attributeparametervalue | identifier)
+
+markdown_remarks ::= markdownheading | markdowntext

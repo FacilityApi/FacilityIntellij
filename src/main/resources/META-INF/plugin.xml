@@ -1,18 +1,30 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.jzbrooks.facilityintellij</id>
-    <name>FacilityIntellij</name>
-    <vendor>jzbrooks</vendor>
+    <id>com.facilityapi.fsdsupport</id>
+    <name>Facility API</name>
+    <vendor url="https://facilityapi.github.io">FacilityAPI</vendor>
 
-    <depends>com.intellij.modules.platform</depends>
+    <!-- Enable all JetBrains products -->
+    <depends>com.intellij.modules.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.jzbrooks.facilityintellij.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.jzbrooks.facilityintellij.services.MyProjectService"/>
+
+        <!-- File-Type Factory -->
+        <fileType name="FSD" extensions="fsd" implementationClass="io.github.facilityapi.intellij.FsdFileType" />
+        <internalFileTemplate name="Facility Service Definition File" />
+
+        <!-- Parser -->
+        <lang.parserDefinition
+                language="FSD"
+                implementationClass="io.github.facilityapi.intellij.parser.FsdParserDefinition" />
+
+        <!-- Syntax Highlighter -->
+        <lang.syntaxHighlighterFactory
+                language="FSD"
+                implementationClass="io.github.facilityapi.intellij.FsdSyntaxHighlighter$Factory" />
     </extensions>
 
-    <applicationListeners>
-        <listener class="com.github.jzbrooks.facilityintellij.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
 </idea-plugin>
