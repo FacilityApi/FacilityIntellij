@@ -22,6 +22,9 @@
         <lang.syntaxHighlighterFactory
                 language="FSD"
                 implementationClass="io.github.facilityapi.intellij.FsdSyntaxHighlighter$Factory" />
+
+        <!-- Syntax Highlighting User Options -->
+        <colorSettingsPage implementation="io.github.facilityapi.intellij.FsdColorSettingsPage" />
     </extensions>
 
     <actions>

@@ -36,8 +36,8 @@
   ]
 }
 
-// Maybe comments are unnecessary to specify. GrammarKit docs suggest they are skipped.
 definition ::= service_spec comment* markdown_remarks*
+
 service_spec ::= comment* attribute_list* comment* service identifier service_items
 service_items ::= '{' service_item* '}' | service_item?
 private service_item ::= enum_spec | dto_spec | method_spec | error_set_spec
@@ -46,8 +46,6 @@ method_spec ::= comment* attribute_list* comment* method identifier '{' field* '
 
 dto_spec ::= comment* attribute_list* comment* data identifier '{' field* '}'
 
-field ::= comment* attribute_list* comment* identifier ':' type ';'
-type ::= (string | boolean | int32 | int64 | double | decimal | bytes | object | map | result | error | typename) [ '<' type '>' ] [ ('['']')* ]
 enum_spec ::= comment* attribute_list* comment* enum identifier enum_value_list
 enum_value_list ::= '{' enum_value (',' (enum_value | &'}'))* '}' {pin(".*")=1}
 enum_value ::= comment* attribute_list* comment* identifier
@@ -58,6 +56,9 @@ error_spec ::= comment* attribute_list* comment* identifier
 
 attribute_list ::= '[' attribute (',' attribute)* ']'
 attribute ::= attributename [ '(' attribute_parameter (',' attribute_parameter)* ')' ]
-attribute_parameter ::= identifier ':' (attributeparametervalue | identifier)
+attribute_parameter ::= identifier ':' attributeparametervalue
+
+field ::= comment* attribute_list* comment* identifier ':' type ';'
+type ::= (string | boolean | int32 | int64 | double | decimal | bytes | object | map | result | error | typename) [ '<' type '>' ] [ ('['']')* ]
 
 markdown_remarks ::= markdownheading | markdowntext

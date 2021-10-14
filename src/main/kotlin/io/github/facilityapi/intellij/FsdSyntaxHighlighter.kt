@@ -16,15 +16,14 @@ import io.github.facilityapi.intellij.psi.FsdTypes
 class FsdSyntaxHighlighter : SyntaxHighlighterBase() {
     override fun getHighlightingLexer(): Lexer = FsdLexerAdapter()
 
-    // NOTE: these colors are not final
     override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> {
         return when (tokenType) {
-            FsdTypes.COMMENT -> arrayOf(createTextAttributesKey("FSD.COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT))
-            FsdTypes.IDENTIFIER -> arrayOf(createTextAttributesKey("FSD.NAME", DefaultLanguageHighlighterColors.IDENTIFIER))
-            FsdTypes.ATTRIBUTENAME -> arrayOf(createTextAttributesKey("FSD.ATTRIBUTE.NAME", DefaultLanguageHighlighterColors.METADATA))
-            FsdTypes.ATTRIBUTEPARAMETERVALUE -> arrayOf(createTextAttributesKey("FSD.ATTRIBUTE.ARGUMENT", DefaultLanguageHighlighterColors.STRING))
+            FsdTypes.COMMENT -> COMMENT_KEYS
 
-            FsdTypes.MARKDOWNHEADING -> arrayOf(createTextAttributesKey("FSD.MARKUP.HEADING", DefaultLanguageHighlighterColors.DOC_COMMENT))
+            FsdTypes.MARKDOWNHEADING -> MARKUP_HEADING_KEYS
+
+            FsdTypes.ATTRIBUTENAME -> ATTRIBUTE_NAME_KEYS
+            FsdTypes.ATTRIBUTEPARAMETERVALUE -> ATTRIBUTE_ARGUMENT_KEYS
 
             FsdTypes.STRING,
             FsdTypes.BOOLEAN,
@@ -36,13 +35,16 @@ class FsdSyntaxHighlighter : SyntaxHighlighterBase() {
             FsdTypes.OBJECT,
             FsdTypes.MAP,
             FsdTypes.RESULT,
-            FsdTypes.ERROR -> arrayOf(createTextAttributesKey("FSD.TYPE.PRIMITIVE", DefaultLanguageHighlighterColors.KEYWORD))
+            FsdTypes.ERROR -> PRIMITIVE_TYPE_KEYS
+
+            FsdTypes.TYPENAME -> TYPE_REFERENCE_KEYS
 
             FsdTypes.SERVICE,
             FsdTypes.DATA,
             FsdTypes.METHOD,
             FsdTypes.ENUM,
-            FsdTypes.ERRORS -> arrayOf(createTextAttributesKey("FSD.KEYWORD", DefaultLanguageHighlighterColors.KEYWORD))
+            FsdTypes.ERRORS -> KEYWORD_KEYS
+
             else -> emptyArray()
         }
     }
@@ -51,5 +53,15 @@ class FsdSyntaxHighlighter : SyntaxHighlighterBase() {
         override fun getSyntaxHighlighter(project: Project?, virtualFile: VirtualFile?): SyntaxHighlighter {
             return FsdSyntaxHighlighter()
         }
+    }
+
+    companion object {
+        val COMMENT_KEYS = arrayOf(createTextAttributesKey("FSD.COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT))
+        val MARKUP_HEADING_KEYS = arrayOf(createTextAttributesKey("FSD.MARKUP.HEADING", DefaultLanguageHighlighterColors.DOC_COMMENT))
+        val ATTRIBUTE_NAME_KEYS = arrayOf(createTextAttributesKey("FSD.ATTRIBUTE.NAME", DefaultLanguageHighlighterColors.METADATA))
+        val ATTRIBUTE_ARGUMENT_KEYS = arrayOf(createTextAttributesKey("FSD.ATTRIBUTE.ARGUMENT", DefaultLanguageHighlighterColors.STRING))
+        val PRIMITIVE_TYPE_KEYS = arrayOf(createTextAttributesKey("FSD.TYPE.PRIMITIVE", DefaultLanguageHighlighterColors.KEYWORD))
+        val TYPE_REFERENCE_KEYS = arrayOf(createTextAttributesKey("FSD.TYPE.REFERENCE", DefaultLanguageHighlighterColors.CLASS_REFERENCE))
+        val KEYWORD_KEYS = arrayOf(createTextAttributesKey("FSD.KEYWORD", DefaultLanguageHighlighterColors.KEYWORD))
     }
 }
