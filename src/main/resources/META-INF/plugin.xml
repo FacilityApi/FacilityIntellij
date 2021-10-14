@@ -1,6 +1,6 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.facilityapi.fsdsupport</id>
+    <id>io.github.facilityapi</id>
     <name>Facility API</name>
     <vendor url="https://facilityapi.github.io">FacilityAPI</vendor>
 
@@ -10,7 +10,11 @@
     <extensions defaultExtensionNs="com.intellij">
 
         <!-- File-Type Factory -->
-        <fileType name="FSD" extensions="fsd" implementationClass="io.github.facilityapi.intellij.FsdFileType" />
+        <fileType name="Facility Service Definition"
+                  language="FSD"
+                  extensions="fsd"
+                  implementationClass="io.github.facilityapi.intellij.FsdFileType" />
+
         <internalFileTemplate name="Facility Service Definition File" />
 
         <!-- Parser -->

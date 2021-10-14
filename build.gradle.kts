@@ -72,6 +72,10 @@ tasks {
         gradleVersion = properties("gradleVersion")
     }
 
+    compileKotlin {
+        dependsOn("generateFsdLexer", "generateFsdParser")
+    }
+
     register<GenerateLexer>("generateFsdLexer") {
         source = "src/main/kotlin/io/github/facilityapi/intellij/lexer/_FsdLexer.flex"
         targetDir = "src/main/gen/io/github/facilityapi/intellij/lexer/"
