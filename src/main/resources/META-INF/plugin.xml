@@ -15,8 +15,6 @@
                   extensions="fsd"
                   implementationClass="io.github.facilityapi.intellij.FsdFileType" />
 
-        <internalFileTemplate name="Facility Service Definition File" />
-
         <!-- Parser -->
         <lang.parserDefinition
                 language="FSD"
