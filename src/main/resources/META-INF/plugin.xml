@@ -2,7 +2,7 @@
 <idea-plugin>
     <id>io.github.facilityapi</id>
     <name>Facility API</name>
-    <vendor url="https://facilityapi.github.io">FacilityAPI</vendor>
+    <vendor url="https://facilityapi.github.io">Facility API Framework</vendor>
 
     <!-- Enable all JetBrains products -->
     <depends>com.intellij.modules.lang</depends>
