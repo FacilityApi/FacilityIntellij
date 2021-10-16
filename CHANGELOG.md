@@ -2,6 +2,8 @@
 
 # FacilityIntellij Changelog
 
+## [Unreleased]
+
 ## 0.0.2
 ### Added 
 - Icon and description to the plugin marketplace page  
