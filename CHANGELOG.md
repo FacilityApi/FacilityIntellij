@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+## 0.0.3
+### Changed
+- Point references to github project at the FacilityApi organization
+
 ## 0.0.2
 ### Added 
 - Icon and description to the plugin marketplace page  

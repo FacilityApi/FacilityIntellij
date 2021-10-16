@@ -1,6 +1,6 @@
 # FacilityIntellij
 
-![Build](https://github.com/jzbrooks/FacilityIntellij/workflows/Build/badge.svg)
+![Build](https://github.com/FacilityApi/FacilityIntellij/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/io.github.facilityapi.svg)](https://plugins.jetbrains.com/plugin/io.github.facilityapi)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/io.github.facilityapi.svg)](https://plugins.jetbrains.com/plugin/io.github.facilityapi)
 
@@ -17,7 +17,7 @@ This Intellij plugin provides syntax highlighting and language support for Facil
   
 - Manually:
 
-  Download the [latest release](https://github.com/jzbrooks/FacilityIntellij/releases/latest) and install it manually using
+  Download the [latest release](https://github.com/FacilityApi/FacilityIntellij/releases/latest) and install it manually using
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
 
