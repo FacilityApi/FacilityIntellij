@@ -2,8 +2,6 @@ package io.github.facilityapi.intellij.reference
 
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
-import io.github.facilityapi.intellij.psi.FsdDtoSpec
-
 
 class FsdReference(element: PsiElement, textRange: TextRange)
     : PsiReferenceBase<PsiElement>(element, textRange), PsiPolyVariantReference {
@@ -16,7 +14,14 @@ class FsdReference(element: PsiElement, textRange: TextRange)
     }
 
     override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
-        val dataTypes: List<FsdDtoSpec> = findDataTypes(myElement.project, identifier)
+        val dataTypes = findDataTypes(myElement.project, identifier)
         return dataTypes.map(::PsiElementResolveResult).toTypedArray()
+    }
+
+    override fun handleElementRename(newElementName: String): PsiElement {
+        val dataType = createTypeReference(myElement.project, newElementName)
+        val newNode = dataType.node
+        myElement.node.replaceChild(myElement.node, newNode)
+        return myElement
     }
 }
