@@ -5,7 +5,7 @@
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/io.github.facilityapi.svg)](https://plugins.jetbrains.com/plugin/io.github.facilityapi)
 
 <!-- Plugin description -->
-This Intellij plugin provides syntax highlighting and language support for Facility Service Definition (fsd) files for the [Facility API Framework](https://facilityapi.github.io).
+Provides syntax highlighting and language support for Facility Service Definition (fsd) files for the [Facility API Framework](https://facilityapi.github.io).
 <!-- Plugin description end -->
 
 ## Installation
