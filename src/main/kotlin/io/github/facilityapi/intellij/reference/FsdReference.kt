@@ -14,7 +14,7 @@ class FsdReference(element: PsiElement, textRange: TextRange)
     }
 
     override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
-        val dataTypes = findDataTypes(myElement.project, identifier)
+        val dataTypes = findTypeDefinitions(myElement.project, identifier)
         return dataTypes.map(::PsiElementResolveResult).toTypedArray()
     }
 
