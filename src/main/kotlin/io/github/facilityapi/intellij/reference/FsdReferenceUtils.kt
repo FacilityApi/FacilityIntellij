@@ -26,3 +26,16 @@ fun findTypeDefinitions(project: Project, name: String): List<FsdNamedElement> {
 
     return types
 }
+
+fun findTypeDefinitions(project: Project): List<FsdNamedElement> {
+    val types = mutableListOf<FsdNamedElement>()
+    val virtualFiles = FileTypeIndex.getFiles(FsdFileType, GlobalSearchScope.allScope(project))
+
+    for (virtualFile in virtualFiles) {
+        val file = PsiManager.getInstance(project).findFile(virtualFile) as FsdFile
+        val dataTypes = PsiTreeUtil.findChildrenOfType(file, FsdNamedElement::class.java)
+        types.addAll(dataTypes)
+    }
+
+    return types
+}
