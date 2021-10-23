@@ -45,20 +45,22 @@ private service_item ::= enum_spec | dto_spec | method_spec | error_set_spec
 
 method_spec ::= comment* attribute_list* comment* method identifier '{' field* '}' ':' '{' field* '}'
 
-dto_spec ::= comment* attribute_list* comment* data identifier '{' field* '}'
+dto_spec ::= comment* attribute_list* comment* data type_identifier '{' field* '}'
+
+enum_spec ::= comment* attribute_list* comment* enum type_identifier enum_value_list
+enum_value_list ::= '{' enum_value (',' (enum_value | &'}'))* '}' {pin(".*")=1}
+enum_value ::= comment* attribute_list* comment* identifier
+
+error_set_spec ::= comment* attribute_list* comment* errors type_identifier error_list
+error_list ::= '{' error_spec (',' (error_spec | &'}'))* '}' {pin(".*")=1}
+error_spec ::= comment* attribute_list* comment* identifier
+
+type_identifier ::= identifier
 {
   mixin="io.github.facilityapi.intellij.reference.FsdNamedElementImpl"
   implements="io.github.facilityapi.intellij.reference.FsdNamedElement"
   methods=[getName setName getNameIdentifier]
 }
-
-enum_spec ::= comment* attribute_list* comment* enum identifier enum_value_list
-enum_value_list ::= '{' enum_value (',' (enum_value | &'}'))* '}' {pin(".*")=1}
-enum_value ::= comment* attribute_list* comment* identifier
-
-error_set_spec ::= comment* attribute_list* comment* errors identifier error_list
-error_list ::= '{' error_spec (',' (error_spec | &'}'))* '}' {pin(".*")=1}
-error_spec ::= comment* attribute_list* comment* identifier
 
 attribute_list ::= '[' attribute (',' attribute)* ']'
 attribute ::= attributename [ '(' attribute_parameter (',' attribute_parameter)* ')' ]

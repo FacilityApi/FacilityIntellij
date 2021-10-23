@@ -7,18 +7,18 @@ import io.github.facilityapi.intellij.reference.createDataType
 
 object FsdPsiImplUtil {
     @JvmStatic
-    fun FsdDtoSpec.getName(): String = identifier.text
+    fun FsdTypeIdentifier.getName(): String = identifier.text
 
     @JvmStatic
-    fun FsdDtoSpec.setName(name: String): PsiElement {
+    fun FsdTypeIdentifier.setName(name: String): PsiElement {
         val dataType = createDataType(project, name)
-        val newNode = dataType.identifier.node
+        val newNode = dataType.node
         node.replaceChild(identifier.node, newNode)
         return this
     }
 
     @JvmStatic
-    fun FsdDtoSpec.getNameIdentifier(): PsiElement = identifier
+    fun FsdTypeIdentifier.getNameIdentifier(): PsiElement = identifier
 
     @JvmStatic
     fun FsdReferenceType.getReference(): PsiReference = FsdReference(this, textRange)
