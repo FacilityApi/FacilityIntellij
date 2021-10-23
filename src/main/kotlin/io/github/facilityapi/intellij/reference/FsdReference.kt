@@ -1,32 +1,18 @@
 package io.github.facilityapi.intellij.reference
 
-import com.intellij.codeInsight.lookup.LookupElement
-import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.util.TextRange
-import com.intellij.psi.*
-import io.github.facilityapi.intellij.FsdFileType
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiElementResolveResult
+import com.intellij.psi.PsiReferenceBase
 
-class FsdReference(element: PsiElement, textRange: TextRange)
-    : PsiReferenceBase<PsiElement>(element, textRange), PsiPolyVariantReference {
+class FsdReference(element: PsiElement, textRange: TextRange) : PsiReferenceBase<PsiElement>(element, textRange) {
 
     private val identifier = element.text.substring(textRange.startOffset, textRange.endOffset)
 
     override fun resolve(): PsiElement? {
-        val resolveResults = multiResolve(false)
-        return if (resolveResults.size == 1) resolveResults[0].element else null
-    }
-
-    override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
         val dataTypes = findTypeDefinitions(myElement.project, identifier)
-        return dataTypes.map(::PsiElementResolveResult).toTypedArray()
-    }
-
-    override fun getVariants(): Array<LookupElement> {
-        return findTypeDefinitions(myElement.project).map { typeDefinition ->
-            LookupElementBuilder.create(typeDefinition)
-                .withIcon(FsdFileType.icon)
-                .withTypeText(typeDefinition.containingFile.name)
-        }.toTypedArray()
+        val resolveResults = dataTypes.map(::PsiElementResolveResult).toTypedArray()
+        return if (resolveResults.size == 1) resolveResults[0].element else null
     }
 
     override fun handleElementRename(newElementName: String): PsiElement {
