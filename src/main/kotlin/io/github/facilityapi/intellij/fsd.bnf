@@ -5,6 +5,7 @@
   psiImplClassSuffix="Impl"
   psiPackage="io.github.facilityapi.intellij.psi"
   psiImplPackage="io.github.facilityapi.intellij.psi.impl"
+  psiImplUtilClass="io.github.facilityapi.intellij.psi.FsdPsiImplUtil"
 
   elementTypeHolderClass="io.github.facilityapi.intellij.psi.FsdTypes"
   elementTypePrefix=""
@@ -45,6 +46,11 @@ private service_item ::= enum_spec | dto_spec | method_spec | error_set_spec
 method_spec ::= comment* attribute_list* comment* method identifier '{' field* '}' ':' '{' field* '}'
 
 dto_spec ::= comment* attribute_list* comment* data identifier '{' field* '}'
+{
+  mixin="io.github.facilityapi.intellij.reference.FsdNamedElementImpl"
+  implements="io.github.facilityapi.intellij.reference.FsdNamedElement"
+  methods=[getName setName getNameIdentifier]
+}
 
 enum_spec ::= comment* attribute_list* comment* enum identifier enum_value_list
 enum_value_list ::= '{' enum_value (',' (enum_value | &'}'))* '}' {pin(".*")=1}
@@ -60,6 +66,9 @@ attribute_parameter ::= identifier ':' attribute_parameter_value
 private attribute_parameter_value ::= attributeparametervalue { name="attribute parameter value" }
 
 field ::= comment* attribute_list* comment* identifier ':' type ';'
-type ::= (string | boolean | int32 | int64 | double | decimal | bytes | object | map | result | error | typename) [ '<' type '>' ] [ ('['']')* ]
-
+type ::= (string | boolean | int32 | int64 | double | decimal | bytes | object | map | result | error | reference_type) [ '<' type '>' ] [ ('['']')* ]
+reference_type ::= typename
+{
+  methods=[getReference]
+}
 markdown_remarks ::= markdownheading | markdowntext

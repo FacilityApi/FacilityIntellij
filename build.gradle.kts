@@ -73,7 +73,7 @@ tasks {
     }
 
     compileKotlin {
-        dependsOn("generateFsdLexer", "generateFsdParser")
+        dependsOn("generateFsdLexer")
     }
 
     register<GenerateLexer>("generateFsdLexer") {
@@ -83,13 +83,14 @@ tasks {
         purgeOldFiles = true
     }
 
-    register<GenerateParser>("generateFsdParser") {
-        source = "src/main/kotlin/io/github/facilityapi/intellij/fsd.bnf"
-        targetRoot = "src/main/gen/"
-        pathToParser = "io/github/facilityapi/intellij/parser/FsdParser.java"
-        pathToPsiRoot = "io/github/facilityapi/intellij/psi"
-        purgeOldFiles = true
-    }
+// the gradle plugin doesn't support method mixins :(
+//    register<GenerateParser>("generateFsdParser") {
+//        source = "src/main/kotlin/io/github/facilityapi/intellij/fsd.bnf"
+//        targetRoot = "src/main/gen/"
+//        pathToParser = "io/github/facilityapi/intellij/parser/FsdParser.java"
+//        pathToPsiRoot = "io/github/facilityapi/intellij/psi"
+//        purgeOldFiles = true
+//    }
 
     patchPluginXml {
         version.set(properties("pluginVersion"))
