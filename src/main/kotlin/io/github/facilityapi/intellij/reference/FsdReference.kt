@@ -11,14 +11,13 @@ class FsdReference(element: PsiElement, textRange: TextRange) : PsiReferenceBase
 
     override fun resolve(): PsiElement? {
         val dataTypes = findTypeDefinitions(myElement.project, identifier)
-        val resolveResults = dataTypes.map(::PsiElementResolveResult).toTypedArray()
+        val resolveResults = dataTypes.map(::PsiElementResolveResult)
         return if (resolveResults.size == 1) resolveResults[0].element else null
     }
 
     override fun handleElementRename(newElementName: String): PsiElement {
-        val dataType = createTypeReference(myElement.project, newElementName)
-        val newNode = dataType.node
-        myElement.node.replaceChild(myElement.node, newNode)
+        val newTypeReference = createTypeReference(myElement.project, newElementName)
+        myElement.node.replaceChild(myElement.node,  newTypeReference.node)
         return myElement
     }
 }

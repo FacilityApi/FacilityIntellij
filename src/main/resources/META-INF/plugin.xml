@@ -27,6 +27,11 @@
 
         <!-- Syntax Highlighting User Options -->
         <colorSettingsPage implementation="io.github.facilityapi.intellij.FsdColorSettingsPage" />
+
+        <!-- Inline Refactoring Support -->
+        <lang.refactoringSupport
+                language="FSD"
+                implementationClass="io.github.facilityapi.intellij.reference.FsdRefactoringSupportProvider" />
     </extensions>
 
     <actions>
