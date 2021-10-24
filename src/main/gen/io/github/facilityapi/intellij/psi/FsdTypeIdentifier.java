@@ -11,16 +11,13 @@ public interface FsdTypeIdentifier extends FsdNamedElement {
   @NotNull
   PsiElement getIdentifier();
 
-  //WARNING: getName(...) is skipped
-  //matching getName(FsdTypeIdentifier, ...)
-  //methods are not found in FsdPsiImplUtil
+  @NotNull
+  String getName();
 
-  //WARNING: setName(...) is skipped
-  //matching setName(FsdTypeIdentifier, ...)
-  //methods are not found in FsdPsiImplUtil
+  @NotNull
+  PsiElement setName(@NotNull String name);
 
-  //WARNING: getNameIdentifier(...) is skipped
-  //matching getNameIdentifier(FsdTypeIdentifier, ...)
-  //methods are not found in FsdPsiImplUtil
+  @NotNull
+  PsiElement getNameIdentifier();
 
 }

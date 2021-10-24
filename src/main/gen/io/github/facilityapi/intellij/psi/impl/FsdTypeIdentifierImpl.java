@@ -33,4 +33,22 @@ public class FsdTypeIdentifierImpl extends FsdNamedElementImpl implements FsdTyp
     return findNotNullChildByType(IDENTIFIER);
   }
 
+  @Override
+  @NotNull
+  public String getName() {
+    return FsdPsiImplUtil.getName(this);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement setName(@NotNull String name) {
+    return FsdPsiImplUtil.setName(this, name);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getNameIdentifier() {
+    return FsdPsiImplUtil.getNameIdentifier(this);
+  }
+
 }

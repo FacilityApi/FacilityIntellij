@@ -4,14 +4,14 @@ package io.github.facilityapi.intellij.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 
 public interface FsdReferenceType extends PsiElement {
 
   @NotNull
   PsiElement getTypename();
 
-  //WARNING: getReference(...) is skipped
-  //matching getReference(FsdReferenceType, ...)
-  //methods are not found in FsdPsiImplUtil
+  @NotNull
+  PsiReference getReference();
 
 }

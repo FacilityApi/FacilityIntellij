@@ -10,6 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static io.github.facilityapi.intellij.psi.FsdTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.facilityapi.intellij.psi.*;
+import com.intellij.psi.PsiReference;
 
 public class FsdReferenceTypeImpl extends ASTWrapperPsiElement implements FsdReferenceType {
 
@@ -31,6 +32,12 @@ public class FsdReferenceTypeImpl extends ASTWrapperPsiElement implements FsdRef
   @NotNull
   public PsiElement getTypename() {
     return findNotNullChildByType(TYPENAME);
+  }
+
+  @Override
+  @NotNull
+  public PsiReference getReference() {
+    return FsdPsiImplUtil.getReference(this);
   }
 
 }
