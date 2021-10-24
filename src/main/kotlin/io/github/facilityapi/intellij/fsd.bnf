@@ -57,8 +57,8 @@ error_spec ::= comment* attribute_list* comment* identifier
 
 type_identifier ::= identifier
 {
-  mixin="io.github.facilityapi.intellij.reference.FsdNamedElementImpl"
-  implements="io.github.facilityapi.intellij.reference.FsdNamedElement"
+  mixin="io.github.facilityapi.intellij.psi.FsdNamedElementImpl"
+  implements="io.github.facilityapi.intellij.psi.FsdNamedElement"
   methods=[getName setName getNameIdentifier]
 }
 

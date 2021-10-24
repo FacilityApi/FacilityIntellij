@@ -5,6 +5,7 @@ import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.util.findDescendantOfType
 import io.github.facilityapi.intellij.FsdFile
 import io.github.facilityapi.intellij.FsdFileType
+import io.github.facilityapi.intellij.psi.FsdNamedElement
 import io.github.facilityapi.intellij.psi.FsdReferenceType
 
 fun createTypeDefinition(project: Project, name: String): FsdNamedElement {

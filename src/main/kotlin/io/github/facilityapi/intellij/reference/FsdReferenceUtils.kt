@@ -7,6 +7,7 @@ import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.PsiTreeUtil
 import io.github.facilityapi.intellij.FsdFile
 import io.github.facilityapi.intellij.FsdFileType
+import io.github.facilityapi.intellij.psi.FsdNamedElement
 
 // This scope could probably be narrower since FSD
 // only supports single file compilation units, but

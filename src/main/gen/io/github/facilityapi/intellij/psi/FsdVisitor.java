@@ -4,7 +4,6 @@ package io.github.facilityapi.intellij.psi;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiElement;
-import io.github.facilityapi.intellij.reference.FsdNamedElement;
 
 public class FsdVisitor extends PsiElementVisitor {
 

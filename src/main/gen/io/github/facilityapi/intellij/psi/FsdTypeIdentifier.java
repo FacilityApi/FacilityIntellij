@@ -4,7 +4,6 @@ package io.github.facilityapi.intellij.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import io.github.facilityapi.intellij.reference.FsdNamedElement;
 
 public interface FsdTypeIdentifier extends FsdNamedElement {
 
