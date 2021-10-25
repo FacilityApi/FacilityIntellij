@@ -11,14 +11,14 @@ import static io.github.facilityapi.intellij.psi.FsdTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.facilityapi.intellij.psi.*;
 
-public class FsdDtoSpecImpl extends ASTWrapperPsiElement implements FsdDtoSpec {
+public class FsdDataSpecImpl extends ASTWrapperPsiElement implements FsdDataSpec {
 
-  public FsdDtoSpecImpl(@NotNull ASTNode node) {
+  public FsdDataSpecImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull FsdVisitor visitor) {
-    visitor.visitDtoSpec(this);
+    visitor.visitDataSpec(this);
   }
 
   @Override

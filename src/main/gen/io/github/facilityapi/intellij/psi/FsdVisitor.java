@@ -19,7 +19,7 @@ public class FsdVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitDtoSpec(@NotNull FsdDtoSpec o) {
+  public void visitDataSpec(@NotNull FsdDataSpec o) {
     visitPsiElement(o);
   }
 
