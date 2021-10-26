@@ -10,7 +10,8 @@ import io.github.facilityapi.intellij.psi.FsdReferenceType
 
 fun createTypeDefinition(project: Project, name: String): FsdNamedElement {
     val fileName = "dummy.fsd"
-    // this is a dumb hack
+    // This is a silly way to do this on the surface, but the docs recommend it
+    // https://plugins.jetbrains.com/docs/intellij/rename-refactoring.html
     val serviceText = """
         service dummy {
             data $name {
@@ -23,7 +24,8 @@ fun createTypeDefinition(project: Project, name: String): FsdNamedElement {
 
 fun createTypeReference(project: Project, name: String): FsdReferenceType {
     val fileName = "dummy.fsd"
-    // this is a dumb hack
+    // This is a silly way to do this on the surface, but the docs recommend it
+    // https://plugins.jetbrains.com/docs/intellij/rename-refactoring.html
     val serviceText = """
         service dummy {
             data dummy {
