@@ -1,8 +1,8 @@
 # FacilityIntellij
 
 ![Build](https://github.com/FacilityApi/FacilityIntellij/workflows/Build/badge.svg)
-[![Version](https://img.shields.io/jetbrains/plugin/v/io.github.facilityapi.svg)](https://plugins.jetbrains.com/plugin/io.github.facilityapi)
-[![Downloads](https://img.shields.io/jetbrains/plugin/d/io.github.facilityapi.svg)](https://plugins.jetbrains.com/plugin/io.github.facilityapi)
+[![Version](https://img.shields.io/jetbrains/plugin/v/io.github.facilityapi.svg)](https://plugins.jetbrains.com/plugin/17802-facility-api)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/io.github.facilityapi.svg)](https://plugins.jetbrains.com/plugin/17802-facility-api)
 
 <!-- Plugin description -->
 Provides syntax highlighting and language support for Facility Service Definition (fsd) files for the [Facility API Framework](https://facilityapi.github.io).
