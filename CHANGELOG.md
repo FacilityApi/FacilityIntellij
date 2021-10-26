@@ -3,9 +3,12 @@
 # FacilityIntellij Changelog
 
 ## [Unreleased]
+### Added
+- Rename types with inline refactoring
 
 ## 0.0.4
-- Change the plugin description to conform to JetBrains guidelines
+### Changed
+- The plugin description conforms to JetBrains guidelines
 
 ## 0.0.3
 ### Changed
