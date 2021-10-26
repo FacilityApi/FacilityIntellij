@@ -4,6 +4,9 @@
 
 ## [Unreleased]
 
+## 0.0.4
+- Change the plugin description to conform to JetBrains guidelines
+
 ## 0.0.3
 ### Changed
 - Point references to github project at the FacilityApi organization
