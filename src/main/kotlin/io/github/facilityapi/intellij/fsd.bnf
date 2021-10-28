@@ -37,23 +37,23 @@
   ]
 }
 
-definition ::= service_spec comment* markdown_remarks*
+definition ::= service_spec markdown_remarks*
 
-service_spec ::= comment* attribute_list* comment* service identifier service_items
+service_spec ::= attribute_list* service identifier service_items
 service_items ::= '{' service_item* '}' | service_item
 private service_item ::= enum_spec | data_spec | method_spec | error_set_spec
 
-method_spec ::= comment* attribute_list* comment* method identifier '{' field* '}' ':' '{' field* '}'
+method_spec ::= attribute_list* method identifier '{' field* '}' ':' '{' field* '}'
 
-data_spec ::= comment* attribute_list* comment* data type_identifier '{' field* '}'
+data_spec ::= attribute_list* data type_identifier '{' field* '}'
 
-enum_spec ::= comment* attribute_list* comment* enum type_identifier enum_value_list
+enum_spec ::= attribute_list* enum type_identifier enum_value_list
 enum_value_list ::= '{' enum_value (',' (enum_value | &'}'))* '}' {pin(".*")=1}
-enum_value ::= comment* attribute_list* comment* identifier
+enum_value ::= attribute_list* identifier
 
-error_set_spec ::= comment* attribute_list* comment* errors type_identifier error_list
+error_set_spec ::= attribute_list* errors type_identifier error_list
 error_list ::= '{' error_spec (',' (error_spec | &'}'))* '}' {pin(".*")=1}
-error_spec ::= comment* attribute_list* comment* identifier
+error_spec ::= attribute_list* identifier
 
 type_identifier ::= identifier
 {
@@ -67,7 +67,7 @@ attribute ::= attributename [ '(' attribute_parameter (',' attribute_parameter)*
 attribute_parameter ::= identifier ':' attribute_parameter_value
 private attribute_parameter_value ::= attributeparametervalue { name="attribute parameter value" }
 
-field ::= comment* attribute_list* comment* identifier ':' type ';'
+field ::= attribute_list* identifier ':' type ';'
 type ::= (string | boolean | int32 | int64 | double | decimal | bytes | object | map | result | error | reference_type) [ '<' type '>' ] [ ('['']')* ]
 reference_type ::= typename
 {
