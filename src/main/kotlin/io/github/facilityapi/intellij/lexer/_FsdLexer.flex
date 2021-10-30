@@ -161,6 +161,7 @@ MARKDOWN_TEXT=.+
 
 <METHOD_BODY_TYPE> {
   {WHITE_SPACE}                  { return WHITE_SPACE; }
+  {COMMENT}                      { return COMMENT; }
 
   "string"                       { yybegin(METHOD_BODY_TYPE_END); return STRING; }
   "boolean"                      { yybegin(METHOD_BODY_TYPE_END); return BOOLEAN; }
@@ -175,8 +176,6 @@ MARKDOWN_TEXT=.+
   "error"                        { yybegin(METHOD_BODY_TYPE_END); return ERROR; }
 
   {IDENTIFIER}                   { yybegin(METHOD_BODY_TYPE_END); return TYPENAME; }
-
-  {COMMENT}                      { return COMMENT; }
 
   "}"                            { yybegin(RESPONSE_SEPARATOR); return RIGHT_BRACKET; }
 }
@@ -241,6 +240,7 @@ MARKDOWN_TEXT=.+
 
 <RESPONSE_BODY_TYPE> {
   {WHITE_SPACE}                  { return WHITE_SPACE; }
+  {COMMENT}                      { return COMMENT; }
 
   "string"                       { yybegin(RESPONSE_BODY_TYPE_END); return STRING; }
   "boolean"                      { yybegin(RESPONSE_BODY_TYPE_END); return BOOLEAN; }
@@ -255,8 +255,6 @@ MARKDOWN_TEXT=.+
   "error"                        { yybegin(RESPONSE_BODY_TYPE_END); return ERROR; }
 
   {IDENTIFIER}                   { yybegin(RESPONSE_BODY_TYPE_END); return TYPENAME; }
-
-  {COMMENT}                      { return COMMENT; }
 
   "}"                            { yybegin(SERVICE_BODY); return RIGHT_BRACKET; }
 }
@@ -317,6 +315,7 @@ MARKDOWN_TEXT=.+
 
 <DATA_BODY_TYPE> {
   {WHITE_SPACE}                  { return WHITE_SPACE; }
+  {COMMENT}                      { return COMMENT; }
 
   "string"                       { yybegin(DATA_BODY_TYPE_END); return STRING; }
   "boolean"                      { yybegin(DATA_BODY_TYPE_END); return BOOLEAN; }
