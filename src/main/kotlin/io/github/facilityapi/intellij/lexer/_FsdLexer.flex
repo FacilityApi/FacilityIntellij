@@ -35,9 +35,9 @@ MARKDOWN_TEXT=.+
 %state MARKDOWN_SECTION
 %state SERVICE_ATTRIBUTE, SERVICE_ATTRIBUTE_PARAMETER_LIST, SERVICE_ATTRIBUTE_ARGUMENT
 %state SERVICE_BODY, SERVICE_BODY_ATTRIBUTE, SERVICE_BODY_ATTRIBUTE_PARAMETER_LIST, SERVICE_BODY_ATTRIBUTE_ARGUMENT
-%state METHOD_BODY, METHOD_BODY_TYPE, METHOD_BODY_ATTRIBUTE, METHOD_BODY_ATTRIBUTE_PARAMETER_LIST, METHOD_BODY_ATTRIBUTE_ARGUMENT
-%state RESPONSE_SEPARATOR, RESPONSE_BODY, RESPONSE_BODY_TYPE, RESPONSE_BODY_ATTRIBUTE, RESPONSE_BODY_ATTRIBUTE_PARAMETER_LIST, RESPONSE_BODY_ATTRIBUTE_ARGUMENT
-%state DATA_BODY, DATA_BODY_TYPE, DATA_BODY_ATTRIBUTE, DATA_BODY_ATTRIBUTE_PARAMETER_LIST, DATA_BODY_ATTRIBUTE_ARGUMENT
+%state METHOD_BODY, METHOD_BODY_TYPE, METHOD_BODY_TYPE_END, METHOD_BODY_ATTRIBUTE, METHOD_BODY_ATTRIBUTE_PARAMETER_LIST, METHOD_BODY_ATTRIBUTE_ARGUMENT
+%state RESPONSE_SEPARATOR, RESPONSE_BODY, RESPONSE_BODY_TYPE, RESPONSE_BODY_TYPE_END, RESPONSE_BODY_ATTRIBUTE, RESPONSE_BODY_ATTRIBUTE_PARAMETER_LIST, RESPONSE_BODY_ATTRIBUTE_ARGUMENT
+%state DATA_BODY, DATA_BODY_TYPE, DATA_BODY_TYPE_END, DATA_BODY_ATTRIBUTE, DATA_BODY_ATTRIBUTE_PARAMETER_LIST, DATA_BODY_ATTRIBUTE_ARGUMENT
 %state LIST_BODY, LIST_BODY_ATTRIBUTE, LIST_BODY_ATTRIBUTE_PARAMETER_LIST, LIST_BODY_ATTRIBUTE_ARGUMENT
 
 %%
@@ -162,25 +162,39 @@ MARKDOWN_TEXT=.+
 <METHOD_BODY_TYPE> {
   {WHITE_SPACE}                  { return WHITE_SPACE; }
 
-  "string"                       { return STRING; }
-  "boolean"                      { return BOOLEAN; }
-  "int32"                        { return INT32; }
-  "int64"                        { return INT64; }
-  "double"                       { return DOUBLE; }
-  "decimal"                      { return DECIMAL; }
-  "bytes"                        { return BYTES; }
-  "object"                       { return OBJECT; }
-  "map"                          { return MAP; }
-  "result"                       { return RESULT; }
-  "error"                        { return ERROR; }
+  "string"                       { yybegin(METHOD_BODY_TYPE_END); return STRING; }
+  "boolean"                      { yybegin(METHOD_BODY_TYPE_END); return BOOLEAN; }
+  "int32"                        { yybegin(METHOD_BODY_TYPE_END); return INT32; }
+  "int64"                        { yybegin(METHOD_BODY_TYPE_END); return INT64; }
+  "double"                       { yybegin(METHOD_BODY_TYPE_END); return DOUBLE; }
+  "decimal"                      { yybegin(METHOD_BODY_TYPE_END); return DECIMAL; }
+  "bytes"                        { yybegin(METHOD_BODY_TYPE_END); return BYTES; }
+  "object"                       { yybegin(METHOD_BODY_TYPE_END); return OBJECT; }
+  "map"                          { yybegin(METHOD_BODY_TYPE_END); return MAP; }
+  "result"                       { yybegin(METHOD_BODY_TYPE_END); return RESULT; }
+  "error"                        { yybegin(METHOD_BODY_TYPE_END); return ERROR; }
 
-  "<"                            { return LEFT_ANGLE; }
-  ">"                            { return RIGHT_ANGLE; }
-  "["                            { return LEFT_BRACKET; }
-  "]"                            { return RIGHT_BRACKET; }
-  ";"                            { yybegin(METHOD_BODY); return SEMI; }
+  {IDENTIFIER}                   { yybegin(METHOD_BODY_TYPE_END); return TYPENAME; }
 
-  {IDENTIFIER}                   { return TYPENAME; }
+  {COMMENT}                      { return COMMENT; }
+
+  "}"                            { yybegin(RESPONSE_SEPARATOR); return RIGHT_BRACKET; }
+}
+
+<METHOD_BODY_TYPE_END> {
+    {WHITE_SPACE}                  { return WHITE_SPACE; }
+    {COMMENT}                      { return COMMENT; }
+
+    "<"                            { yybegin(METHOD_BODY_TYPE); return LEFT_ANGLE; }
+    ">"                            { return RIGHT_ANGLE; }
+    "["                            { return LEFT_BRACKET; }
+    "]"                            { return RIGHT_BRACKET; }
+
+    ";"                            { yybegin(METHOD_BODY); return SEMI; }
+
+    // Identifiers shouldn't be here, so break back into the body definition
+    {IDENTIFIER}                   { yybegin(METHOD_BODY); return IDENTIFIER; }
+    "}"                            { yybegin(RESPONSE_SEPARATOR); return RIGHT_BRACKET; }
 }
 
 <RESPONSE_SEPARATOR> {
@@ -228,26 +242,41 @@ MARKDOWN_TEXT=.+
 <RESPONSE_BODY_TYPE> {
   {WHITE_SPACE}                  { return WHITE_SPACE; }
 
-  "string"                       { return STRING; }
-  "boolean"                      { return BOOLEAN; }
-  "int32"                        { return INT32; }
-  "int64"                        { return INT64; }
-  "double"                       { return DOUBLE; }
-  "decimal"                      { return DECIMAL; }
-  "bytes"                        { return BYTES; }
-  "object"                       { return OBJECT; }
-  "map"                          { return MAP; }
-  "result"                       { return RESULT; }
-  "error"                        { return ERROR; }
+  "string"                       { yybegin(RESPONSE_BODY_TYPE_END); return STRING; }
+  "boolean"                      { yybegin(RESPONSE_BODY_TYPE_END); return BOOLEAN; }
+  "int32"                        { yybegin(RESPONSE_BODY_TYPE_END); return INT32; }
+  "int64"                        { yybegin(RESPONSE_BODY_TYPE_END); return INT64; }
+  "double"                       { yybegin(RESPONSE_BODY_TYPE_END); return DOUBLE; }
+  "decimal"                      { yybegin(RESPONSE_BODY_TYPE_END); return DECIMAL; }
+  "bytes"                        { yybegin(RESPONSE_BODY_TYPE_END); return BYTES; }
+  "object"                       { yybegin(RESPONSE_BODY_TYPE_END); return OBJECT; }
+  "map"                          { yybegin(RESPONSE_BODY_TYPE_END); return MAP; }
+  "result"                       { yybegin(RESPONSE_BODY_TYPE_END); return RESULT; }
+  "error"                        { yybegin(RESPONSE_BODY_TYPE_END); return ERROR; }
 
-  "<"                            { return LEFT_ANGLE; }
-  ">"                            { return RIGHT_ANGLE; }
-  "["                            { return LEFT_BRACKET; }
-  "]"                            { return RIGHT_BRACKET; }
-  ";"                            { yybegin(RESPONSE_BODY); return SEMI; }
+  {IDENTIFIER}                   { yybegin(RESPONSE_BODY_TYPE_END); return TYPENAME; }
 
-  {IDENTIFIER}                   { return TYPENAME; }
+  {COMMENT}                      { return COMMENT; }
+
+  "}"                            { yybegin(SERVICE_BODY); return RIGHT_BRACKET; }
 }
+
+<RESPONSE_BODY_TYPE_END> {
+    {WHITE_SPACE}                  { return WHITE_SPACE; }
+    {COMMENT}                      { return COMMENT; }
+
+    "<"                            { yybegin(RESPONSE_BODY_TYPE); return LEFT_ANGLE; }
+    ">"                            { return RIGHT_ANGLE; }
+    "["                            { return LEFT_BRACKET; }
+    "]"                            { return RIGHT_BRACKET; }
+
+    ";"                            { yybegin(RESPONSE_BODY); return SEMI; }
+
+    // Identifiers shouldn't be here, so break back into the body definition
+    {IDENTIFIER}                   { yybegin(RESPONSE_BODY); return IDENTIFIER; }
+    "}"                            { yybegin(SERVICE_BODY); return RIGHT_BRACKET; }
+}
+
 <DATA_BODY> {
   {WHITE_SPACE}                  { return WHITE_SPACE; }
 
@@ -289,25 +318,37 @@ MARKDOWN_TEXT=.+
 <DATA_BODY_TYPE> {
   {WHITE_SPACE}                  { return WHITE_SPACE; }
 
-  "string"                       { return STRING; }
-  "boolean"                      { return BOOLEAN; }
-  "int32"                        { return INT32; }
-  "int64"                        { return INT64; }
-  "double"                       { return DOUBLE; }
-  "decimal"                      { return DECIMAL; }
-  "bytes"                        { return BYTES; }
-  "object"                       { return OBJECT; }
-  "map"                          { return MAP; }
-  "result"                       { return RESULT; }
-  "error"                        { return ERROR; }
+  "string"                       { yybegin(DATA_BODY_TYPE_END); return STRING; }
+  "boolean"                      { yybegin(DATA_BODY_TYPE_END); return BOOLEAN; }
+  "int32"                        { yybegin(DATA_BODY_TYPE_END); return INT32; }
+  "int64"                        { yybegin(DATA_BODY_TYPE_END); return INT64; }
+  "double"                       { yybegin(DATA_BODY_TYPE_END); return DOUBLE; }
+  "decimal"                      { yybegin(DATA_BODY_TYPE_END); return DECIMAL; }
+  "bytes"                        { yybegin(DATA_BODY_TYPE_END); return BYTES; }
+  "object"                       { yybegin(DATA_BODY_TYPE_END); return OBJECT; }
+  "map"                          { yybegin(DATA_BODY_TYPE_END); return MAP; }
+  "result"                       { yybegin(DATA_BODY_TYPE_END); return RESULT; }
+  "error"                        { yybegin(DATA_BODY_TYPE_END); return ERROR; }
 
-  "<"                            { return LEFT_ANGLE; }
-  ">"                            { return RIGHT_ANGLE; }
-  "["                            { return LEFT_BRACKET; }
-  "]"                            { return RIGHT_BRACKET; }
-  ";"                            { yybegin(DATA_BODY); return SEMI; }
+  {IDENTIFIER}                   { yybegin(DATA_BODY_TYPE_END); return TYPENAME; }
 
-  {IDENTIFIER}                   { return TYPENAME; }
+  "}"                            { yybegin(SERVICE_BODY); return RIGHT_BRACKET; }
+}
+
+<DATA_BODY_TYPE_END> {
+    {WHITE_SPACE}                  { return WHITE_SPACE; }
+    {COMMENT}                      { return COMMENT; }
+
+    "<"                            { yybegin(DATA_BODY_TYPE); return LEFT_ANGLE; }
+    ">"                            { return RIGHT_ANGLE; }
+    "["                            { return LEFT_BRACKET; }
+    "]"                            { return RIGHT_BRACKET; }
+
+    ";"                            { yybegin(DATA_BODY); return SEMI; }
+
+    // Identifiers shouldn't be here, so break back into the body definition
+    {IDENTIFIER}                   { yybegin(DATA_BODY); return IDENTIFIER; }
+    "}"                            { yybegin(SERVICE_BODY); return RIGHT_BRACKET; }
 }
 
 <LIST_BODY> {

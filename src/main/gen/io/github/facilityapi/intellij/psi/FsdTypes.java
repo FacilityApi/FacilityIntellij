@@ -26,6 +26,7 @@ public interface FsdTypes {
   IElementType SERVICE_SPEC = new FsdElementType("SERVICE_SPEC");
   IElementType TYPE = new FsdElementType("TYPE");
   IElementType TYPE_IDENTIFIER = new FsdElementType("TYPE_IDENTIFIER");
+  IElementType TYPE_PARAMETER = new FsdElementType("TYPE_PARAMETER");
 
   IElementType ATTRIBUTENAME = new FsdElementType("attributename");
   IElementType ATTRIBUTEPARAMETERVALUE = new FsdElementType("attributeparametervalue");
@@ -119,6 +120,9 @@ public interface FsdTypes {
       }
       else if (type == TYPE_IDENTIFIER) {
         return new FsdTypeIdentifierImpl(node);
+      }
+      else if (type == TYPE_PARAMETER) {
+        return new FsdTypeParameterImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

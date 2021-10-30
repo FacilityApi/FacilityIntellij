@@ -41,11 +41,12 @@ definition ::= service_spec markdown_remarks*
 
 service_spec ::= attribute_list* service identifier service_items
 service_items ::= '{' service_item* '}' | service_item
-private service_item ::= enum_spec | data_spec | method_spec | error_set_spec
+private service_item ::= enum_spec | data_spec | method_spec | error_set_spec { recoverWhile=service_item_recover }
+private service_item_recover ::= !('[' | '}' | enum | data | errors | method)
 
-method_spec ::= attribute_list* method identifier '{' field* '}' ':' '{' field* '}'
+method_spec ::= attribute_list* method identifier '{' field* '}' ':' '{' field* '}' { pin=2 }
 
-data_spec ::= attribute_list* data type_identifier '{' field* '}'
+data_spec ::= attribute_list* data type_identifier '{' field* '}' { pin=2 }
 
 enum_spec ::= attribute_list* enum type_identifier enum_value_list
 enum_value_list ::= '{' enum_value (',' (enum_value | &'}'))* '}' {pin(".*")=1}
@@ -67,8 +68,9 @@ attribute ::= attributename [ '(' attribute_parameter (',' attribute_parameter)*
 attribute_parameter ::= identifier ':' attribute_parameter_value
 private attribute_parameter_value ::= attributeparametervalue { name="attribute parameter value" }
 
-field ::= attribute_list* identifier ':' type ';'
-type ::= (string | boolean | int32 | int64 | double | decimal | bytes | object | map | result | error | reference_type) [ '<' type '>' ] [ ('['']')* ]
+field ::= attribute_list* identifier ':' type ';' {pin=4}
+type ::= (string | boolean | int32 | int64 | double | decimal | bytes | object | map | result | error | reference_type) [ type_parameter ] [ ('['']')* ]
+type_parameter ::= '<' type '>' { pin=2 }
 reference_type ::= typename
 {
   methods=[getReference]

@@ -11,14 +11,14 @@ import static io.github.facilityapi.intellij.psi.FsdTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.facilityapi.intellij.psi.*;
 
-public class FsdTypeImpl extends ASTWrapperPsiElement implements FsdType {
+public class FsdTypeParameterImpl extends ASTWrapperPsiElement implements FsdTypeParameter {
 
-  public FsdTypeImpl(@NotNull ASTNode node) {
+  public FsdTypeParameterImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull FsdVisitor visitor) {
-    visitor.visitType(this);
+    visitor.visitTypeParameter(this);
   }
 
   @Override
@@ -28,15 +28,9 @@ public class FsdTypeImpl extends ASTWrapperPsiElement implements FsdType {
   }
 
   @Override
-  @Nullable
-  public FsdReferenceType getReferenceType() {
-    return findChildByClass(FsdReferenceType.class);
-  }
-
-  @Override
-  @Nullable
-  public FsdTypeParameter getTypeParameter() {
-    return findChildByClass(FsdTypeParameter.class);
+  @NotNull
+  public FsdType getType() {
+    return findNotNullChildByClass(FsdType.class);
   }
 
 }
