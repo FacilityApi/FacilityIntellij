@@ -5,6 +5,7 @@
 ## [Unreleased]
 ### Added
 - Rename types with inline refactoring
+- Find usages for user-defined types
 
 ## 0.0.4
 ### Changed
