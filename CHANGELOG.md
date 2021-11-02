@@ -10,7 +10,7 @@
 - Comment or uncomment lines with editor actions
 - Support for structure view
 - Support for go to symbol
-``
+
 ## 0.0.4
 ### Changed
 - The plugin description conforms to JetBrains guidelines

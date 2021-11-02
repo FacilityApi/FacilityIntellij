@@ -31,7 +31,7 @@ class FsdReference(element: PsiElement, textRange: TextRange) : PsiReferenceBase
 
     override fun handleElementRename(newElementName: String): PsiElement {
         val newTypeReference = createTypeReference(myElement.project, newElementName)
-        myElement.node.replaceChild(myElement.node,  newTypeReference.node)
+        myElement.parent.node.replaceChild(myElement.node,  newTypeReference.node)
         return myElement
     }
 }

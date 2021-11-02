@@ -28,6 +28,10 @@ repositories {
     mavenCentral()
 }
 
+dependencies {
+    testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.25")
+}
+
 sourceSets["main"].java.srcDirs("src/main/gen")
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
