@@ -7,23 +7,26 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementResolveResult
 import com.intellij.psi.PsiReferenceBase
 import io.github.facilityapi.intellij.FsdFileType
+import io.github.facilityapi.intellij.findTypeDefinitions
 
 class FsdReference(element: PsiElement, textRange: TextRange) : PsiReferenceBase<PsiElement>(element, textRange) {
 
     private val identifier = element.text.substring(textRange.startOffset, textRange.endOffset)
 
     override fun resolve(): PsiElement? {
-        val dataTypes = findTypeDefinitions(myElement.project, identifier)
-        val resolveResults = dataTypes.map(::PsiElementResolveResult)
-        return if (resolveResults.size == 1) resolveResults[0].element else null
+        return findTypeDefinitions(myElement.project, identifier)
+            .map(::PsiElementResolveResult)
+            .map(PsiElementResolveResult::getElement)
+            .firstOrNull()
     }
 
     override fun getVariants(): Array<Any> {
         return findTypeDefinitions(myElement.project).map { type ->
             LookupElementBuilder
-                .create(type).withIcon(FsdFileType.icon)
+                .create(type)
+                .withIcon(FsdFileType.icon)
                 .withTypeText(type.containingFile.name)
-        }.toTypedArray()
+        }.toList().toTypedArray()
     }
 
     override fun handleElementRename(newElementName: String): PsiElement {

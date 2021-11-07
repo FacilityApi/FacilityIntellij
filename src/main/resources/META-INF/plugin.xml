@@ -45,6 +45,15 @@
                                  implementationClass="io.github.facilityapi.intellij.FsdFindUsagesProvider" />
 
         <usageTypeProvider implementation="io.github.facilityapi.intellij.FsdUsageTypeProvider" />
+
+        <!-- Enables structure view -->
+        <lang.psiStructureViewFactory
+            language="FSD"
+            implementationClass="io.github.facilityapi.intellij.FsdStructureViewFactory" />
+
+        <!-- Enables go to symbol -->
+        <gotoSymbolContributor implementation="io.github.facilityapi.intellij.FsdChooseByNameContributor" />
+
     </extensions>
 
     <actions>

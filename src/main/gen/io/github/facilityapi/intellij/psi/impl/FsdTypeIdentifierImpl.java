@@ -10,6 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static io.github.facilityapi.intellij.psi.FsdTypes.*;
 import io.github.facilityapi.intellij.psi.FsdNamedElementImpl;
 import io.github.facilityapi.intellij.psi.*;
+import com.intellij.navigation.ItemPresentation;
 
 public class FsdTypeIdentifierImpl extends FsdNamedElementImpl implements FsdTypeIdentifier {
 
@@ -49,6 +50,12 @@ public class FsdTypeIdentifierImpl extends FsdNamedElementImpl implements FsdTyp
   @NotNull
   public PsiElement getNameIdentifier() {
     return FsdPsiImplUtil.getNameIdentifier(this);
+  }
+
+  @Override
+  @NotNull
+  public ItemPresentation getPresentation() {
+    return FsdPsiImplUtil.getPresentation(this);
   }
 
 }

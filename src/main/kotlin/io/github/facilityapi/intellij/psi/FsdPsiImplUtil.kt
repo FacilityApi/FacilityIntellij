@@ -1,9 +1,14 @@
 package io.github.facilityapi.intellij.psi
 
+import com.intellij.navigation.ItemPresentation
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiReference
+import io.github.facilityapi.intellij.FsdFile
+import io.github.facilityapi.intellij.FsdFileType
 import io.github.facilityapi.intellij.reference.FsdReference
 import io.github.facilityapi.intellij.reference.createTypeDefinition
+
 
 object FsdPsiImplUtil {
     @JvmStatic
@@ -24,4 +29,13 @@ object FsdPsiImplUtil {
 
     @JvmStatic
     fun FsdReferenceType.getReference(): PsiReference = FsdReference(this, textRangeInParent)
+
+    @JvmStatic
+    fun FsdNamedElement.getPresentation(): ItemPresentation {
+        return object : ItemPresentation {
+            override fun getPresentableText() = this@getPresentation.name ?: ""
+            override fun getLocationString() = this@getPresentation.containingFile?.name
+            override fun getIcon(unused: Boolean) = FsdFileType.icon
+        }
+    }
 }
