@@ -18,7 +18,7 @@ class FsdStructureViewElement(
 
     override fun getAlphaSortKey() = element.name ?: ""
     override fun getValue(): Any = element
-    override fun getPresentation(): ItemPresentation = element.presentation!! // todo: robustness
+    override fun getPresentation(): ItemPresentation = element.presentation!!
     override fun navigate(requestFocus: Boolean) = element.navigate(requestFocus)
     override fun canNavigate() = element.canNavigate()
     override fun canNavigateToSource() = element.canNavigateToSource()
@@ -26,10 +26,10 @@ class FsdStructureViewElement(
     override fun getChildren(): Array<TreeElement> {
         if (element !is FsdFile) return emptyArray()
 
-        // Get the children from the service spec
-        return PsiTreeUtil.findChildrenOfType(element, FsdNamedElement::class.java)
+        return findTypeDefinitions(element.project)
             .filterIsInstance<FsdNamedElementImpl>()
             .map(::FsdStructureViewElement)
+            .toList()
             .toTypedArray()
     }
 }
