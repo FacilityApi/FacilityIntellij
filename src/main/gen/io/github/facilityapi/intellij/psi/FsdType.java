@@ -11,6 +11,6 @@ public interface FsdType extends PsiElement {
   FsdReferenceType getReferenceType();
 
   @Nullable
-  FsdType getType();
+  FsdTypeParameter getTypeParameter();
 
 }

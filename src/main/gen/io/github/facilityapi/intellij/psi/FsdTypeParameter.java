@@ -5,15 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface FsdDataSpec extends PsiElement {
+public interface FsdTypeParameter extends PsiElement {
 
   @NotNull
-  List<FsdAttributeList> getAttributeListList();
-
-  @NotNull
-  List<FsdField> getFieldList();
-
-  @Nullable
-  FsdTypeIdentifier getTypeIdentifier();
+  FsdType getType();
 
 }
