@@ -4,6 +4,8 @@
     <name>Facility API</name>
     <vendor url="https://facilityapi.github.io">Facility API Framework</vendor>
 
+    <resource-bundle>messages.FsdBundle</resource-bundle>
+
     <!-- Enable all JetBrains products -->
     <depends>com.intellij.modules.lang</depends>
 
@@ -37,6 +39,12 @@
         <lang.commenter
             language="FSD"
             implementationClass="io.github.facilityapi.intellij.FsdCommenter" />
+
+        <!-- Enables "Find Usages" -->
+        <lang.findUsagesProvider language="FSD"
+                                 implementationClass="io.github.facilityapi.intellij.FsdFindUsagesProvider" />
+
+        <usageTypeProvider implementation="io.github.facilityapi.intellij.FsdUsageTypeProvider" />
     </extensions>
 
     <actions>

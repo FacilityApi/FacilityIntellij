@@ -157,16 +157,17 @@ public class FsdParser implements PsiParser, LightPsiParser {
   public static boolean data_spec(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "data_spec")) return false;
     if (!nextTokenIs(b, "<data spec>", DATA, LEFT_BRACKET)) return false;
-    boolean r;
+    boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, DATA_SPEC, "<data spec>");
     r = data_spec_0(b, l + 1);
     r = r && consumeToken(b, DATA);
-    r = r && type_identifier(b, l + 1);
-    r = r && consumeToken(b, LEFT_BRACE);
-    r = r && data_spec_4(b, l + 1);
-    r = r && consumeToken(b, RIGHT_BRACE);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+    p = r; // pin = 2
+    r = r && report_error_(b, type_identifier(b, l + 1));
+    r = p && report_error_(b, consumeToken(b, LEFT_BRACE)) && r;
+    r = p && report_error_(b, data_spec_4(b, l + 1)) && r;
+    r = p && consumeToken(b, RIGHT_BRACE) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // attribute_list*
@@ -440,14 +441,15 @@ public class FsdParser implements PsiParser, LightPsiParser {
   public static boolean field(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "field")) return false;
     if (!nextTokenIs(b, "<field>", IDENTIFIER, LEFT_BRACKET)) return false;
-    boolean r;
+    boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, FIELD, "<field>");
     r = field_0(b, l + 1);
     r = r && consumeTokens(b, 0, IDENTIFIER, COLON);
     r = r && type(b, l + 1);
+    p = r; // pin = 4
     r = r && consumeToken(b, SEMI);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // attribute_list*
@@ -479,16 +481,17 @@ public class FsdParser implements PsiParser, LightPsiParser {
   public static boolean method_spec(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "method_spec")) return false;
     if (!nextTokenIs(b, "<method spec>", LEFT_BRACKET, METHOD)) return false;
-    boolean r;
+    boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, METHOD_SPEC, "<method spec>");
     r = method_spec_0(b, l + 1);
-    r = r && consumeTokens(b, 0, METHOD, IDENTIFIER, LEFT_BRACE);
-    r = r && method_spec_4(b, l + 1);
-    r = r && consumeTokens(b, 0, RIGHT_BRACE, COLON, LEFT_BRACE);
-    r = r && method_spec_8(b, l + 1);
-    r = r && consumeToken(b, RIGHT_BRACE);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+    r = r && consumeTokens(b, 1, METHOD, IDENTIFIER, LEFT_BRACE);
+    p = r; // pin = 2
+    r = r && report_error_(b, method_spec_4(b, l + 1));
+    r = p && report_error_(b, consumeTokens(b, -1, RIGHT_BRACE, COLON, LEFT_BRACE)) && r;
+    r = p && report_error_(b, method_spec_8(b, l + 1)) && r;
+    r = p && consumeToken(b, RIGHT_BRACE) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // attribute_list*
@@ -541,10 +544,36 @@ public class FsdParser implements PsiParser, LightPsiParser {
   static boolean service_item(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "service_item")) return false;
     boolean r;
+    Marker m = enter_section_(b, l, _NONE_);
     r = enum_spec(b, l + 1);
     if (!r) r = data_spec(b, l + 1);
     if (!r) r = method_spec(b, l + 1);
     if (!r) r = error_set_spec(b, l + 1);
+    exit_section_(b, l, m, r, false, FsdParser::service_item_recover);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // !('[' | '}' | enum | data | errors | method)
+  static boolean service_item_recover(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "service_item_recover")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_);
+    r = !service_item_recover_0(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // '[' | '}' | enum | data | errors | method
+  private static boolean service_item_recover_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "service_item_recover_0")) return false;
+    boolean r;
+    r = consumeToken(b, LEFT_BRACKET);
+    if (!r) r = consumeToken(b, RIGHT_BRACE);
+    if (!r) r = consumeToken(b, ENUM);
+    if (!r) r = consumeToken(b, DATA);
+    if (!r) r = consumeToken(b, ERRORS);
+    if (!r) r = consumeToken(b, METHOD);
     return r;
   }
 
@@ -609,11 +638,11 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (string | boolean | int32 | int64 | double | decimal | bytes | object | map | result | error | reference_type) [ '<' type '>' ] [ ('['']')* ]
+  // (string | boolean | int32 | int64 | double | decimal | bytes | object | map | result | error | reference_type) [ type_parameter ] [ ('['']')* ]
   public static boolean type(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "type")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _COLLAPSE_, TYPE, "<type>");
+    Marker m = enter_section_(b, l, _NONE_, TYPE, "<type>");
     r = type_0(b, l + 1);
     r = r && type_1(b, l + 1);
     r = r && type_2(b, l + 1);
@@ -640,23 +669,11 @@ public class FsdParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // [ '<' type '>' ]
+  // [ type_parameter ]
   private static boolean type_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "type_1")) return false;
-    type_1_0(b, l + 1);
+    type_parameter(b, l + 1);
     return true;
-  }
-
-  // '<' type '>'
-  private static boolean type_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "type_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, LEFT_ANGLE);
-    r = r && type(b, l + 1);
-    r = r && consumeToken(b, RIGHT_ANGLE);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   // [ ('['']')* ]
@@ -697,6 +714,21 @@ public class FsdParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, IDENTIFIER);
     exit_section_(b, m, TYPE_IDENTIFIER, r);
     return r;
+  }
+
+  /* ********************************************************** */
+  // '<' type '>'
+  public static boolean type_parameter(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "type_parameter")) return false;
+    if (!nextTokenIs(b, LEFT_ANGLE)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, TYPE_PARAMETER, null);
+    r = consumeToken(b, LEFT_ANGLE);
+    r = r && type(b, l + 1);
+    p = r; // pin = 2
+    r = r && consumeToken(b, RIGHT_ANGLE);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
 }
