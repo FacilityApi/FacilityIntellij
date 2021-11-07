@@ -40,4 +40,8 @@ public class FsdReferenceTypeImpl extends ASTWrapperPsiElement implements FsdRef
     return FsdPsiImplUtil.getReference(this);
   }
 
+  @Override
+  public PsiElement getContext() {
+    return super.getContext();
+  }
 }
