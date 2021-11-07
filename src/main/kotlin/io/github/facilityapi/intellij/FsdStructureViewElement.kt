@@ -7,6 +7,8 @@ import com.intellij.navigation.ItemPresentation
 import com.intellij.psi.NavigatablePsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import io.github.facilityapi.intellij.psi.FsdDataSpec
+import io.github.facilityapi.intellij.psi.FsdNamedElement
+import io.github.facilityapi.intellij.psi.FsdNamedElementImpl
 import io.github.facilityapi.intellij.psi.impl.FsdDataSpecImpl
 
 
@@ -22,18 +24,12 @@ class FsdStructureViewElement(
     override fun canNavigateToSource() = element.canNavigateToSource()
 
     override fun getChildren(): Array<TreeElement> {
-        if (element is FsdFile) {
-            val properties: List<FsdDataSpec> = PsiTreeUtil.getChildrenOfTypeAsList(
-                element,
-                FsdDataSpec::class.java
-            )
-            val treeElements: MutableList<TreeElement> = ArrayList(properties.size)
-            for (property in properties) {
-                treeElements.add(FsdStructureViewElement(property as FsdDataSpecImpl))
-            }
-            return treeElements.toTypedArray()
-        }
+        if (element !is FsdFile) return emptyArray()
 
-        return emptyArray()
+        // Get the children from the service spec
+        return PsiTreeUtil.findChildrenOfType(element, FsdNamedElement::class.java)
+            .filterIsInstance<FsdNamedElementImpl>()
+            .map(::FsdStructureViewElement)
+            .toTypedArray()
     }
 }

@@ -50,6 +50,10 @@
         <lang.psiStructureViewFactory
             language="FSD"
             implementationClass="io.github.facilityapi.intellij.FsdStructureViewFactory" />
+
+        <!-- Enables go to symbol -->
+        <gotoSymbolContributor implementation="io.github.facilityapi.intellij.FsdChooseByNameContributor" />
+
     </extensions>
 
     <actions>

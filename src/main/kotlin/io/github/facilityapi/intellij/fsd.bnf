@@ -60,7 +60,7 @@ type_identifier ::= identifier
 {
   mixin="io.github.facilityapi.intellij.psi.FsdNamedElementImpl"
   implements="io.github.facilityapi.intellij.psi.FsdNamedElement"
-  methods=[getName setName getNameIdentifier]
+  methods=[getName setName getNameIdentifier getPresentation]
 }
 
 attribute_list ::= '[' attribute (',' attribute)* ']'
