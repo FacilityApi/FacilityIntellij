@@ -5,6 +5,7 @@
 ## [Unreleased]
 ### Added
 - Rename types with inline refactoring
+- Autocomplete user-defined types
 
 ## 0.0.4
 ### Changed

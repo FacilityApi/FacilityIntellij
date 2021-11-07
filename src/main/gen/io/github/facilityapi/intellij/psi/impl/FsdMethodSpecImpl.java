@@ -40,9 +40,9 @@ public class FsdMethodSpecImpl extends ASTWrapperPsiElement implements FsdMethod
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
+    return findChildByType(IDENTIFIER);
   }
 
 }

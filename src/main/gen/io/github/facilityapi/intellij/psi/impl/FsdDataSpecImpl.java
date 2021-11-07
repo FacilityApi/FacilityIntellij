@@ -40,9 +40,9 @@ public class FsdDataSpecImpl extends ASTWrapperPsiElement implements FsdDataSpec
   }
 
   @Override
-  @NotNull
+  @Nullable
   public FsdTypeIdentifier getTypeIdentifier() {
-    return findNotNullChildByClass(FsdTypeIdentifier.class);
+    return findChildByClass(FsdTypeIdentifier.class);
   }
 
 }
