@@ -32,6 +32,11 @@
         <lang.refactoringSupport
                 language="FSD"
                 implementationClass="io.github.facilityapi.intellij.reference.FsdRefactoringSupportProvider" />
+
+        <!-- Editor comment / uncomment -->
+        <lang.commenter
+            language="FSD"
+            implementationClass="io.github.facilityapi.intellij.FsdCommenter" />
     </extensions>
 
     <actions>

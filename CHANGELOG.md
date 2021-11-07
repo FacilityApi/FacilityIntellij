@@ -5,6 +5,7 @@
 ## [Unreleased]
 ### Added
 - Rename types with inline refactoring
+- Comment or uncomment lines with editor actions
 
 ## 0.0.4
 ### Changed
