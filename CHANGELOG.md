@@ -7,6 +7,7 @@
 - Rename types with inline refactoring
 - Autocomplete user-defined types
 - Find usages for user-defined types
+- Comment or uncomment lines with editor actions
 
 ## 0.0.4
 ### Changed

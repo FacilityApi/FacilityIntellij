@@ -35,6 +35,11 @@
                 language="FSD"
                 implementationClass="io.github.facilityapi.intellij.reference.FsdRefactoringSupportProvider" />
 
+        <!-- Editor comment / uncomment -->
+        <lang.commenter
+            language="FSD"
+            implementationClass="io.github.facilityapi.intellij.FsdCommenter" />
+
         <!-- Enables "Find Usages" -->
         <lang.findUsagesProvider language="FSD"
                                  implementationClass="io.github.facilityapi.intellij.FsdFindUsagesProvider" />
