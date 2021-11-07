@@ -54,6 +54,11 @@
         <!-- Enables go to symbol -->
         <gotoSymbolContributor implementation="io.github.facilityapi.intellij.FsdChooseByNameContributor" />
 
+        <!-- Enables formatting -->
+        <lang.formatter
+            language="FSD"
+            implementationClass="io.github.facilityapi.intellij.formatting.FsdFormattingModelBuilder" />
+
     </extensions>
 
     <actions>
