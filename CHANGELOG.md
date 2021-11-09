@@ -3,6 +3,8 @@
 # FacilityIntellij Changelog
 
 ## [Unreleased]
+
+## [0.0.5]
 ### Added
 - Rename types with inline refactoring
 - Autocomplete user-defined types
@@ -20,8 +22,8 @@
 - Point references to github project at the FacilityApi organization
 
 ## 0.0.2
-### Added 
-- Icon and description to the plugin marketplace page  
+### Added
+- Icon and description to the plugin marketplace page
 
 ## 0.0.1
 ### Added
