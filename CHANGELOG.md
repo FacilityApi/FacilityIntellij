@@ -3,6 +3,8 @@
 # FacilityIntellij Changelog
 
 ## [Unreleased]
+### Added
+- Support re-indent code
 
 ## [0.0.5]
 ### Added
