@@ -10,17 +10,15 @@ class FsdFormattingModelBuilder : FormattingModelBuilder {
     override fun createModel(formattingContext: FormattingContext): FormattingModel {
         val block = FsdBlock(
             formattingContext.node,
-            Wrap.createWrap(WrapType.NONE, false),
+            Wrap.createWrap(WrapType.NORMAL, false),
             Alignment.createAlignment(),
             formattingContext.codeStyleSettings,
         )
 
-        return DocumentBasedFormattingModel(
-            block,
-            formattingContext.project,
-            formattingContext.codeStyleSettings,
-            formattingContext.containingFile.fileType,
+        return FormattingModelProvider.createFormattingModelForPsiFile(
             formattingContext.containingFile,
+            block,
+            formattingContext.codeStyleSettings,
         )
     }
 }
