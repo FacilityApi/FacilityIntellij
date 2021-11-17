@@ -3,9 +3,12 @@ package io.github.facilityapi.intellij.formatting
 import com.intellij.formatting.*
 import com.intellij.formatting.templateLanguages.BlockWithParent
 import com.intellij.lang.ASTNode
+import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.TokenType
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.formatter.common.AbstractBlock
+import io.github.facilityapi.intellij.psi.FsdTypes
+
 
 class FsdBlock(
     node: ASTNode,
@@ -14,7 +17,7 @@ class FsdBlock(
     private val codeStyleSettings: CodeStyleSettings
 ) : AbstractBlock(node, wrap, alignment), BlockWithParent {
 
-    private val _indent: Indent = FsdIndentProcessor(codeStyleSettings).getIndent(node)
+    private val _indent: Indent = FsdIndentProcessor().getIndent(node)
     private var parent: BlockWithParent? = null
 
     override fun getIndent(): Indent = _indent
@@ -50,6 +53,21 @@ class FsdBlock(
     }
 
     override fun getChildAttributes(newChildIndex: Int): ChildAttributes {
-        return super.getChildAttributes(newChildIndex) // todo: really implement this for nicer editing
+        if (newChildIndex == 0) {
+            return ChildAttributes(Indent.getNoneIndent(), null)
+        }
+
+        val previousBlock = subBlocks.take(newChildIndex)
+            .reversed()
+            .firstOrNull { (it as ASTBlock) !is PsiWhiteSpace }
+
+        val prevType = (previousBlock as ASTBlock?)?.node?.elementType
+        if (prevType == FsdTypes.LEFT_BRACE ||
+            prevType == FsdTypes.DECORATED_SERVICE_ITEM ||
+            prevType == FsdTypes.DECORATED_FIELD) {
+            return ChildAttributes(Indent.getNormalIndent(), null)
+        }
+
+        return ChildAttributes(previousBlock?.indent, previousBlock?.alignment)
     }
 }
