@@ -31,6 +31,14 @@ public class FsdVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitDecoratedField(@NotNull FsdDecoratedField o) {
+    visitPsiElement(o);
+  }
+
+  public void visitDecoratedServiceItem(@NotNull FsdDecoratedServiceItem o) {
+    visitPsiElement(o);
+  }
+
   public void visitEnumSpec(@NotNull FsdEnumSpec o) {
     visitPsiElement(o);
   }

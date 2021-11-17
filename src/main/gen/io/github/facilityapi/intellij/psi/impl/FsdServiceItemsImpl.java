@@ -29,32 +29,8 @@ public class FsdServiceItemsImpl extends ASTWrapperPsiElement implements FsdServ
 
   @Override
   @NotNull
-  public List<FsdAttributeList> getAttributeListList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdAttributeList.class);
-  }
-
-  @Override
-  @NotNull
-  public List<FsdDataSpec> getDataSpecList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdDataSpec.class);
-  }
-
-  @Override
-  @NotNull
-  public List<FsdEnumSpec> getEnumSpecList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdEnumSpec.class);
-  }
-
-  @Override
-  @NotNull
-  public List<FsdErrorSetSpec> getErrorSetSpecList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdErrorSetSpec.class);
-  }
-
-  @Override
-  @NotNull
-  public List<FsdMethodSpec> getMethodSpecList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdMethodSpec.class);
+  public List<FsdDecoratedServiceItem> getDecoratedServiceItemList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdDecoratedServiceItem.class);
   }
 
 }

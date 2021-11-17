@@ -8,12 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface FsdMethodSpec extends PsiElement {
 
   @NotNull
-  List<FsdAttributeList> getAttributeListList();
+  List<FsdDecoratedField> getDecoratedFieldList();
 
-  @NotNull
-  List<FsdField> getFieldList();
-
-  @NotNull
+  @Nullable
   PsiElement getIdentifier();
 
 }

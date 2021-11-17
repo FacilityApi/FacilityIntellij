@@ -153,51 +153,29 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // data type_identifier '{' (attribute_list* field)* '}'
+  // data type_identifier '{' decorated_field* '}'
   public static boolean data_spec(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "data_spec")) return false;
     if (!nextTokenIs(b, DATA)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, DATA_SPEC, null);
     r = consumeToken(b, DATA);
-    r = r && type_identifier(b, l + 1);
-    p = r; // pin = 2
-    r = r && report_error_(b, consumeToken(b, LEFT_BRACE));
+    p = r; // pin = 1
+    r = r && report_error_(b, type_identifier(b, l + 1));
+    r = p && report_error_(b, consumeToken(b, LEFT_BRACE)) && r;
     r = p && report_error_(b, data_spec_3(b, l + 1)) && r;
     r = p && consumeToken(b, RIGHT_BRACE) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // (attribute_list* field)*
+  // decorated_field*
   private static boolean data_spec_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "data_spec_3")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!data_spec_3_0(b, l + 1)) break;
+      if (!decorated_field(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "data_spec_3", c)) break;
-    }
-    return true;
-  }
-
-  // attribute_list* field
-  private static boolean data_spec_3_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "data_spec_3_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = data_spec_3_0_0(b, l + 1);
-    r = r && field(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // attribute_list*
-  private static boolean data_spec_3_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "data_spec_3_0_0")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!attribute_list(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "data_spec_3_0_0", c)) break;
     }
     return true;
   }
@@ -246,6 +224,53 @@ public class FsdParser implements PsiParser, LightPsiParser {
       int c = current_position_(b);
       if (!attribute_list(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "decorated_error_spec_0", c)) break;
+    }
+    return true;
+  }
+
+  /* ********************************************************** */
+  // attribute_list* field
+  public static boolean decorated_field(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "decorated_field")) return false;
+    if (!nextTokenIs(b, "<decorated field>", IDENTIFIER, LEFT_BRACKET)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, DECORATED_FIELD, "<decorated field>");
+    r = decorated_field_0(b, l + 1);
+    r = r && field(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // attribute_list*
+  private static boolean decorated_field_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "decorated_field_0")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!attribute_list(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "decorated_field_0", c)) break;
+    }
+    return true;
+  }
+
+  /* ********************************************************** */
+  // attribute_list* service_item
+  public static boolean decorated_service_item(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "decorated_service_item")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, DECORATED_SERVICE_ITEM, "<decorated service item>");
+    r = decorated_service_item_0(b, l + 1);
+    r = r && service_item(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // attribute_list*
+  private static boolean decorated_service_item_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "decorated_service_item_0")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!attribute_list(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "decorated_service_item_0", c)) break;
     }
     return true;
   }
@@ -473,13 +498,14 @@ public class FsdParser implements PsiParser, LightPsiParser {
   public static boolean field(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "field")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, FIELD, null);
     r = consumeTokens(b, 0, IDENTIFIER, COLON);
     r = r && type(b, l + 1);
+    p = r; // pin = 3
     r = r && consumeToken(b, SEMI);
-    exit_section_(b, m, FIELD, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -496,14 +522,14 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // method identifier '{' (attribute_list* field)* '}' ':' '{' (attribute_list* field)* '}'
+  // method identifier '{' decorated_field* '}' ':' '{' decorated_field* '}'
   public static boolean method_spec(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "method_spec")) return false;
     if (!nextTokenIs(b, METHOD)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, METHOD_SPEC, null);
-    r = consumeTokens(b, 2, METHOD, IDENTIFIER, LEFT_BRACE);
-    p = r; // pin = 2
+    r = consumeTokens(b, 1, METHOD, IDENTIFIER, LEFT_BRACE);
+    p = r; // pin = 1
     r = r && report_error_(b, method_spec_3(b, l + 1));
     r = p && report_error_(b, consumeTokens(b, -1, RIGHT_BRACE, COLON, LEFT_BRACE)) && r;
     r = p && report_error_(b, method_spec_7(b, l + 1)) && r;
@@ -512,68 +538,24 @@ public class FsdParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // (attribute_list* field)*
+  // decorated_field*
   private static boolean method_spec_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "method_spec_3")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!method_spec_3_0(b, l + 1)) break;
+      if (!decorated_field(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "method_spec_3", c)) break;
     }
     return true;
   }
 
-  // attribute_list* field
-  private static boolean method_spec_3_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "method_spec_3_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = method_spec_3_0_0(b, l + 1);
-    r = r && field(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // attribute_list*
-  private static boolean method_spec_3_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "method_spec_3_0_0")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!attribute_list(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "method_spec_3_0_0", c)) break;
-    }
-    return true;
-  }
-
-  // (attribute_list* field)*
+  // decorated_field*
   private static boolean method_spec_7(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "method_spec_7")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!method_spec_7_0(b, l + 1)) break;
+      if (!decorated_field(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "method_spec_7", c)) break;
-    }
-    return true;
-  }
-
-  // attribute_list* field
-  private static boolean method_spec_7_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "method_spec_7_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = method_spec_7_0_0(b, l + 1);
-    r = r && field(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // attribute_list*
-  private static boolean method_spec_7_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "method_spec_7_0_0")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!attribute_list(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "method_spec_7_0_0", c)) break;
     }
     return true;
   }
@@ -591,36 +573,16 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // attribute_list* (enum_spec | data_spec | method_spec | error_set_spec)
+  // enum_spec | data_spec | method_spec | error_set_spec
   static boolean service_item(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "service_item")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_);
-    r = service_item_0(b, l + 1);
-    r = r && service_item_1(b, l + 1);
-    exit_section_(b, l, m, r, false, FsdParser::service_item_recover);
-    return r;
-  }
-
-  // attribute_list*
-  private static boolean service_item_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "service_item_0")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!attribute_list(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "service_item_0", c)) break;
-    }
-    return true;
-  }
-
-  // enum_spec | data_spec | method_spec | error_set_spec
-  private static boolean service_item_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "service_item_1")) return false;
-    boolean r;
     r = enum_spec(b, l + 1);
     if (!r) r = data_spec(b, l + 1);
     if (!r) r = method_spec(b, l + 1);
     if (!r) r = error_set_spec(b, l + 1);
+    exit_section_(b, l, m, r, false, FsdParser::service_item_recover);
     return r;
   }
 
@@ -649,18 +611,18 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '{' service_item* '}' | service_item
+  // '{' decorated_service_item* '}' | decorated_service_item
   public static boolean service_items(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "service_items")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, SERVICE_ITEMS, "<service items>");
     r = service_items_0(b, l + 1);
-    if (!r) r = service_item(b, l + 1);
+    if (!r) r = decorated_service_item(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // '{' service_item* '}'
+  // '{' decorated_service_item* '}'
   private static boolean service_items_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "service_items_0")) return false;
     boolean r;
@@ -672,12 +634,12 @@ public class FsdParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // service_item*
+  // decorated_service_item*
   private static boolean service_items_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "service_items_0_1")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!service_item(b, l + 1)) break;
+      if (!decorated_service_item(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "service_items_0_1", c)) break;
     }
     return true;

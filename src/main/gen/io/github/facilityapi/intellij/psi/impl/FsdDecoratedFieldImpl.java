@@ -10,16 +10,15 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static io.github.facilityapi.intellij.psi.FsdTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.facilityapi.intellij.psi.*;
-import com.intellij.psi.PsiReference;
 
-public class FsdReferenceTypeImpl extends ASTWrapperPsiElement implements FsdReferenceType {
+public class FsdDecoratedFieldImpl extends ASTWrapperPsiElement implements FsdDecoratedField {
 
-  public FsdReferenceTypeImpl(@NotNull ASTNode node) {
+  public FsdDecoratedFieldImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull FsdVisitor visitor) {
-    visitor.visitReferenceType(this);
+    visitor.visitDecoratedField(this);
   }
 
   @Override
@@ -30,14 +29,14 @@ public class FsdReferenceTypeImpl extends ASTWrapperPsiElement implements FsdRef
 
   @Override
   @NotNull
-  public PsiElement getTypename() {
-    return findNotNullChildByType(TYPENAME);
+  public List<FsdAttributeList> getAttributeListList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdAttributeList.class);
   }
 
   @Override
   @NotNull
-  public PsiReference getReference() {
-    return FsdPsiImplUtil.getReference(this);
+  public FsdField getField() {
+    return findNotNullChildByClass(FsdField.class);
   }
 
 }

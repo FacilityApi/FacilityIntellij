@@ -29,20 +29,14 @@ public class FsdMethodSpecImpl extends ASTWrapperPsiElement implements FsdMethod
 
   @Override
   @NotNull
-  public List<FsdAttributeList> getAttributeListList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdAttributeList.class);
+  public List<FsdDecoratedField> getDecoratedFieldList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdDecoratedField.class);
   }
 
   @Override
-  @NotNull
-  public List<FsdField> getFieldList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdField.class);
-  }
-
-  @Override
-  @NotNull
+  @Nullable
   public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
+    return findChildByType(IDENTIFIER);
   }
 
 }
