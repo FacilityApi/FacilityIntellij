@@ -64,7 +64,9 @@ class FsdBlock(
         val prevType = (previousBlock as ASTBlock?)?.node?.elementType
         if (prevType == FsdTypes.LEFT_BRACE ||
             prevType == FsdTypes.DECORATED_SERVICE_ITEM ||
-            prevType == FsdTypes.DECORATED_FIELD) {
+            prevType == FsdTypes.DECORATED_FIELD ||
+            prevType == FsdTypes.DECORATED_ENUM_VALUE ||
+            prevType == FsdTypes.DECORATED_ERROR_SPEC) {
             return ChildAttributes(Indent.getNormalIndent(), null)
         }
 
