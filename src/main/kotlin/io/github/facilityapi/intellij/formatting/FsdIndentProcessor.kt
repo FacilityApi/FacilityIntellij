@@ -3,24 +3,11 @@ package io.github.facilityapi.intellij.formatting
 import com.intellij.formatting.Indent
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiFile
-import com.intellij.psi.TokenType
-import com.intellij.psi.codeStyle.CodeStyleSettings
-import io.github.facilityapi.intellij.FsdFile
-import io.github.facilityapi.intellij.psi.FsdType
 import io.github.facilityapi.intellij.psi.FsdTypes
 
-class FsdIndentProcessor(private val codeStyleSettings: CodeStyleSettings) {
+class FsdIndentProcessor {
     fun getIndent(node: ASTNode): Indent {
-        val psi = node.psi
-        val parent = node.treeParent
-
-        val parentType = parent?.elementType
-
-//        if (parentType in blocks && node.elementType in setOf(FsdTypes.LEFT_BRACE, FsdTypes.RIGHT_BRACE)) {
-//            return Indent.getNoneIndent()
-//        }
-
-        if (parent?.psi is PsiFile) {
+        if (node.treeParent?.psi is PsiFile) {
             return Indent.getAbsoluteNoneIndent()
         }
 
