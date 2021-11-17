@@ -29,8 +29,8 @@ public class FsdErrorListImpl extends ASTWrapperPsiElement implements FsdErrorLi
 
   @Override
   @NotNull
-  public List<FsdErrorSpec> getErrorSpecList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdErrorSpec.class);
+  public List<FsdDecoratedErrorSpec> getDecoratedErrorSpecList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdDecoratedErrorSpec.class);
   }
 
 }

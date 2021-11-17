@@ -12,6 +12,8 @@ public interface FsdTypes {
   IElementType ATTRIBUTE_LIST = new FsdElementType("ATTRIBUTE_LIST");
   IElementType ATTRIBUTE_PARAMETER = new FsdElementType("ATTRIBUTE_PARAMETER");
   IElementType DATA_SPEC = new FsdElementType("DATA_SPEC");
+  IElementType DECORATED_ENUM_VALUE = new FsdElementType("DECORATED_ENUM_VALUE");
+  IElementType DECORATED_ERROR_SPEC = new FsdElementType("DECORATED_ERROR_SPEC");
   IElementType ENUM_SPEC = new FsdElementType("ENUM_SPEC");
   IElementType ENUM_VALUE = new FsdElementType("ENUM_VALUE");
   IElementType ENUM_VALUE_LIST = new FsdElementType("ENUM_VALUE_LIST");
@@ -78,6 +80,12 @@ public interface FsdTypes {
       }
       else if (type == DATA_SPEC) {
         return new FsdDataSpecImpl(node);
+      }
+      else if (type == DECORATED_ENUM_VALUE) {
+        return new FsdDecoratedEnumValueImpl(node);
+      }
+      else if (type == DECORATED_ERROR_SPEC) {
+        return new FsdDecoratedErrorSpecImpl(node);
       }
       else if (type == ENUM_SPEC) {
         return new FsdEnumSpecImpl(node);

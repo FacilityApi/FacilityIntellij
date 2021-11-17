@@ -17,7 +17,7 @@ class FsdBlock(
     private val _indent: Indent = FsdIndentProcessor(codeStyleSettings).getIndent(node)
     private var parent: BlockWithParent? = null
 
-    override fun getChildIndent(): Indent = _indent
+    override fun getIndent(): Indent = _indent
     override fun getSpacing(child1: Block?, child2: Block): Spacing? = null
     override fun isLeaf() = myNode.firstChildNode == null
 

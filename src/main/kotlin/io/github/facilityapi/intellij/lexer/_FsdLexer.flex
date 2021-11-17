@@ -25,7 +25,7 @@ import static io.github.facilityapi.intellij.psi.FsdTypes.*;
 EOL=\R
 WHITE_SPACE=\s+
 
-COMMENT="//"([^\r\n]*)(\r\n?|\n|\$)
+COMMENT="//"[^\r\n]*
 IDENTIFIER=[a-zA-Z0-9_]+
 ATTRIBUTEPARAMETERVALUE=\"(([^\"\\]+|\\[\"\\/bfnrt]|\\u[0-9a-fA-f]{4})*)\"|([0-9a-zA-Z.+_-]+)
 NUMBER=[0-9]+(\.[0-9]*)?

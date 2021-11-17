@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface FsdErrorList extends PsiElement {
 
   @NotNull
-  List<FsdErrorSpec> getErrorSpecList();
+  List<FsdDecoratedErrorSpec> getDecoratedErrorSpecList();
 
 }

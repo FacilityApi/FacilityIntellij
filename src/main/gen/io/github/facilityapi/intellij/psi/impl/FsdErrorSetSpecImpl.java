@@ -29,12 +29,6 @@ public class FsdErrorSetSpecImpl extends ASTWrapperPsiElement implements FsdErro
 
   @Override
   @NotNull
-  public List<FsdAttributeList> getAttributeListList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdAttributeList.class);
-  }
-
-  @Override
-  @NotNull
   public FsdErrorList getErrorList() {
     return findNotNullChildByClass(FsdErrorList.class);
   }

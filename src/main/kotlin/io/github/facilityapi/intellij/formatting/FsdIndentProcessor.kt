@@ -20,8 +20,8 @@ class FsdIndentProcessor(private val codeStyleSettings: CodeStyleSettings) {
 //            return Indent.getNoneIndent()
 //        }
 
-        if (psi is PsiFile) {
-            return Indent.getNoneIndent();
+        if (parent?.psi is PsiFile) {
+            return Indent.getAbsoluteNoneIndent()
         }
 
         if (node.elementType in blocks) {
@@ -33,11 +33,15 @@ class FsdIndentProcessor(private val codeStyleSettings: CodeStyleSettings) {
 
     companion object {
         val blocks = setOf(
-            FsdTypes.SERVICE_ITEMS,
+            FsdTypes.COMMENT,
+            FsdTypes.ATTRIBUTE_LIST,
             FsdTypes.METHOD_SPEC,
             FsdTypes.DATA_SPEC,
             FsdTypes.ENUM_SPEC,
+            FsdTypes.ENUM_VALUE,
             FsdTypes.ERROR_SET_SPEC,
+            FsdTypes.ERROR_SPEC,
+            FsdTypes.FIELD,
         )
     }
 }

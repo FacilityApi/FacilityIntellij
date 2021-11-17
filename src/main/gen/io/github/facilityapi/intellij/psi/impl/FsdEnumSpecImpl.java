@@ -29,12 +29,6 @@ public class FsdEnumSpecImpl extends ASTWrapperPsiElement implements FsdEnumSpec
 
   @Override
   @NotNull
-  public List<FsdAttributeList> getAttributeListList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdAttributeList.class);
-  }
-
-  @Override
-  @NotNull
   public FsdEnumValueList getEnumValueList() {
     return findNotNullChildByClass(FsdEnumValueList.class);
   }

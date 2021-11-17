@@ -29,8 +29,8 @@ public class FsdEnumValueListImpl extends ASTWrapperPsiElement implements FsdEnu
 
   @Override
   @NotNull
-  public List<FsdEnumValue> getEnumValueList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdEnumValue.class);
+  public List<FsdDecoratedEnumValue> getDecoratedEnumValueList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdDecoratedEnumValue.class);
   }
 
 }

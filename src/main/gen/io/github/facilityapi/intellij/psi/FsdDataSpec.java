@@ -13,7 +13,7 @@ public interface FsdDataSpec extends PsiElement {
   @NotNull
   List<FsdField> getFieldList();
 
-  @Nullable
+  @NotNull
   FsdTypeIdentifier getTypeIdentifier();
 
 }
