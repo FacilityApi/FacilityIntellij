@@ -40,6 +40,11 @@
             language="FSD"
             implementationClass="io.github.facilityapi.intellij.FsdCommenter" />
 
+        <!-- Adds built-in types to autocomplete suggestions -->
+        <completion.contributor
+            language="FSD"
+            implementationClass="io.github.facilityapi.intellij.FsdCompletionContributor" />
+
         <!-- Enables "Find Usages" -->
         <lang.findUsagesProvider language="FSD"
                                  implementationClass="io.github.facilityapi.intellij.FsdFindUsagesProvider" />
