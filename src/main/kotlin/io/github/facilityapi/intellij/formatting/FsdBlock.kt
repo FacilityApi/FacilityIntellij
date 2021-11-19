@@ -1,6 +1,12 @@
 package io.github.facilityapi.intellij.formatting
 
-import com.intellij.formatting.*
+import com.intellij.formatting.ASTBlock
+import com.intellij.formatting.Alignment
+import com.intellij.formatting.Block
+import com.intellij.formatting.ChildAttributes
+import com.intellij.formatting.Indent
+import com.intellij.formatting.Spacing
+import com.intellij.formatting.Wrap
 import com.intellij.formatting.templateLanguages.BlockWithParent
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiWhiteSpace
@@ -8,7 +14,6 @@ import com.intellij.psi.TokenType
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.formatter.common.AbstractBlock
 import io.github.facilityapi.intellij.psi.FsdTypes
-
 
 class FsdBlock(
     node: ASTNode,
@@ -66,7 +71,8 @@ class FsdBlock(
             prevType == FsdTypes.DECORATED_SERVICE_ITEM ||
             prevType == FsdTypes.DECORATED_FIELD ||
             prevType == FsdTypes.DECORATED_ENUM_VALUE ||
-            prevType == FsdTypes.DECORATED_ERROR_SPEC) {
+            prevType == FsdTypes.DECORATED_ERROR_SPEC
+        ) {
             return ChildAttributes(Indent.getNormalIndent(), null)
         }
 

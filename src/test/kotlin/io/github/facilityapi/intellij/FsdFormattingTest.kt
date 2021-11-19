@@ -2,7 +2,6 @@ package io.github.facilityapi.intellij
 
 import com.intellij.psi.formatter.FormatterTestCase
 
-
 class FsdFormattingTest : FormatterTestCase() {
     override fun getTestDataPath() = "src/test/testData"
     override fun getBasePath(): String = "formatter"

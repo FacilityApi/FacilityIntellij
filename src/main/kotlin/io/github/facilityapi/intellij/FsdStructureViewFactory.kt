@@ -1,7 +1,6 @@
 package io.github.facilityapi.intellij
 
 import com.intellij.ide.structureView.StructureViewBuilder
-import com.intellij.ide.structureView.StructureViewModel
 import com.intellij.ide.structureView.TreeBasedStructureViewBuilder
 import com.intellij.lang.PsiStructureViewFactory
 import com.intellij.openapi.editor.Editor

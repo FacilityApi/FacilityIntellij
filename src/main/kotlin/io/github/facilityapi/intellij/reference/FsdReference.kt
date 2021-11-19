@@ -1,6 +1,5 @@
 package io.github.facilityapi.intellij.reference
 
-import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
@@ -31,7 +30,7 @@ class FsdReference(element: PsiElement, textRange: TextRange) : PsiReferenceBase
 
     override fun handleElementRename(newElementName: String): PsiElement {
         val newTypeReference = createTypeReference(myElement.project, newElementName)
-        myElement.parent.node.replaceChild(myElement.node,  newTypeReference.node)
+        myElement.parent.node.replaceChild(myElement.node, newTypeReference.node)
         return myElement
     }
 }

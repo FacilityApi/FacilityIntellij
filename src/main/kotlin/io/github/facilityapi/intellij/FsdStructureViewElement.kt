@@ -5,12 +5,7 @@ import com.intellij.ide.util.treeView.smartTree.SortableTreeElement
 import com.intellij.ide.util.treeView.smartTree.TreeElement
 import com.intellij.navigation.ItemPresentation
 import com.intellij.psi.NavigatablePsiElement
-import com.intellij.psi.util.PsiTreeUtil
-import io.github.facilityapi.intellij.psi.FsdDataSpec
-import io.github.facilityapi.intellij.psi.FsdNamedElement
 import io.github.facilityapi.intellij.psi.FsdNamedElementImpl
-import io.github.facilityapi.intellij.psi.impl.FsdDataSpecImpl
-
 
 class FsdStructureViewElement(
     private val element: NavigatablePsiElement,

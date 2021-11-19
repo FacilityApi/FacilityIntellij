@@ -4,7 +4,7 @@ import assertk.assertThat
 import assertk.assertions.hasSize
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
-class FsdFindUsageProviderTest: BasePlatformTestCase() {
+class FsdFindUsageProviderTest : BasePlatformTestCase() {
     fun `test find usages works from type definition`() {
         myFixture.configureByText(
             FsdFileType,

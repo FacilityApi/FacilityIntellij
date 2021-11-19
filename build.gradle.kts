@@ -1,6 +1,6 @@
 import org.jetbrains.changelog.markdownToHTML
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.grammarkit.tasks.GenerateLexer
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun properties(key: String) = project.findProperty(key).toString()
 
@@ -17,6 +17,8 @@ plugins {
     id("org.jetbrains.qodana") version "0.1.13"
     // Gradle GrammarKit Plugin
     id("org.jetbrains.grammarkit") version "2021.1.3"
+    // ktlint Plugin
+    id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
 }
 
 group = properties("pluginGroup")
@@ -28,6 +30,7 @@ repositories {
 }
 
 dependencies {
+    implementation(kotlin("stdlib-jdk8"))
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.25")
 }
 
@@ -101,11 +104,13 @@ tasks {
         )
 
         // Get the latest available change notes from the changelog file
-        changeNotes.set(provider {
-            changelog.run {
-                getOrNull(properties("pluginVersion")) ?: getLatest()
-            }.toHTML()
-        })
+        changeNotes.set(
+            provider {
+                changelog.run {
+                    getOrNull(properties("pluginVersion")) ?: getLatest()
+                }.toHTML()
+            }
+        )
     }
 
     runPluginVerifier {
@@ -137,6 +142,6 @@ tasks {
     }
 }
 
-dependencies {
-    implementation(kotlin("stdlib-jdk8"))
+ktlint {
+    version.set("0.43.0")
 }

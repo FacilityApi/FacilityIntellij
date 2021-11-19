@@ -1,6 +1,10 @@
 package io.github.facilityapi.intellij
 
-import com.intellij.codeInsight.completion.*
+import com.intellij.codeInsight.completion.CompletionContributor
+import com.intellij.codeInsight.completion.CompletionParameters
+import com.intellij.codeInsight.completion.CompletionProvider
+import com.intellij.codeInsight.completion.CompletionResultSet
+import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.util.ProcessingContext
@@ -13,9 +17,11 @@ class FsdCompletionContributor : CompletionContributor() {
             CompletionType.BASIC,
             PlatformPatterns.psiElement(FsdTypes.TYPENAME).withSuperParent(2, FsdType::class.java),
             object : CompletionProvider<CompletionParameters>() {
-                override fun addCompletions(parameters: CompletionParameters,
-                                            context: ProcessingContext,
-                                            resultSet: CompletionResultSet) {
+                override fun addCompletions(
+                    parameters: CompletionParameters,
+                    context: ProcessingContext,
+                    resultSet: CompletionResultSet
+                ) {
                     resultSet.addElement(LookupElementBuilder.create("string"))
                     resultSet.addElement(LookupElementBuilder.create("boolean"))
                     resultSet.addElement(LookupElementBuilder.create("int32"))

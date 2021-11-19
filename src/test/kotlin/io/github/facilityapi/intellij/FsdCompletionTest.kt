@@ -1,7 +1,6 @@
 package io.github.facilityapi.intellij
 
 import assertk.assertThat
-import assertk.assertions.containsExactly
 import assertk.assertions.containsExactlyInAnyOrder
 import assertk.assertions.isNotNull
 import com.intellij.testFramework.fixtures.BasePlatformTestCase

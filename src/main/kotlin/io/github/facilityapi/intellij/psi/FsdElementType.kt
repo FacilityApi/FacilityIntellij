@@ -1,6 +1,6 @@
 package io.github.facilityapi.intellij.psi
 
-import io.github.facilityapi.intellij.FsdLanguage
 import com.intellij.psi.tree.IElementType
+import io.github.facilityapi.intellij.FsdLanguage
 
 class FsdElementType(name: String) : IElementType(name, FsdLanguage)

@@ -1,0 +1,4 @@
+* text=auto eol=lf
+
+**/testData/** linguist-vendored
+*.jar binary

@@ -1,6 +1,5 @@
 package io.github.facilityapi.intellij
 
-import io.github.facilityapi.intellij.lexer.FsdLexerAdapter
 import com.intellij.lexer.Lexer
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.colors.TextAttributesKey
@@ -11,6 +10,7 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.tree.IElementType
+import io.github.facilityapi.intellij.lexer.FsdLexerAdapter
 import io.github.facilityapi.intellij.psi.FsdTypes
 
 class FsdSyntaxHighlighter : SyntaxHighlighterBase() {
