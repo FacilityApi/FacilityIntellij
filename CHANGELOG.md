@@ -3,6 +3,8 @@
 # FacilityIntellij Changelog
 
 ## [Unreleased]
+
+## [0.0.6]
 ### Added
 - Automatically indent code
 - Autocomplete built-in types
