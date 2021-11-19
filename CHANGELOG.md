@@ -3,6 +3,8 @@
 # FacilityIntellij Changelog
 
 ## [Unreleased]
+### Added
+- Autocomplete built-in types
 
 ## [0.0.5]
 ### Added
