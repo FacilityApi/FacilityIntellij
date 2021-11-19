@@ -29,12 +29,6 @@ public class FsdServiceSpecImpl extends ASTWrapperPsiElement implements FsdServi
 
   @Override
   @NotNull
-  public List<FsdAttributeList> getAttributeListList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdAttributeList.class);
-  }
-
-  @Override
-  @NotNull
   public FsdServiceItems getServiceItems() {
     return findNotNullChildByClass(FsdServiceItems.class);
   }

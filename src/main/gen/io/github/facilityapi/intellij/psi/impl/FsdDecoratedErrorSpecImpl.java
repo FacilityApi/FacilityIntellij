@@ -11,14 +11,14 @@ import static io.github.facilityapi.intellij.psi.FsdTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.facilityapi.intellij.psi.*;
 
-public class FsdEnumValueImpl extends ASTWrapperPsiElement implements FsdEnumValue {
+public class FsdDecoratedErrorSpecImpl extends ASTWrapperPsiElement implements FsdDecoratedErrorSpec {
 
-  public FsdEnumValueImpl(@NotNull ASTNode node) {
+  public FsdDecoratedErrorSpecImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull FsdVisitor visitor) {
-    visitor.visitEnumValue(this);
+    visitor.visitDecoratedErrorSpec(this);
   }
 
   @Override
@@ -29,8 +29,14 @@ public class FsdEnumValueImpl extends ASTWrapperPsiElement implements FsdEnumVal
 
   @Override
   @NotNull
-  public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
+  public List<FsdAttributeList> getAttributeListList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdAttributeList.class);
+  }
+
+  @Override
+  @NotNull
+  public FsdErrorSpec getErrorSpec() {
+    return findNotNullChildByClass(FsdErrorSpec.class);
   }
 
 }

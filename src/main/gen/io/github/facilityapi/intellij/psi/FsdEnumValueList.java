@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface FsdEnumValueList extends PsiElement {
 
   @NotNull
-  List<FsdEnumValue> getEnumValueList();
+  List<FsdDecoratedEnumValue> getDecoratedEnumValueList();
 
 }

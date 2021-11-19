@@ -29,12 +29,6 @@ public class FsdFieldImpl extends ASTWrapperPsiElement implements FsdField {
 
   @Override
   @NotNull
-  public List<FsdAttributeList> getAttributeListList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdAttributeList.class);
-  }
-
-  @Override
-  @NotNull
   public FsdType getType() {
     return findNotNullChildByClass(FsdType.class);
   }

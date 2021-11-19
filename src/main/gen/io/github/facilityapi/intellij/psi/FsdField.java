@@ -8,9 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface FsdField extends PsiElement {
 
   @NotNull
-  List<FsdAttributeList> getAttributeListList();
-
-  @NotNull
   FsdType getType();
 
   @NotNull

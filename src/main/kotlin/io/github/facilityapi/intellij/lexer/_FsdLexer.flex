@@ -25,7 +25,7 @@ import static io.github.facilityapi.intellij.psi.FsdTypes.*;
 EOL=\R
 WHITE_SPACE=\s+
 
-COMMENT="//"([^\r\n]*)(\r\n?|\n|\$)
+COMMENT="//"[^\r\n]*
 IDENTIFIER=[a-zA-Z0-9_]+
 ATTRIBUTEPARAMETERVALUE=\"(([^\"\\]+|\\[\"\\/bfnrt]|\\u[0-9a-fA-f]{4})*)\"|([0-9a-zA-Z.+_-]+)
 NUMBER=[0-9]+(\.[0-9]*)?
@@ -177,7 +177,7 @@ MARKDOWN_TEXT=.+
 
   {IDENTIFIER}                   { yybegin(METHOD_BODY_TYPE_END); return TYPENAME; }
 
-  "}"                            { yybegin(RESPONSE_SEPARATOR); return RIGHT_BRACKET; }
+  "}"                            { yybegin(RESPONSE_SEPARATOR); return RIGHT_BRACE; }
 }
 
 <METHOD_BODY_TYPE_END> {
@@ -193,7 +193,7 @@ MARKDOWN_TEXT=.+
 
     // Identifiers shouldn't be here, so break back into the body definition
     {IDENTIFIER}                   { yybegin(METHOD_BODY); return IDENTIFIER; }
-    "}"                            { yybegin(RESPONSE_SEPARATOR); return RIGHT_BRACKET; }
+    "}"                            { yybegin(RESPONSE_SEPARATOR); return RIGHT_BRACE; }
 }
 
 <RESPONSE_SEPARATOR> {
@@ -272,7 +272,7 @@ MARKDOWN_TEXT=.+
 
     // Identifiers shouldn't be here, so break back into the body definition
     {IDENTIFIER}                   { yybegin(RESPONSE_BODY); return IDENTIFIER; }
-    "}"                            { yybegin(SERVICE_BODY); return RIGHT_BRACKET; }
+    "}"                            { yybegin(SERVICE_BODY); return RIGHT_BRACE; }
 }
 
 <DATA_BODY> {
@@ -331,7 +331,7 @@ MARKDOWN_TEXT=.+
 
   {IDENTIFIER}                   { yybegin(DATA_BODY_TYPE_END); return TYPENAME; }
 
-  "}"                            { yybegin(SERVICE_BODY); return RIGHT_BRACKET; }
+  "}"                            { yybegin(SERVICE_BODY); return RIGHT_BRACE; }
 }
 
 <DATA_BODY_TYPE_END> {
@@ -347,7 +347,7 @@ MARKDOWN_TEXT=.+
 
     // Identifiers shouldn't be here, so break back into the body definition
     {IDENTIFIER}                   { yybegin(DATA_BODY); return IDENTIFIER; }
-    "}"                            { yybegin(SERVICE_BODY); return RIGHT_BRACKET; }
+    "}"                            { yybegin(SERVICE_BODY); return RIGHT_BRACE; }
 }
 
 <LIST_BODY> {

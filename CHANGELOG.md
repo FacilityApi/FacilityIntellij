@@ -4,6 +4,7 @@
 
 ## [Unreleased]
 ### Added
+- Automatically indent code
 - Autocomplete built-in types
 
 ## [0.0.5]

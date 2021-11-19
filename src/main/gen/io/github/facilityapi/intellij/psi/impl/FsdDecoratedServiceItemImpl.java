@@ -11,14 +11,14 @@ import static io.github.facilityapi.intellij.psi.FsdTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.facilityapi.intellij.psi.*;
 
-public class FsdDataSpecImpl extends ASTWrapperPsiElement implements FsdDataSpec {
+public class FsdDecoratedServiceItemImpl extends ASTWrapperPsiElement implements FsdDecoratedServiceItem {
 
-  public FsdDataSpecImpl(@NotNull ASTNode node) {
+  public FsdDecoratedServiceItemImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull FsdVisitor visitor) {
-    visitor.visitDataSpec(this);
+    visitor.visitDecoratedServiceItem(this);
   }
 
   @Override
@@ -29,14 +29,32 @@ public class FsdDataSpecImpl extends ASTWrapperPsiElement implements FsdDataSpec
 
   @Override
   @NotNull
-  public List<FsdDecoratedField> getDecoratedFieldList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdDecoratedField.class);
+  public List<FsdAttributeList> getAttributeListList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdAttributeList.class);
   }
 
   @Override
   @Nullable
-  public FsdTypeIdentifier getTypeIdentifier() {
-    return findChildByClass(FsdTypeIdentifier.class);
+  public FsdDataSpec getDataSpec() {
+    return findChildByClass(FsdDataSpec.class);
+  }
+
+  @Override
+  @Nullable
+  public FsdEnumSpec getEnumSpec() {
+    return findChildByClass(FsdEnumSpec.class);
+  }
+
+  @Override
+  @Nullable
+  public FsdErrorSetSpec getErrorSetSpec() {
+    return findChildByClass(FsdErrorSetSpec.class);
+  }
+
+  @Override
+  @Nullable
+  public FsdMethodSpec getMethodSpec() {
+    return findChildByClass(FsdMethodSpec.class);
   }
 
 }

@@ -1,0 +1,15 @@
+service BadlyIndentedService
+{
+    method fetch
+    {
+        id: Long;
+    }:
+    {
+    }
+
+    data Widget
+    {
+        [required]
+        id: Long;
+    }
+}

@@ -8,9 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface FsdServiceSpec extends PsiElement {
 
   @NotNull
-  List<FsdAttributeList> getAttributeListList();
-
-  @NotNull
   FsdServiceItems getServiceItems();
 
   @NotNull
