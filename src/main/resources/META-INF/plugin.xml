@@ -64,6 +64,11 @@
             language="FSD"
             implementationClass="io.github.facilityapi.intellij.formatting.FsdFormattingModelBuilder" />
 
+        <!-- Enables code folding -->
+        <lang.foldingBuilder
+            language="FSD"
+            implementationClass="io.github.facilityapi.intellij.FsdFoldingBuilder" />
+
     </extensions>
 
     <actions>
