@@ -5,13 +5,14 @@ import com.intellij.lang.folding.FoldingBuilderEx
 import com.intellij.lang.folding.FoldingDescriptor
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.editor.FoldingGroup
+import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.refactoring.suggested.endOffset
 import io.github.facilityapi.intellij.psi.*
 
-class FsdFoldingBuilder : FoldingBuilderEx() {
+class FsdFoldingBuilder : FoldingBuilderEx(), DumbAware {
     override fun buildFoldRegions(root: PsiElement, document: Document, quick: Boolean): Array<FoldingDescriptor> {
         return FOLDABLES.flatMap { foldable ->
             PsiTreeUtil.findChildrenOfType(root, foldable).mapNotNull { child ->
