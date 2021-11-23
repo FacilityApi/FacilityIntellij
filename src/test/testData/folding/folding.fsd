@@ -1,0 +1,5 @@
+service FoldingService  {<fold text='...'>
+    data Shirt  {<fold text='...'>
+        fabric: Fabric;
+     </fold>}
+</fold>}
