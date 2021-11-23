@@ -69,6 +69,11 @@
             language="FSD"
             implementationClass="io.github.facilityapi.intellij.FsdFoldingBuilder" />
 
+        <!-- Enables Quick Documentation -->
+        <lang.documentationProvider
+                language="FSD"
+                implementationClass="io.github.facilityapi.intellij.FsdDocumentationProvider" />
+
     </extensions>
 
     <actions>
