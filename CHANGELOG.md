@@ -3,6 +3,8 @@
 # FacilityIntellij Changelog
 
 ## [Unreleased]
+### Added
+- Code folding
 
 ## [0.0.6]
 ### Added
