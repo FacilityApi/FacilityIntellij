@@ -34,6 +34,7 @@ public interface FsdTypes {
 
   IElementType ATTRIBUTENAME = new FsdElementType("attributename");
   IElementType ATTRIBUTEPARAMETERVALUE = new FsdElementType("attributeparametervalue");
+  IElementType BANG = new FsdElementType("!");
   IElementType BOOLEAN = new FsdElementType("boolean");
   IElementType BYTES = new FsdElementType("bytes");
   IElementType COLON = new FsdElementType(":");

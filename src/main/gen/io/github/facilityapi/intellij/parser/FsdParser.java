@@ -494,7 +494,7 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier ':' type ';'
+  // identifier ':' type [ '!' ] ';'
   public static boolean field(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "field")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
@@ -503,9 +503,17 @@ public class FsdParser implements PsiParser, LightPsiParser {
     r = consumeTokens(b, 0, IDENTIFIER, COLON);
     r = r && type(b, l + 1);
     p = r; // pin = 3
-    r = r && consumeToken(b, SEMI);
+    r = r && report_error_(b, field_3(b, l + 1));
+    r = p && consumeToken(b, SEMI) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
+  }
+
+  // [ '!' ]
+  private static boolean field_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "field_3")) return false;
+    consumeToken(b, BANG);
+    return true;
   }
 
   /* ********************************************************** */

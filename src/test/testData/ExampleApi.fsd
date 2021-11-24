@@ -14,8 +14,8 @@ service ExampleApi
 		/// The limit of returned results.
 		limit: int32;
 
-		/// The sort field.
-		sort: WidgetField;
+		/// The sort field. It is required.
+		sort: WidgetField!;
 
 		/// True to sort descending.
 		desc: boolean;

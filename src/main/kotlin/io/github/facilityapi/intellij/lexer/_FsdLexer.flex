@@ -188,6 +188,7 @@ MARKDOWN_TEXT=.+
     ">"                            { return RIGHT_ANGLE; }
     "["                            { return LEFT_BRACKET; }
     "]"                            { return RIGHT_BRACKET; }
+    "!"                            { return BANG; }
 
     ";"                            { yybegin(METHOD_BODY); return SEMI; }
 
@@ -267,6 +268,7 @@ MARKDOWN_TEXT=.+
     ">"                            { return RIGHT_ANGLE; }
     "["                            { return LEFT_BRACKET; }
     "]"                            { return RIGHT_BRACKET; }
+    "!"                            { return BANG; }
 
     ";"                            { yybegin(RESPONSE_BODY); return SEMI; }
 
@@ -342,6 +344,7 @@ MARKDOWN_TEXT=.+
     ">"                            { return RIGHT_ANGLE; }
     "["                            { return LEFT_BRACKET; }
     "]"                            { return RIGHT_BRACKET; }
+    "!"                            { return BANG; }
 
     ";"                            { yybegin(DATA_BODY); return SEMI; }
 
