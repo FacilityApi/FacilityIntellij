@@ -6,6 +6,7 @@
 ### Added
 - Code folding
 - Documentation comment tooltips
+- Support `[required]` shorthand `!`
 
 ## [0.0.6]
 ### Added

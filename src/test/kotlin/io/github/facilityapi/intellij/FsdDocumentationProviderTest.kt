@@ -36,8 +36,8 @@ class FsdDocumentationProviderTest : BasePlatformTestCase() {
             element = originalElement
         }
 
-        val documentationProvider = DocumentationManager.getProviderFromElement(element);
-        val generateDoc = documentationProvider.generateDoc(element, originalElement);
+        val documentationProvider = DocumentationManager.getProviderFromElement(element)
+        val generateDoc = documentationProvider.generateDoc(element, originalElement)
 
         assertThat(generateDoc, "generatedDoc").isNotNull().isEqualTo(
             """
