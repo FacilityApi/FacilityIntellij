@@ -62,16 +62,25 @@ class FsdBlock(
             return ChildAttributes(Indent.getNoneIndent(), null)
         }
 
-        val previousBlock = subBlocks.take(newChildIndex)
+        val blocks = subBlocks.take(newChildIndex)
+            .filterIsInstance<ASTBlock>()
+            .filter { it !is PsiWhiteSpace }
             .reversed()
-            .firstOrNull { (it as ASTBlock) !is PsiWhiteSpace }
 
-        val prevType = (previousBlock as ASTBlock?)?.node?.elementType
+        val previousBlock = blocks.getOrNull(0)
+        val secondPreviousBlock = blocks.getOrNull(1)
+
+        val prevType = previousBlock?.node?.elementType
+        val secondPrevType = secondPreviousBlock?.node?.elementType
         if (prevType == FsdTypes.LEFT_BRACE ||
             prevType == FsdTypes.DECORATED_SERVICE_ITEM ||
             prevType == FsdTypes.DECORATED_FIELD ||
             prevType == FsdTypes.DECORATED_ENUM_VALUE ||
-            prevType == FsdTypes.DECORATED_ERROR_SPEC
+            prevType == FsdTypes.DECORATED_ERROR_SPEC ||
+            (secondPrevType == FsdTypes.DATA && prevType == FsdTypes.IDENTIFIER) ||
+            (secondPrevType == FsdTypes.METHOD && prevType == FsdTypes.IDENTIFIER) ||
+            (secondPrevType == FsdTypes.ENUM && prevType == FsdTypes.IDENTIFIER) ||
+            (secondPrevType == FsdTypes.ERRORS && prevType == FsdTypes.IDENTIFIER)
         ) {
             return ChildAttributes(Indent.getNormalIndent(), null)
         }
