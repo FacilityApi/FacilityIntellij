@@ -5,6 +5,7 @@
 ## [Unreleased]
 ### Added
 - Code folding
+- Documentation comment tooltips
 
 ## [0.0.6]
 ### Added
