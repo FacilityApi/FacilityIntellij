@@ -74,6 +74,11 @@
                 language="FSD"
                 implementationClass="io.github.facilityapi.intellij.FsdDocumentationProvider" />
 
+        <!-- Enable Brace Matching -->
+        <lang.braceMatcher
+            language="FSD"
+            implementationClass="io.github.facilityapi.intellij.FsdBraceMatcher" />
+
     </extensions>
 
     <actions>
