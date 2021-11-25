@@ -10,6 +10,12 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.refactoring.suggested.endOffset
+import io.github.facilityapi.intellij.psi.FsdDataSpec
+import io.github.facilityapi.intellij.psi.FsdEnumSpec
+import io.github.facilityapi.intellij.psi.FsdErrorSetSpec
+import io.github.facilityapi.intellij.psi.FsdMethodSpec
+import io.github.facilityapi.intellij.psi.FsdServiceSpec
+import io.github.facilityapi.intellij.psi.FsdTypes
 
 class FsdFoldingBuilder : FoldingBuilderEx(), DumbAware {
     override fun buildFoldRegions(root: PsiElement, document: Document, quick: Boolean): Array<FoldingDescriptor> {
