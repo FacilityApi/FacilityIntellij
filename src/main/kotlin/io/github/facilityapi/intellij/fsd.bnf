@@ -50,13 +50,13 @@ method_spec ::= method identifier '{' decorated_field* '}' ':' '{' decorated_fie
 
 data_spec ::= data type_identifier '{' decorated_field* '}' { pin=1 }
 
-enum_spec ::= enum type_identifier enum_value_list
-enum_value_list ::= '{' decorated_enum_value (',' (decorated_enum_value | &'}'))* '}' { pin(".*")=1 }
+enum_spec ::= enum type_identifier enum_value_list { pin=1 }
+enum_value_list ::= '{' [ decorated_enum_value (',' (decorated_enum_value | &'}'))* ] '}' { pin(".*")=1 }
 decorated_enum_value ::= attribute_list* enum_value
 enum_value ::= identifier
 
-error_set_spec ::=  errors type_identifier error_list
-error_list ::= '{' decorated_error_spec (',' (decorated_error_spec | &'}'))* '}' { pin(".*")=1 }
+error_set_spec ::=  errors type_identifier error_list { pin=1 }
+error_list ::= '{' [ decorated_error_spec (',' (decorated_error_spec | &'}'))* ] '}' { pin(".*")=1 }
 decorated_error_spec ::= attribute_list* error_spec
 error_spec ::= identifier
 

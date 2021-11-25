@@ -7,10 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface FsdErrorSetSpec extends PsiElement {
 
-  @NotNull
+  @Nullable
   FsdErrorList getErrorList();
 
-  @NotNull
+  @Nullable
   FsdTypeIdentifier getTypeIdentifier();
 
 }

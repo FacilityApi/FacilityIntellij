@@ -49,6 +49,7 @@ class FsdBlock(
             child = child.treeNext
         }
 
+        @Suppress("UNCHECKED_CAST")
         return blocks as MutableList<Block>
     }
 
@@ -72,8 +73,13 @@ class FsdBlock(
 
         val prevType = previousBlock?.node?.elementType
         val secondPrevType = secondPreviousBlock?.node?.elementType
+
+        if (prevType == FsdTypes.RIGHT_BRACKET || prevType == FsdTypes.SEMI) {
+            return ChildAttributes(Indent.getNormalIndent(), (parent as ASTBlock).alignment)
+        }
+
         if (prevType == FsdTypes.LEFT_BRACE ||
-            prevType == FsdTypes.RIGHT_BRACKET ||
+            prevType == FsdTypes.COMMA ||
             prevType == FsdTypes.DECORATED_SERVICE_ITEM ||
             prevType == FsdTypes.DECORATED_FIELD ||
             prevType == FsdTypes.DECORATED_ENUM_VALUE ||
@@ -83,7 +89,7 @@ class FsdBlock(
             (secondPrevType == FsdTypes.ENUM && prevType == FsdTypes.IDENTIFIER) ||
             (secondPrevType == FsdTypes.ERRORS && prevType == FsdTypes.IDENTIFIER)
         ) {
-            return ChildAttributes(Indent.getNormalIndent(), (parent as ASTBlock).alignment)
+            return ChildAttributes(Indent.getNormalIndent(), null)
         }
 
         return ChildAttributes(previousBlock?.indent, previousBlock?.alignment)
