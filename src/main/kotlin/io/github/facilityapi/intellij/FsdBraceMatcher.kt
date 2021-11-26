@@ -8,7 +8,7 @@ import io.github.facilityapi.intellij.psi.FsdTypes
 
 class FsdBraceMatcher : PairedBraceMatcher {
     override fun getPairs() = arrayOf(
-        BracePair(FsdTypes.LEFT_BRACE, FsdTypes.RIGHT_BRACE, true),
+        BracePair(FsdTypes.LEFT_BRACE, FsdTypes.RIGHT_BRACE, false),
         BracePair(FsdTypes.LEFT_BRACKET, FsdTypes.RIGHT_BRACKET, false),
         BracePair(FsdTypes.LEFT_ANGLE, FsdTypes.RIGHT_ANGLE, false),
     )
