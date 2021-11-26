@@ -2,28 +2,43 @@ package io.github.facilityapi.intellij.formatting
 
 import com.intellij.formatting.Indent
 import com.intellij.lang.ASTNode
-import com.intellij.psi.PsiFile
+import com.intellij.psi.PsiWhiteSpace
+import com.intellij.psi.util.PsiTreeUtil
 import io.github.facilityapi.intellij.psi.FsdTypes
 
 class FsdIndentProcessor {
     fun getIndent(node: ASTNode): Indent {
-        if (node.treePrev?.treePrev?.elementType == FsdTypes.METHOD) {
+        if (node.elementType in BLOCKS) {
             return Indent.getNormalIndent()
         }
 
-        if (node.treeParent?.psi is PsiFile) {
-            return Indent.getAbsoluteNoneIndent()
-        }
-
-        if (node.elementType in blocks) {
+        if (isRequestBlock(node)) {
             return Indent.getNormalIndent()
         }
 
         return Indent.getNoneIndent()
     }
 
+    private fun isRequestBlock(node: ASTNode): Boolean {
+        if (node.elementType != FsdTypes.LEFT_BRACE) return false
+
+        var firstNonWhitespaceNode: ASTNode? = node.treePrev
+
+        while (firstNonWhitespaceNode != null && firstNonWhitespaceNode is PsiWhiteSpace) {
+            firstNonWhitespaceNode = firstNonWhitespaceNode.treePrev
+        }
+
+        var secondNonWhitespaceASTNode: ASTNode? = firstNonWhitespaceNode?.treePrev
+        while (secondNonWhitespaceASTNode != null && secondNonWhitespaceASTNode is PsiWhiteSpace) {
+            secondNonWhitespaceASTNode = secondNonWhitespaceASTNode.treePrev
+        }
+
+        return firstNonWhitespaceNode?.elementType == FsdTypes.IDENTIFIER &&
+            secondNonWhitespaceASTNode?.elementType == FsdTypes.METHOD
+    }
+
     companion object {
-        val blocks = setOf(
+        val BLOCKS = setOf(
             FsdTypes.COMMENT,
             FsdTypes.ATTRIBUTE_LIST,
             FsdTypes.METHOD_SPEC,
