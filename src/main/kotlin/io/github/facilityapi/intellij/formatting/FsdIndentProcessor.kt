@@ -3,7 +3,6 @@ package io.github.facilityapi.intellij.formatting
 import com.intellij.formatting.Indent
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiWhiteSpace
-import com.intellij.psi.util.PsiTreeUtil
 import io.github.facilityapi.intellij.psi.FsdTypes
 
 class FsdIndentProcessor {
@@ -12,14 +11,19 @@ class FsdIndentProcessor {
             return Indent.getNormalIndent()
         }
 
-        if (isRequestBlock(node)) {
+        // When people are typing a method definition, I suspect
+        // they would type the entire request body before starting
+        // the response, which means the PSI is going to be broken the
+        // whole time they're typing. This clumsily works around that,
+        // but still requires manually indenting fields in the request body.
+        if (isRequestBlockLeft(node) || isRequestBlockRight(node)) {
             return Indent.getNormalIndent()
         }
 
         return Indent.getNoneIndent()
     }
 
-    private fun isRequestBlock(node: ASTNode): Boolean {
+    private fun isRequestBlockLeft(node: ASTNode): Boolean {
         if (node.elementType != FsdTypes.LEFT_BRACE) return false
 
         var firstNonWhitespaceNode: ASTNode? = node.treePrev
@@ -35,6 +39,18 @@ class FsdIndentProcessor {
 
         return firstNonWhitespaceNode?.elementType == FsdTypes.IDENTIFIER &&
             secondNonWhitespaceASTNode?.elementType == FsdTypes.METHOD
+    }
+
+    private fun isRequestBlockRight(node: ASTNode): Boolean {
+        if (node.elementType != FsdTypes.RIGHT_BRACE) return false
+
+        var firstNonWhitespaceNode: ASTNode? = node.treePrev
+
+        while (firstNonWhitespaceNode != null && firstNonWhitespaceNode is PsiWhiteSpace) {
+            firstNonWhitespaceNode = firstNonWhitespaceNode.treePrev
+        }
+
+        return firstNonWhitespaceNode != null && isRequestBlockLeft(firstNonWhitespaceNode)
     }
 
     companion object {
