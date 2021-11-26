@@ -7,6 +7,10 @@ import io.github.facilityapi.intellij.psi.FsdTypes
 
 class FsdIndentProcessor {
     fun getIndent(node: ASTNode): Indent {
+        if (node.treePrev?.treePrev?.elementType == FsdTypes.METHOD) {
+            return Indent.getNormalIndent()
+        }
+
         if (node.treeParent?.psi is PsiFile) {
             return Indent.getAbsoluteNoneIndent()
         }

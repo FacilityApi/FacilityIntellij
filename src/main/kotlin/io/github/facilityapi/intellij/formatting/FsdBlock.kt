@@ -9,10 +9,12 @@ import com.intellij.formatting.Spacing
 import com.intellij.formatting.Wrap
 import com.intellij.formatting.templateLanguages.BlockWithParent
 import com.intellij.lang.ASTNode
+import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.TokenType
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.formatter.common.AbstractBlock
+import com.intellij.psi.tree.IElementType
 import io.github.facilityapi.intellij.psi.FsdTypes
 
 class FsdBlock(
@@ -70,12 +72,16 @@ class FsdBlock(
 
         val previousBlock = blocks.getOrNull(0)
         val secondPreviousBlock = blocks.getOrNull(1)
+        val thirdPreviousBlock = blocks.getOrNull(2)
 
         val prevType = previousBlock?.node?.elementType
         val secondPrevType = secondPreviousBlock?.node?.elementType
+        val thirdPrevType = thirdPreviousBlock?.node?.elementType
 
-        if (prevType == FsdTypes.RIGHT_BRACKET || prevType == FsdTypes.SEMI) {
-            return ChildAttributes(Indent.getNormalIndent(), (parent as ASTBlock).alignment)
+        if (previousBlock?.node is PsiErrorElement && DEFINITION_KEYWORDS.contains(thirdPrevType)) {
+            if (secondPrevType == FsdTypes.IDENTIFIER || secondPrevType == FsdTypes.TYPE_IDENTIFIER) {
+                return ChildAttributes(Indent.getNoneIndent(), null)
+            }
         }
 
         if (prevType == FsdTypes.LEFT_BRACE ||
@@ -84,14 +90,25 @@ class FsdBlock(
             prevType == FsdTypes.DECORATED_FIELD ||
             prevType == FsdTypes.DECORATED_ENUM_VALUE ||
             prevType == FsdTypes.DECORATED_ERROR_SPEC ||
-            (secondPrevType == FsdTypes.DATA && prevType == FsdTypes.IDENTIFIER) ||
-            (secondPrevType == FsdTypes.METHOD && prevType == FsdTypes.IDENTIFIER) ||
-            (secondPrevType == FsdTypes.ENUM && prevType == FsdTypes.IDENTIFIER) ||
-            (secondPrevType == FsdTypes.ERRORS && prevType == FsdTypes.IDENTIFIER)
+            ((prevType == FsdTypes.IDENTIFIER || prevType == FsdTypes.TYPE_IDENTIFIER) && DEFINITION_KEYWORDS.contains(secondPrevType))
         ) {
             return ChildAttributes(Indent.getNormalIndent(), null)
         }
 
-        return ChildAttributes(previousBlock?.indent, previousBlock?.alignment)
+        if (prevType == FsdTypes.RIGHT_BRACKET || prevType == FsdTypes.SEMI) {
+            return ChildAttributes(Indent.getNormalIndent(), (parent as ASTBlock).alignment)
+        }
+
+        return ChildAttributes(previousBlock?.indent, null)
+    }
+
+    companion object {
+        private val DEFINITION_KEYWORDS: Set<IElementType> = hashSetOf(
+            FsdTypes.SERVICE,
+            FsdTypes.DATA,
+            FsdTypes.METHOD,
+            FsdTypes.ENUM,
+            FsdTypes.ERRORS,
+        )
     }
 }
