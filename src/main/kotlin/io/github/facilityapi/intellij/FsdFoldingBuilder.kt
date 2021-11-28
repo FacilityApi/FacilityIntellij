@@ -23,9 +23,17 @@ class FsdFoldingBuilder : FoldingBuilderEx(), DumbAware {
             PsiTreeUtil.findChildrenOfType(root, foldable).mapNotNull { child ->
                 when (child) {
                     is FsdServiceSpec -> {
+                        val serviceItems = child.serviceItems
+                        if (serviceItems == null) return@mapNotNull null
+
+                        val startOffset = serviceItems.textRange.startOffset + 1
+                        val endOffset = serviceItems.textRange.endOffset - 1
+
+                        if (startOffset >= endOffset) return@mapNotNull null
+
                         FoldingDescriptor(
                             child.node,
-                            TextRange(child.serviceItems.textRange.startOffset + 1, child.serviceItems.textRange.endOffset - 1),
+                            TextRange(startOffset, endOffset),
                             FoldingGroup.newGroup("Fsd Service Folding Group ${child.identifier}")
                         )
                     }
