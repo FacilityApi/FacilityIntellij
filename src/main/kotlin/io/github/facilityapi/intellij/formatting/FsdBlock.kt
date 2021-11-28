@@ -56,25 +56,26 @@ class FsdBlock(
     }
 
     override fun getChildAttributes(newChildIndex: Int): ChildAttributes {
-        if (newChildIndex == 0) {
-            return ChildAttributes(Indent.getNoneIndent(), null)
-        }
-
         val reversedBlocks = subBlocks.take(newChildIndex).reversed()
+        val previousBlock = reversedBlocks.firstOrNull { (it as ASTBlock) !is PsiWhiteSpace }
+        val prevType = (previousBlock as ASTBlock?)?.node?.elementType
 
         // When parser is in a degenerate state, some
         // alignment needs to happen as if it weren't
         if (node.elementType is IFileElementType) {
             return if (reversedBlocks.any { (it as ASTBlock).node?.elementType == FsdTypes.LEFT_BRACE }) {
-                ChildAttributes(Indent.getNormalIndent(), null)
+                val f = if (previousBlock?.node?.elementType == FsdTypes.RIGHT_BRACKET) {
+                    reversedBlocks.firstOrNull { (it as ASTBlock).node?.elementType == FsdTypes.LEFT_BRACKET }
+                } else null
+                ChildAttributes(Indent.getNormalIndent(), f?.alignment)
             } else {
                 ChildAttributes(Indent.getNoneIndent(), alignment)
             }
         }
 
-        val previousBlock = reversedBlocks.firstOrNull { (it as ASTBlock) !is PsiWhiteSpace }
-        val prevType = (previousBlock as ASTBlock?)?.node?.elementType
+
         if (prevType == FsdTypes.LEFT_BRACE ||
+            prevType == FsdTypes.COMMENT || // todo: should this go here?
             prevType == FsdTypes.COMMA ||
             prevType == FsdTypes.DECORATED_SERVICE_ITEM ||
             prevType == FsdTypes.DECORATED_FIELD
