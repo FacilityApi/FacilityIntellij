@@ -75,10 +75,9 @@ class FsdBlock(
         val previousBlock = reversedBlocks.firstOrNull { (it as ASTBlock) !is PsiWhiteSpace }
         val prevType = (previousBlock as ASTBlock?)?.node?.elementType
         if (prevType == FsdTypes.LEFT_BRACE ||
+            prevType == FsdTypes.COMMA ||
             prevType == FsdTypes.DECORATED_SERVICE_ITEM ||
-            prevType == FsdTypes.DECORATED_FIELD ||
-            prevType == FsdTypes.DECORATED_ENUM_VALUE ||
-            prevType == FsdTypes.DECORATED_ERROR_SPEC
+            prevType == FsdTypes.DECORATED_FIELD
         ) {
             return ChildAttributes(Indent.getNormalIndent(), null)
         }
