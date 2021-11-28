@@ -266,7 +266,7 @@ MARKDOWN_TEXT=.+
 
   {IDENTIFIER}                   { yybegin(RESPONSE_BODY_TYPE_END); return TYPENAME; }
 
-  "}"                            { yybegin(SERVICE_BODY); return RIGHT_BRACKET; }
+  "}"                            { yybegin(SERVICE_BODY); return RIGHT_BRACE; }
 }
 
 <RESPONSE_BODY_TYPE_END> {

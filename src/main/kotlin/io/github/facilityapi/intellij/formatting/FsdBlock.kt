@@ -1,16 +1,13 @@
 package io.github.facilityapi.intellij.formatting
 
-import com.intellij.formatting.Alignment
-import com.intellij.formatting.Block
-import com.intellij.formatting.ChildAttributes
-import com.intellij.formatting.Indent
-import com.intellij.formatting.Spacing
-import com.intellij.formatting.Wrap
+import com.intellij.formatting.*
 import com.intellij.formatting.templateLanguages.BlockWithParent
 import com.intellij.lang.ASTNode
+import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.TokenType
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.formatter.common.AbstractBlock
+import com.intellij.psi.impl.source.tree.FileElement
 import com.intellij.psi.tree.IElementType
 import io.github.facilityapi.intellij.psi.FsdTypes
 
@@ -59,7 +56,25 @@ class FsdBlock(
     }
 
     override fun getChildAttributes(newChildIndex: Int): ChildAttributes {
-        return ChildAttributes(Indent.getNormalIndent(), null)
+        if (newChildIndex == 0 || node is FileElement) {
+            return ChildAttributes(Indent.getNoneIndent(), null)
+        }
+
+        val previousBlock = subBlocks.take(newChildIndex)
+            .reversed()
+            .firstOrNull { (it as ASTBlock) !is PsiWhiteSpace }
+
+        val prevType = (previousBlock as ASTBlock?)?.node?.elementType
+        if (prevType == FsdTypes.LEFT_BRACE ||
+            prevType == FsdTypes.DECORATED_SERVICE_ITEM ||
+            prevType == FsdTypes.DECORATED_FIELD ||
+            prevType == FsdTypes.DECORATED_ENUM_VALUE ||
+            prevType == FsdTypes.DECORATED_ERROR_SPEC
+        ) {
+            return ChildAttributes(Indent.getNormalIndent(), null)
+        }
+
+        return ChildAttributes(previousBlock?.indent, previousBlock?.alignment)
     }
 
     private fun needsParentAlignment(child: ASTNode): Boolean {

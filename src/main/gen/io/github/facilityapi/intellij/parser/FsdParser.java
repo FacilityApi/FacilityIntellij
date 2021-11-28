@@ -568,28 +568,18 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !'}'
-  static boolean method_recover(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "method_recover")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NOT_);
-    r = !consumeToken(b, RIGHT_BRACE);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  /* ********************************************************** */
   // method identifier '{' decorated_field* '}' (':' '{' decorated_field* '}')
   public static boolean method_spec(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "method_spec")) return false;
+    if (!nextTokenIs(b, METHOD)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, METHOD_SPEC, "<method spec>");
+    Marker m = enter_section_(b, l, _NONE_, METHOD_SPEC, null);
     r = consumeTokens(b, 1, METHOD, IDENTIFIER, LEFT_BRACE);
     p = r; // pin = 1
     r = r && report_error_(b, method_spec_3(b, l + 1));
     r = p && report_error_(b, consumeToken(b, RIGHT_BRACE)) && r;
     r = p && method_spec_5(b, l + 1) && r;
-    exit_section_(b, l, m, r, p, FsdParser::method_recover);
+    exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
