@@ -23,12 +23,8 @@ class FsdIndentProcessor {
     companion object {
         val BLOCKS = setOf(
             FsdTypes.COMMENT,
-            FsdTypes.ATTRIBUTE_LIST,
-            FsdTypes.METHOD_SPEC,
-            FsdTypes.DATA_SPEC,
-            FsdTypes.ENUM_SPEC,
+            FsdTypes.DECORATED_SERVICE_ITEM,
             FsdTypes.ENUM_VALUE,
-            FsdTypes.ERROR_SET_SPEC,
             FsdTypes.ERROR_SPEC,
             FsdTypes.DECORATED_FIELD,
         )

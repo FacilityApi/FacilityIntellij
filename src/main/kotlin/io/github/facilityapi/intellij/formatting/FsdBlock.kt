@@ -71,10 +71,12 @@ class FsdBlock(
 
     companion object {
         private val DEFINITION_SPECS: Set<IElementType> = hashSetOf(
+            FsdTypes.DECORATED_SERVICE_ITEM,
             FsdTypes.DATA_SPEC,
             FsdTypes.METHOD_SPEC,
             FsdTypes.ENUM_SPEC,
             FsdTypes.ERROR_SET_SPEC,
+            FsdTypes.DECORATED_FIELD,
         )
     }
 }
