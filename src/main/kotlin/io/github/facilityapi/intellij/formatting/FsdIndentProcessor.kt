@@ -11,46 +11,7 @@ class FsdIndentProcessor {
             return Indent.getNormalIndent()
         }
 
-        // When people are typing a method definition, I suspect
-        // they would type the entire request body before starting
-        // the response, which means the PSI is going to be broken the
-        // whole time they're typing. This clumsily works around that,
-        // but still requires manually indenting fields in the request body.
-        if (isRequestBlockLeft(node) || isRequestBlockRight(node)) {
-            return Indent.getNormalIndent()
-        }
-
         return Indent.getNoneIndent()
-    }
-
-    private fun isRequestBlockLeft(node: ASTNode): Boolean {
-        if (node.elementType != FsdTypes.LEFT_BRACE) return false
-
-        var firstNonWhitespaceNode: ASTNode? = node.treePrev
-
-        while (firstNonWhitespaceNode != null && firstNonWhitespaceNode is PsiWhiteSpace) {
-            firstNonWhitespaceNode = firstNonWhitespaceNode.treePrev
-        }
-
-        var secondNonWhitespaceASTNode: ASTNode? = firstNonWhitespaceNode?.treePrev
-        while (secondNonWhitespaceASTNode != null && secondNonWhitespaceASTNode is PsiWhiteSpace) {
-            secondNonWhitespaceASTNode = secondNonWhitespaceASTNode.treePrev
-        }
-
-        return firstNonWhitespaceNode?.elementType == FsdTypes.IDENTIFIER &&
-            secondNonWhitespaceASTNode?.elementType == FsdTypes.METHOD
-    }
-
-    private fun isRequestBlockRight(node: ASTNode): Boolean {
-        if (node.elementType != FsdTypes.RIGHT_BRACE) return false
-
-        var firstNonWhitespaceNode: ASTNode? = node.treePrev
-
-        while (firstNonWhitespaceNode != null && firstNonWhitespaceNode is PsiWhiteSpace) {
-            firstNonWhitespaceNode = firstNonWhitespaceNode.treePrev
-        }
-
-        return firstNonWhitespaceNode != null && isRequestBlockLeft(firstNonWhitespaceNode)
     }
 
     companion object {

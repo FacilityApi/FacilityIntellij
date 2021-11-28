@@ -40,7 +40,7 @@ class FsdBlock(
                 val block = FsdBlock(
                     child,
                     null,
-                    Alignment.createAlignment(),
+                    if (DEFINITION_SPECS.contains(node.elementType)) alignment else Alignment.createAlignment(),
                     codeStyleSettings,
                 )
 
@@ -61,45 +61,25 @@ class FsdBlock(
     }
 
     override fun getChildAttributes(newChildIndex: Int): ChildAttributes {
-        if (newChildIndex == 0) {
-            return ChildAttributes(Indent.getNoneIndent(), null)
-        }
+        return ChildAttributes(Indent.getNormalIndent(), null)
+//        if (newChildIndex == 0) {
+//            return ChildAttributes(Indent.getNoneIndent(), null)
+//        }
+//
+//        val blocks = subBlocks.take(newChildIndex)
+//            .filterIsInstance<ASTBlock>()
+//            .filter { it !is PsiWhiteSpace }
+//            .reversed()
+//
+//        val previousBlock = blocks.getOrNull(0)
+//        val secondPreviousBlock = blocks.getOrNull(1)
+//        val thirdPreviousBlock = blocks.getOrNull(2)
+//
+//        val prevType = previousBlock?.node?.elementType
+//        val secondPrevType = secondPreviousBlock?.node?.elementType
+//        val thirdPrevType = thirdPreviousBlock?.node?.elementType
+//
 
-        val blocks = subBlocks.take(newChildIndex)
-            .filterIsInstance<ASTBlock>()
-            .filter { it !is PsiWhiteSpace }
-            .reversed()
-
-        val previousBlock = blocks.getOrNull(0)
-        val secondPreviousBlock = blocks.getOrNull(1)
-        val thirdPreviousBlock = blocks.getOrNull(2)
-
-        val prevType = previousBlock?.node?.elementType
-        val secondPrevType = secondPreviousBlock?.node?.elementType
-        val thirdPrevType = thirdPreviousBlock?.node?.elementType
-
-        if (previousBlock?.node is PsiErrorElement && DEFINITION_KEYWORDS.contains(thirdPrevType)) {
-            if (secondPrevType == FsdTypes.IDENTIFIER || secondPrevType == FsdTypes.TYPE_IDENTIFIER) {
-                return ChildAttributes(Indent.getNoneIndent(), null)
-            }
-        }
-
-        if (prevType == FsdTypes.LEFT_BRACE ||
-            prevType == FsdTypes.COMMA ||
-            prevType == FsdTypes.DECORATED_SERVICE_ITEM ||
-            prevType == FsdTypes.DECORATED_FIELD ||
-            prevType == FsdTypes.DECORATED_ENUM_VALUE ||
-            prevType == FsdTypes.DECORATED_ERROR_SPEC ||
-            ((prevType == FsdTypes.IDENTIFIER || prevType == FsdTypes.TYPE_IDENTIFIER) && DEFINITION_KEYWORDS.contains(secondPrevType))
-        ) {
-            return ChildAttributes(Indent.getNormalIndent(), null)
-        }
-
-        if (prevType == FsdTypes.RIGHT_BRACKET || prevType == FsdTypes.SEMI) {
-            return ChildAttributes(Indent.getNormalIndent(), (parent as ASTBlock).alignment)
-        }
-
-        return ChildAttributes(previousBlock?.indent, null)
     }
 
     companion object {
@@ -109,6 +89,13 @@ class FsdBlock(
             FsdTypes.METHOD,
             FsdTypes.ENUM,
             FsdTypes.ERRORS,
+        )
+
+        private val DEFINITION_SPECS: Set<IElementType> = hashSetOf(
+            FsdTypes.DATA_SPEC,
+            FsdTypes.METHOD_SPEC,
+            FsdTypes.ENUM_SPEC,
+            FsdTypes.ERROR_SET_SPEC,
         )
     }
 }

@@ -199,6 +199,11 @@ MARKDOWN_TEXT=.+
 
 <RESPONSE_SEPARATOR> {
   ":"                            { yybegin(RESPONSE_BODY); return COLON; }
+  "}"                            { yybegin(MARKDOWN_SECTION); return RIGHT_BRACE; }
+  "method"                       { yybegin(METHOD_BODY); return METHOD; }
+  "data"                         { yybegin(DATA_BODY); return DATA; }
+  "errors"                       { yybegin(LIST_BODY); return ERRORS; }
+  "enum"                         { yybegin(LIST_BODY); return ENUM; }
 }
 
 <RESPONSE_BODY> {
