@@ -668,7 +668,7 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '{' decorated_service_item* '}' | decorated_service_item
+  // ('{' decorated_service_item* '}') | decorated_service_item
   public static boolean service_items(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "service_items")) return false;
     boolean r;
@@ -707,12 +707,13 @@ public class FsdParser implements PsiParser, LightPsiParser {
   public static boolean service_spec(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "service_spec")) return false;
     if (!nextTokenIs(b, SERVICE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, SERVICE, IDENTIFIER);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SERVICE_SPEC, null);
+    r = consumeTokens(b, 1, SERVICE, IDENTIFIER);
+    p = r; // pin = 1
     r = r && service_items(b, l + 1);
-    exit_section_(b, m, SERVICE_SPEC, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */

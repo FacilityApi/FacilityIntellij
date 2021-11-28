@@ -28,15 +28,15 @@ public class FsdServiceSpecImpl extends ASTWrapperPsiElement implements FsdServi
   }
 
   @Override
-  @NotNull
+  @Nullable
   public FsdServiceItems getServiceItems() {
-    return findNotNullChildByClass(FsdServiceItems.class);
+    return findChildByClass(FsdServiceItems.class);
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
+    return findChildByType(IDENTIFIER);
   }
 
 }

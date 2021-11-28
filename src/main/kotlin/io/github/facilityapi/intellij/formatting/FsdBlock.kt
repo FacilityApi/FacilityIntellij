@@ -60,14 +60,19 @@ class FsdBlock(
             return ChildAttributes(Indent.getNoneIndent(), null)
         }
 
+        val reversedBlocks = subBlocks.take(newChildIndex).reversed()
+
+        // When parser is in a degenerate state, some
+        // alignment needs to happen as if it weren't
         if (node.elementType is IFileElementType) {
-            return ChildAttributes(Indent.getNoneIndent(), alignment)
+            return if (reversedBlocks.any { (it as ASTBlock).node?.elementType == FsdTypes.LEFT_BRACE }) {
+                ChildAttributes(Indent.getNormalIndent(), null)
+            } else {
+                ChildAttributes(Indent.getNoneIndent(), alignment)
+            }
         }
 
-        val previousBlock = subBlocks.take(newChildIndex)
-            .reversed()
-            .firstOrNull { (it as ASTBlock) !is PsiWhiteSpace }
-
+        val previousBlock = reversedBlocks.firstOrNull { (it as ASTBlock) !is PsiWhiteSpace }
         val prevType = (previousBlock as ASTBlock?)?.node?.elementType
         if (prevType == FsdTypes.LEFT_BRACE ||
             prevType == FsdTypes.DECORATED_SERVICE_ITEM ||
@@ -90,6 +95,7 @@ class FsdBlock(
 
     companion object {
         private val DEFINITION_SPECS: Set<IElementType> = hashSetOf(
+            FsdTypes.SERVICE_SPEC,
             FsdTypes.DECORATED_SERVICE_ITEM,
             FsdTypes.DATA_SPEC,
             FsdTypes.METHOD_SPEC,

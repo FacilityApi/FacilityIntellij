@@ -7,10 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface FsdServiceSpec extends PsiElement {
 
-  @NotNull
+  @Nullable
   FsdServiceItems getServiceItems();
 
-  @NotNull
+  @Nullable
   PsiElement getIdentifier();
 
 }
