@@ -7,8 +7,8 @@ import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.TokenType
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.formatter.common.AbstractBlock
-import com.intellij.psi.impl.source.tree.FileElement
 import com.intellij.psi.tree.IElementType
+import com.intellij.psi.tree.IFileElementType
 import io.github.facilityapi.intellij.psi.FsdTypes
 
 class FsdBlock(
@@ -56,9 +56,12 @@ class FsdBlock(
     }
 
     override fun getChildAttributes(newChildIndex: Int): ChildAttributes {
-        // todo: this needs work
-        if (newChildIndex == 0 || node is FileElement) {
+        if (newChildIndex == 0) {
             return ChildAttributes(Indent.getNoneIndent(), null)
+        }
+
+        if (node.elementType is IFileElementType) {
+            return ChildAttributes(Indent.getNoneIndent(), alignment)
         }
 
         val previousBlock = subBlocks.take(newChildIndex)
