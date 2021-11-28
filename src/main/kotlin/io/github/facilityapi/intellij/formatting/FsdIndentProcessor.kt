@@ -2,8 +2,6 @@ package io.github.facilityapi.intellij.formatting
 
 import com.intellij.formatting.Indent
 import com.intellij.lang.ASTNode
-import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.impl.source.tree.FileElement
 import io.github.facilityapi.intellij.psi.FsdTypes
 

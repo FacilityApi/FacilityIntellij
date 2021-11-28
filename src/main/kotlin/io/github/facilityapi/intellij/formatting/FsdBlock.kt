@@ -1,6 +1,12 @@
 package io.github.facilityapi.intellij.formatting
 
-import com.intellij.formatting.*
+import com.intellij.formatting.ASTBlock
+import com.intellij.formatting.Alignment
+import com.intellij.formatting.Block
+import com.intellij.formatting.ChildAttributes
+import com.intellij.formatting.Indent
+import com.intellij.formatting.Spacing
+import com.intellij.formatting.Wrap
 import com.intellij.formatting.templateLanguages.BlockWithParent
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiWhiteSpace
@@ -72,7 +78,6 @@ class FsdBlock(
                 ChildAttributes(Indent.getNoneIndent(), alignment)
             }
         }
-
 
         if (prevType == FsdTypes.LEFT_BRACE ||
             prevType == FsdTypes.COMMENT || // todo: should this go here?
