@@ -37,6 +37,7 @@ class FsdFoldingBuilder : FoldingBuilderEx(), DumbAware {
                         val start = PsiTreeUtil.findSiblingForward(child.firstChild, FsdTypes.LEFT_BRACE, null) ?: return@mapNotNull null
                         val range = TextRange(start.textOffset + 1, child.endOffset - 1)
                         val group = FoldingGroup.newGroup("Fsd Service Item Body Group")
+                        // todo: some states can cause this line to crash the plugin
 //                        if (child.node != null) FoldingDescriptor(child.node, range, group) else null
                         null
                     }
