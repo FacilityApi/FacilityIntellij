@@ -568,19 +568,28 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // method identifier '{' decorated_field* '}' ':' '{' decorated_field* '}'
+  // !'}'
+  static boolean method_recover(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "method_recover")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_);
+    r = !consumeToken(b, RIGHT_BRACE);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // method identifier '{' decorated_field* '}' (':' '{' decorated_field* '}')
   public static boolean method_spec(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "method_spec")) return false;
-    if (!nextTokenIs(b, METHOD)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, METHOD_SPEC, null);
+    Marker m = enter_section_(b, l, _NONE_, METHOD_SPEC, "<method spec>");
     r = consumeTokens(b, 1, METHOD, IDENTIFIER, LEFT_BRACE);
     p = r; // pin = 1
     r = r && report_error_(b, method_spec_3(b, l + 1));
-    r = p && report_error_(b, consumeTokens(b, -1, RIGHT_BRACE, COLON, LEFT_BRACE)) && r;
-    r = p && report_error_(b, method_spec_7(b, l + 1)) && r;
-    r = p && consumeToken(b, RIGHT_BRACE) && r;
-    exit_section_(b, l, m, r, p, null);
+    r = p && report_error_(b, consumeToken(b, RIGHT_BRACE)) && r;
+    r = p && method_spec_5(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, FsdParser::method_recover);
     return r || p;
   }
 
@@ -595,13 +604,25 @@ public class FsdParser implements PsiParser, LightPsiParser {
     return true;
   }
 
+  // ':' '{' decorated_field* '}'
+  private static boolean method_spec_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "method_spec_5")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, COLON, LEFT_BRACE);
+    r = r && method_spec_5_2(b, l + 1);
+    r = r && consumeToken(b, RIGHT_BRACE);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
   // decorated_field*
-  private static boolean method_spec_7(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "method_spec_7")) return false;
+  private static boolean method_spec_5_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "method_spec_5_2")) return false;
     while (true) {
       int c = current_position_(b);
       if (!decorated_field(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "method_spec_7", c)) break;
+      if (!empty_element_parsed_guard_(b, "method_spec_5_2", c)) break;
     }
     return true;
   }

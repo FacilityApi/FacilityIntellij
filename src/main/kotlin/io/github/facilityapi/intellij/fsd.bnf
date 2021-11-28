@@ -46,7 +46,8 @@ decorated_service_item ::= attribute_list* service_item
 private service_item ::=  (enum_spec | data_spec | method_spec | error_set_spec) { recoverWhile=service_item_recover }
 private service_item_recover ::= !('[' | '}' | enum | data | errors | method)
 
-method_spec ::= method identifier '{' decorated_field* '}' ':' '{' decorated_field* '}' { pin=1 }
+method_spec ::= method identifier '{' decorated_field* '}' (':' '{' decorated_field* '}') { pin=1 recoverWhile=method_recover }
+private method_recover ::= !'}'
 
 data_spec ::= data type_identifier '{' decorated_field* '}' { pin=1 }
 
