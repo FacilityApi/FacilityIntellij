@@ -56,6 +56,7 @@ class FsdBlock(
     }
 
     override fun getChildAttributes(newChildIndex: Int): ChildAttributes {
+        // todo: this needs work
         if (newChildIndex == 0 || node is FileElement) {
             return ChildAttributes(Indent.getNoneIndent(), null)
         }
