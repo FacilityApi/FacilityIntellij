@@ -80,7 +80,7 @@ class FsdBlock(
         }
 
         if (prevType == FsdTypes.LEFT_BRACE ||
-            prevType == FsdTypes.COMMENT || // todo: should this go here?
+            prevType == FsdTypes.COMMENT ||
             prevType == FsdTypes.COMMA ||
             prevType == FsdTypes.DECORATED_SERVICE_ITEM ||
             prevType == FsdTypes.DECORATED_FIELD

@@ -12,7 +12,7 @@ class FsdFormattingModelBuilder : FormattingModelBuilder {
     override fun createModel(formattingContext: FormattingContext): FormattingModel {
         val block = FsdBlock(
             formattingContext.node,
-            Wrap.createWrap(WrapType.NORMAL, false),
+            null,
             Alignment.createAlignment(),
             formattingContext.codeStyleSettings,
         )
