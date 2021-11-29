@@ -8,6 +8,9 @@
 - Documentation comment tooltips
 - Support `[required]` shorthand `!`
 
+### Fixed
+- Improved automatic indenting while typing
+
 ## [0.0.6]
 ### Added
 - Automatically indent code
