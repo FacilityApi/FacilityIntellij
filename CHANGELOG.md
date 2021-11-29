@@ -7,6 +7,7 @@
 - Code folding
 - Documentation comment tooltips
 - Support `[required]` shorthand `!`
+- Match paired braces
 
 ### Fixed
 - Improved automatic indenting while typing
