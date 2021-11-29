@@ -23,9 +23,17 @@ class FsdFoldingBuilder : FoldingBuilderEx(), DumbAware {
             PsiTreeUtil.findChildrenOfType(root, foldable).mapNotNull { child ->
                 when (child) {
                     is FsdServiceSpec -> {
+                        val serviceItems = child.serviceItems
+                        if (serviceItems == null) return@mapNotNull null
+
+                        val startOffset = serviceItems.textRange.startOffset + 1
+                        val endOffset = serviceItems.textRange.endOffset - 1
+
+                        if (startOffset >= endOffset) return@mapNotNull null
+
                         FoldingDescriptor(
                             child.node,
-                            TextRange(child.serviceItems.textRange.startOffset + 1, child.serviceItems.textRange.endOffset - 1),
+                            TextRange(startOffset, endOffset),
                             FoldingGroup.newGroup("Fsd Service Folding Group ${child.identifier}")
                         )
                     }
@@ -35,9 +43,15 @@ class FsdFoldingBuilder : FoldingBuilderEx(), DumbAware {
                     is FsdEnumSpec,
                     is FsdErrorSetSpec -> {
                         val start = PsiTreeUtil.findSiblingForward(child.firstChild, FsdTypes.LEFT_BRACE, null) ?: return@mapNotNull null
-                        val range = TextRange(start.textOffset + 1, child.endOffset - 1)
-                        val group = FoldingGroup.newGroup("Fsd Service Item Body Group")
-                        FoldingDescriptor(child.node, range, group)
+                        val startOffset = start.textOffset + 1
+                        val endOffset = child.endOffset - 1
+                        if (endOffset > startOffset && child.node != null) {
+                            val range = TextRange(startOffset, endOffset)
+                            val group = FoldingGroup.newGroup("Fsd Service Item Body Group")
+                            FoldingDescriptor(child.node, range, group)
+                        } else {
+                            null
+                        }
                     }
 
                     else -> null

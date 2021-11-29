@@ -7,10 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface FsdEnumSpec extends PsiElement {
 
-  @NotNull
+  @Nullable
   FsdEnumValueList getEnumValueList();
 
-  @NotNull
+  @Nullable
   FsdTypeIdentifier getTypeIdentifier();
 
 }

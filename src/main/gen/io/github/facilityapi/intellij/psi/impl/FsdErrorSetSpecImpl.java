@@ -28,15 +28,15 @@ public class FsdErrorSetSpecImpl extends ASTWrapperPsiElement implements FsdErro
   }
 
   @Override
-  @NotNull
+  @Nullable
   public FsdErrorList getErrorList() {
-    return findNotNullChildByClass(FsdErrorList.class);
+    return findChildByClass(FsdErrorList.class);
   }
 
   @Override
-  @NotNull
+  @Nullable
   public FsdTypeIdentifier getTypeIdentifier() {
-    return findNotNullChildByClass(FsdTypeIdentifier.class);
+    return findChildByClass(FsdTypeIdentifier.class);
   }
 
 }

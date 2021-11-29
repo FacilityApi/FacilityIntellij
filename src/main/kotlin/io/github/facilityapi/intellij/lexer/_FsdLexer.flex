@@ -198,7 +198,16 @@ MARKDOWN_TEXT=.+
 }
 
 <RESPONSE_SEPARATOR> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+  {COMMENT}                      { return COMMENT; }
+
   ":"                            { yybegin(RESPONSE_BODY); return COLON; }
+  "}"                            { yybegin(MARKDOWN_SECTION); return RIGHT_BRACE; }
+
+  "method"                       { yybegin(METHOD_BODY); return METHOD; }
+  "data"                         { yybegin(DATA_BODY); return DATA; }
+  "errors"                       { yybegin(LIST_BODY); return ERRORS; }
+  "enum"                         { yybegin(LIST_BODY); return ENUM; }
 }
 
 <RESPONSE_BODY> {
@@ -257,7 +266,7 @@ MARKDOWN_TEXT=.+
 
   {IDENTIFIER}                   { yybegin(RESPONSE_BODY_TYPE_END); return TYPENAME; }
 
-  "}"                            { yybegin(SERVICE_BODY); return RIGHT_BRACKET; }
+  "}"                            { yybegin(SERVICE_BODY); return RIGHT_BRACE; }
 }
 
 <RESPONSE_BODY_TYPE_END> {

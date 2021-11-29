@@ -2,16 +2,16 @@ package io.github.facilityapi.intellij.formatting
 
 import com.intellij.formatting.Indent
 import com.intellij.lang.ASTNode
-import com.intellij.psi.PsiFile
+import com.intellij.psi.impl.source.tree.FileElement
 import io.github.facilityapi.intellij.psi.FsdTypes
 
 class FsdIndentProcessor {
     fun getIndent(node: ASTNode): Indent {
-        if (node.treeParent?.psi is PsiFile) {
-            return Indent.getAbsoluteNoneIndent()
+        if (node.treeParent is FileElement && (node.elementType == FsdTypes.COMMENT || node.elementType == FsdTypes.ATTRIBUTE_LIST)) {
+            return Indent.getNoneIndent()
         }
 
-        if (node.elementType in blocks) {
+        if (node.elementType in BLOCKS) {
             return Indent.getNormalIndent()
         }
 
@@ -19,16 +19,12 @@ class FsdIndentProcessor {
     }
 
     companion object {
-        val blocks = setOf(
+        val BLOCKS = setOf(
             FsdTypes.COMMENT,
-            FsdTypes.ATTRIBUTE_LIST,
-            FsdTypes.METHOD_SPEC,
-            FsdTypes.DATA_SPEC,
-            FsdTypes.ENUM_SPEC,
+            FsdTypes.DECORATED_SERVICE_ITEM,
             FsdTypes.ENUM_VALUE,
-            FsdTypes.ERROR_SET_SPEC,
             FsdTypes.ERROR_SPEC,
-            FsdTypes.FIELD,
+            FsdTypes.DECORATED_FIELD,
         )
     }
 }

@@ -28,15 +28,15 @@ public class FsdEnumSpecImpl extends ASTWrapperPsiElement implements FsdEnumSpec
   }
 
   @Override
-  @NotNull
+  @Nullable
   public FsdEnumValueList getEnumValueList() {
-    return findNotNullChildByClass(FsdEnumValueList.class);
+    return findChildByClass(FsdEnumValueList.class);
   }
 
   @Override
-  @NotNull
+  @Nullable
   public FsdTypeIdentifier getTypeIdentifier() {
-    return findNotNullChildByClass(FsdTypeIdentifier.class);
+    return findChildByClass(FsdTypeIdentifier.class);
   }
 
 }
