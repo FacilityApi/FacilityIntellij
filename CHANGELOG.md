@@ -3,6 +3,8 @@
 # FacilityIntellij Changelog
 
 ## [Unreleased]
+
+## [0.0.7]
 ### Added
 - Code folding
 - Documentation comment tooltips
