@@ -3,14 +3,12 @@
 # FacilityIntellij Changelog
 
 ## [Unreleased]
+
+## [0.0.7]
 ### Added
 - Code folding
 - Documentation comment tooltips
-- Support `[required]` shorthand `!`
-- Match paired braces
-
-### Fixed
-- Improved automatic indenting while typing
+- Support [required]
 
 ## [0.0.6]
 ### Added
