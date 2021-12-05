@@ -1,5 +1,8 @@
 .gradle
-.idea
 .qodana
 build
 jflex
+
+.idea/*
+!.idea/codeStyles
+!.idea/inspectionProfiles
