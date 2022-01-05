@@ -3,6 +3,8 @@
 # FacilityIntellij Changelog
 
 ## [Unreleased]
+### Added
+- Show for method and service definitions in the structure view
 
 ## [0.0.7]
 ### Added
