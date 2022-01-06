@@ -33,7 +33,7 @@ class FsdFoldingBuilder : FoldingBuilderEx(), DumbAware {
                         FoldingDescriptor(
                             child.node,
                             TextRange(startOffset, endOffset),
-                            FoldingGroup.newGroup("Fsd Service Folding Group ${child.typeIdentifier}")
+                            FoldingGroup.newGroup("Fsd Service Folding Group ${child.identifier}")
                         )
                     }
 

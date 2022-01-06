@@ -11,6 +11,6 @@ public interface FsdServiceSpec extends PsiElement {
   FsdServiceItems getServiceItems();
 
   @Nullable
-  FsdTypeIdentifier getTypeIdentifier();
+  PsiElement getIdentifier();
 
 }
