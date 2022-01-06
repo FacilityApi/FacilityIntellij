@@ -9,10 +9,10 @@ import io.github.facilityapi.intellij.reference.createTypeDefinition
 
 object FsdPsiImplUtil {
     @JvmStatic
-    fun FsdTypeIdentifier.getName(): String = identifier.text
+    fun FsdIdentifierDeclaration.getName(): String = identifier.text
 
     @JvmStatic
-    fun FsdTypeIdentifier.setName(name: String): PsiElement {
+    fun FsdIdentifierDeclaration.setName(name: String): PsiElement {
         val declType = parent.node.firstChildNode.text
         val newDefinition = createTypeDefinition(project, name, declType)
         val newNode = newDefinition.node
@@ -21,7 +21,7 @@ object FsdPsiImplUtil {
     }
 
     @JvmStatic
-    fun FsdTypeIdentifier.getNameIdentifier(): PsiElement {
+    fun FsdIdentifierDeclaration.getNameIdentifier(): PsiElement {
         return identifier
     }
 

@@ -35,8 +35,8 @@ public class FsdMethodSpecImpl extends ASTWrapperPsiElement implements FsdMethod
 
   @Override
   @Nullable
-  public FsdTypeIdentifier getTypeIdentifier() {
-    return findChildByClass(FsdTypeIdentifier.class);
+  public FsdIdentifierDeclaration getIdentifierDeclaration() {
+    return findChildByClass(FsdIdentifierDeclaration.class);
   }
 
 }

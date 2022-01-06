@@ -11,6 +11,6 @@ public interface FsdMethodSpec extends PsiElement {
   List<FsdDecoratedField> getDecoratedFieldList();
 
   @Nullable
-  FsdTypeIdentifier getTypeIdentifier();
+  FsdIdentifierDeclaration getIdentifierDeclaration();
 
 }

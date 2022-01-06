@@ -35,8 +35,8 @@ public class FsdEnumSpecImpl extends ASTWrapperPsiElement implements FsdEnumSpec
 
   @Override
   @Nullable
-  public FsdTypeIdentifier getTypeIdentifier() {
-    return findChildByClass(FsdTypeIdentifier.class);
+  public FsdIdentifierDeclaration getIdentifierDeclaration() {
+    return findChildByClass(FsdIdentifierDeclaration.class);
   }
 
 }

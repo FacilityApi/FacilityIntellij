@@ -12,14 +12,14 @@ import io.github.facilityapi.intellij.psi.FsdNamedElementImpl;
 import io.github.facilityapi.intellij.psi.*;
 import com.intellij.navigation.ItemPresentation;
 
-public class FsdTypeIdentifierImpl extends FsdNamedElementImpl implements FsdTypeIdentifier {
+public class FsdIdentifierDeclarationImpl extends FsdNamedElementImpl implements FsdIdentifierDeclaration {
 
-  public FsdTypeIdentifierImpl(@NotNull ASTNode node) {
+  public FsdIdentifierDeclarationImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull FsdVisitor visitor) {
-    visitor.visitTypeIdentifier(this);
+    visitor.visitIdentifierDeclaration(this);
   }
 
   @Override

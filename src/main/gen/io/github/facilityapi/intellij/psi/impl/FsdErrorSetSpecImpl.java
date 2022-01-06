@@ -35,8 +35,8 @@ public class FsdErrorSetSpecImpl extends ASTWrapperPsiElement implements FsdErro
 
   @Override
   @Nullable
-  public FsdTypeIdentifier getTypeIdentifier() {
-    return findChildByClass(FsdTypeIdentifier.class);
+  public FsdIdentifierDeclaration getIdentifierDeclaration() {
+    return findChildByClass(FsdIdentifierDeclaration.class);
   }
 
 }

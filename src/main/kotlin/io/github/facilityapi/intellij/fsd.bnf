@@ -46,21 +46,21 @@ decorated_service_item ::= attribute_list* service_item
 private service_item ::=  (enum_spec | data_spec | method_spec | error_set_spec) { recoverWhile=service_item_recover }
 private service_item_recover ::= !('[' | '}' | enum | data | errors | method)
 
-method_spec ::= method type_identifier '{' decorated_field* '}' (':' '{' decorated_field* '}') { pin=1 }
+method_spec ::= method identifier_declaration '{' decorated_field* '}' (':' '{' decorated_field* '}') { pin=1 }
 
-data_spec ::= data type_identifier '{' decorated_field* '}' { pin=1 }
+data_spec ::= data identifier_declaration '{' decorated_field* '}' { pin=1 }
 
-enum_spec ::= enum type_identifier enum_value_list { pin=1 }
+enum_spec ::= enum identifier_declaration enum_value_list { pin=1 }
 enum_value_list ::= '{' [ decorated_enum_value (',' (decorated_enum_value | &'}'))* ] '}' { pin(".*")=1 }
 decorated_enum_value ::= attribute_list* enum_value
 enum_value ::= identifier
 
-error_set_spec ::=  errors type_identifier error_list { pin=1 }
+error_set_spec ::=  errors identifier_declaration error_list { pin=1 }
 error_list ::= '{' [ decorated_error_spec (',' (decorated_error_spec | &'}'))* ] '}' { pin(".*")=1 }
 decorated_error_spec ::= attribute_list* error_spec
 error_spec ::= identifier
 
-type_identifier ::= identifier
+identifier_declaration ::= identifier
 {
   mixin="io.github.facilityapi.intellij.psi.FsdNamedElementImpl"
   implements="io.github.facilityapi.intellij.psi.FsdNamedElement"

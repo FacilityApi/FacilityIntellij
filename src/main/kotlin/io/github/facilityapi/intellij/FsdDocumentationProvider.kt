@@ -6,11 +6,11 @@ import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.presentation.java.SymbolPresentationUtil
-import io.github.facilityapi.intellij.psi.FsdTypeIdentifier
+import io.github.facilityapi.intellij.psi.FsdIdentifierDeclaration
 
 class FsdDocumentationProvider : AbstractDocumentationProvider() {
     override fun generateDoc(element: PsiElement?, originalElement: PsiElement?): String? {
-        if (element is FsdTypeIdentifier) {
+        if (element is FsdIdentifierDeclaration) {
             return render(
                 element,
                 element.parent.firstChild.text, // data, method, enum, errors
@@ -21,7 +21,7 @@ class FsdDocumentationProvider : AbstractDocumentationProvider() {
         return super.generateDoc(element, originalElement)
     }
 
-    private fun render(type: FsdTypeIdentifier, kind: String, file: String, docComment: String) = buildString {
+    private fun render(type: FsdIdentifierDeclaration, kind: String, file: String, docComment: String) = buildString {
         append(DocumentationMarkup.DEFINITION_START)
         append(kind)
         append(' ')
@@ -41,7 +41,7 @@ class FsdDocumentationProvider : AbstractDocumentationProvider() {
     }
 
     companion object {
-        fun findDocumentationComment(type: FsdTypeIdentifier): String {
+        fun findDocumentationComment(type: FsdIdentifierDeclaration): String {
             val result = mutableListOf<String>()
             var element = type.parent.parent.prevSibling
             while (element is PsiComment || element is PsiWhiteSpace) {

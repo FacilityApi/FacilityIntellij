@@ -6,7 +6,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.navigation.ItemPresentation;
 
-public interface FsdTypeIdentifier extends FsdNamedElement {
+public interface FsdIdentifierDeclaration extends FsdNamedElement {
 
   @NotNull
   PsiElement getIdentifier();

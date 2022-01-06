@@ -153,7 +153,7 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // data type_identifier '{' decorated_field* '}'
+  // data identifier_declaration '{' decorated_field* '}'
   public static boolean data_spec(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "data_spec")) return false;
     if (!nextTokenIs(b, DATA)) return false;
@@ -161,7 +161,7 @@ public class FsdParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, DATA_SPEC, null);
     r = consumeToken(b, DATA);
     p = r; // pin = 1
-    r = r && report_error_(b, type_identifier(b, l + 1));
+    r = r && report_error_(b, identifier_declaration(b, l + 1));
     r = p && report_error_(b, consumeToken(b, LEFT_BRACE)) && r;
     r = p && report_error_(b, data_spec_3(b, l + 1)) && r;
     r = p && consumeToken(b, RIGHT_BRACE) && r;
@@ -322,7 +322,7 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // enum type_identifier enum_value_list
+  // enum identifier_declaration enum_value_list
   public static boolean enum_spec(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "enum_spec")) return false;
     if (!nextTokenIs(b, ENUM)) return false;
@@ -330,7 +330,7 @@ public class FsdParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, ENUM_SPEC, null);
     r = consumeToken(b, ENUM);
     p = r; // pin = 1
-    r = r && report_error_(b, type_identifier(b, l + 1));
+    r = r && report_error_(b, identifier_declaration(b, l + 1));
     r = p && enum_value_list(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
@@ -505,7 +505,7 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // errors type_identifier error_list
+  // errors identifier_declaration error_list
   public static boolean error_set_spec(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "error_set_spec")) return false;
     if (!nextTokenIs(b, ERRORS)) return false;
@@ -513,7 +513,7 @@ public class FsdParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, ERROR_SET_SPEC, null);
     r = consumeToken(b, ERRORS);
     p = r; // pin = 1
-    r = r && report_error_(b, type_identifier(b, l + 1));
+    r = r && report_error_(b, identifier_declaration(b, l + 1));
     r = p && error_list(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
@@ -555,6 +555,18 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // identifier
+  public static boolean identifier_declaration(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "identifier_declaration")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, IDENTIFIER_DECLARATION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // markdownheading | markdowntext
   public static boolean markdown_remarks(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "markdown_remarks")) return false;
@@ -568,7 +580,7 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // method type_identifier '{' decorated_field* '}' (':' '{' decorated_field* '}')
+  // method identifier_declaration '{' decorated_field* '}' (':' '{' decorated_field* '}')
   public static boolean method_spec(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "method_spec")) return false;
     if (!nextTokenIs(b, METHOD)) return false;
@@ -576,7 +588,7 @@ public class FsdParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, METHOD_SPEC, null);
     r = consumeToken(b, METHOD);
     p = r; // pin = 1
-    r = r && report_error_(b, type_identifier(b, l + 1));
+    r = r && report_error_(b, identifier_declaration(b, l + 1));
     r = p && report_error_(b, consumeToken(b, LEFT_BRACE)) && r;
     r = p && report_error_(b, method_spec_3(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, RIGHT_BRACE)) && r;
@@ -782,18 +794,6 @@ public class FsdParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeTokens(b, 0, LEFT_BRACKET, RIGHT_BRACKET);
     exit_section_(b, m, null, r);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // identifier
-  public static boolean type_identifier(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "type_identifier")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, IDENTIFIER);
-    exit_section_(b, m, TYPE_IDENTIFIER, r);
     return r;
   }
 

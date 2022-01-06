@@ -10,7 +10,7 @@ import io.github.facilityapi.intellij.lexer.FsdLexerAdapter
 import io.github.facilityapi.intellij.psi.FsdDataSpec
 import io.github.facilityapi.intellij.psi.FsdEnumSpec
 import io.github.facilityapi.intellij.psi.FsdErrorSetSpec
-import io.github.facilityapi.intellij.psi.FsdTypeIdentifier
+import io.github.facilityapi.intellij.psi.FsdIdentifierDeclaration
 import io.github.facilityapi.intellij.psi.FsdTypes
 
 class FsdFindUsagesProvider : FindUsagesProvider {
@@ -18,7 +18,7 @@ class FsdFindUsagesProvider : FindUsagesProvider {
 
     override fun getWordsScanner(): WordsScanner = DefaultWordsScanner(
         FsdLexerAdapter(),
-        TokenSet.create(FsdTypes.TYPE_IDENTIFIER),
+        TokenSet.create(FsdTypes.IDENTIFIER_DECLARATION),
         TokenSet.create(FsdTypes.COMMENT),
         TokenSet.EMPTY
     )
@@ -32,13 +32,10 @@ class FsdFindUsagesProvider : FindUsagesProvider {
         else -> "type"
     }
 
-    override fun getDescriptiveName(element: PsiElement) = when (element) {
-        is FsdTypeIdentifier -> element.name
-        else -> ""
-    }
+    override fun getDescriptiveName(element: PsiElement) = (element as? FsdIdentifierDeclaration)?.name ?: ""
 
     override fun getNodeText(element: PsiElement, useFullName: Boolean): String = when (element) {
-        is FsdTypeIdentifier -> element.text
+        is FsdIdentifierDeclaration -> element.text
         else -> ""
     }
 }
