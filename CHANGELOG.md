@@ -6,6 +6,9 @@
 ### Added
 - Show for method and service definitions in the structure view
 
+### Fixed
+- Use non-eap qodana for CI
+
 ## [0.0.7]
 ### Added
 - Code folding
