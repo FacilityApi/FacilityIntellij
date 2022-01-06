@@ -705,16 +705,15 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // service type_identifier service_items
+  // service identifier service_items
   public static boolean service_spec(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "service_spec")) return false;
     if (!nextTokenIs(b, SERVICE)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, SERVICE_SPEC, null);
-    r = consumeToken(b, SERVICE);
+    r = consumeTokens(b, 1, SERVICE, IDENTIFIER);
     p = r; // pin = 1
-    r = r && report_error_(b, type_identifier(b, l + 1));
-    r = p && service_items(b, l + 1) && r;
+    r = r && service_items(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }

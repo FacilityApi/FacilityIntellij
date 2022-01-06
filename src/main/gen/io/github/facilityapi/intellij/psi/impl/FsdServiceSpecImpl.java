@@ -35,8 +35,8 @@ public class FsdServiceSpecImpl extends ASTWrapperPsiElement implements FsdServi
 
   @Override
   @Nullable
-  public FsdTypeIdentifier getTypeIdentifier() {
-    return findChildByClass(FsdTypeIdentifier.class);
+  public PsiElement getIdentifier() {
+    return findChildByType(IDENTIFIER);
   }
 
 }

@@ -5,6 +5,7 @@
 ## [Unreleased]
 ### Added
 - Show for method and service definitions in the structure view
+- Icons for presented PSI elements (like method, data, enum, etc). <br/> These appear in the structure view and are helpful in distinguishing between language constructs.
 
 ### Fixed
 - Use non-eap qodana for CI
