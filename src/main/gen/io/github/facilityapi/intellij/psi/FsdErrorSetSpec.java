@@ -11,6 +11,6 @@ public interface FsdErrorSetSpec extends PsiElement {
   FsdErrorList getErrorList();
 
   @Nullable
-  FsdTypeIdentifier getTypeIdentifier();
+  FsdIdentifierDeclaration getIdentifierDeclaration();
 
 }

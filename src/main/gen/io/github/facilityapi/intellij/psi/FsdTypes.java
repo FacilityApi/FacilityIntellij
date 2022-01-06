@@ -23,13 +23,13 @@ public interface FsdTypes {
   IElementType ERROR_SET_SPEC = new FsdElementType("ERROR_SET_SPEC");
   IElementType ERROR_SPEC = new FsdElementType("ERROR_SPEC");
   IElementType FIELD = new FsdElementType("FIELD");
+  IElementType IDENTIFIER_DECLARATION = new FsdElementType("IDENTIFIER_DECLARATION");
   IElementType MARKDOWN_REMARKS = new FsdElementType("MARKDOWN_REMARKS");
   IElementType METHOD_SPEC = new FsdElementType("METHOD_SPEC");
   IElementType REFERENCE_TYPE = new FsdElementType("REFERENCE_TYPE");
   IElementType SERVICE_ITEMS = new FsdElementType("SERVICE_ITEMS");
   IElementType SERVICE_SPEC = new FsdElementType("SERVICE_SPEC");
   IElementType TYPE = new FsdElementType("TYPE");
-  IElementType TYPE_IDENTIFIER = new FsdElementType("TYPE_IDENTIFIER");
   IElementType TYPE_PARAMETER = new FsdElementType("TYPE_PARAMETER");
 
   IElementType ATTRIBUTENAME = new FsdElementType("attributename");
@@ -117,6 +117,9 @@ public interface FsdTypes {
       else if (type == FIELD) {
         return new FsdFieldImpl(node);
       }
+      else if (type == IDENTIFIER_DECLARATION) {
+        return new FsdIdentifierDeclarationImpl(node);
+      }
       else if (type == MARKDOWN_REMARKS) {
         return new FsdMarkdownRemarksImpl(node);
       }
@@ -134,9 +137,6 @@ public interface FsdTypes {
       }
       else if (type == TYPE) {
         return new FsdTypeImpl(node);
-      }
-      else if (type == TYPE_IDENTIFIER) {
-        return new FsdTypeIdentifierImpl(node);
       }
       else if (type == TYPE_PARAMETER) {
         return new FsdTypeParameterImpl(node);

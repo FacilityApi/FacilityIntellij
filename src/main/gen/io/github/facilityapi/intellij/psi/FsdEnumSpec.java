@@ -11,6 +11,6 @@ public interface FsdEnumSpec extends PsiElement {
   FsdEnumValueList getEnumValueList();
 
   @Nullable
-  FsdTypeIdentifier getTypeIdentifier();
+  FsdIdentifierDeclaration getIdentifierDeclaration();
 
 }
