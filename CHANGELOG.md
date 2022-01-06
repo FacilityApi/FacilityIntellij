@@ -8,6 +8,7 @@
 - Icons for presented PSI elements (like method, data, enum, etc). <br/> These appear in the structure view and are helpful in distinguishing between language constructs.
 
 ### Fixed
+- Renaming enums and error sets converts the declaration to `data`
 - Use non-eap qodana for CI
 
 ## [0.0.7]

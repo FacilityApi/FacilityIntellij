@@ -8,13 +8,13 @@ import io.github.facilityapi.intellij.FsdFileType
 import io.github.facilityapi.intellij.psi.FsdNamedElement
 import io.github.facilityapi.intellij.psi.FsdReferenceType
 
-fun createTypeDefinition(project: Project, name: String): FsdNamedElement {
+fun createTypeDefinition(project: Project, name: String, declType: String): FsdNamedElement {
     val fileName = "dummy.fsd"
     // This is a silly way to do this on the surface, but the docs recommend it
     // https://plugins.jetbrains.com/docs/intellij/rename-refactoring.html
     val serviceText = """
         service dummy {
-            data $name {
+            $declType $name {
             }
         }
     """.trimIndent()

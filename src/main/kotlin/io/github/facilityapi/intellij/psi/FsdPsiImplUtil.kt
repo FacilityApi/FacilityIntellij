@@ -4,7 +4,6 @@ import com.intellij.navigation.ItemPresentation
 import com.intellij.openapi.util.IconLoader
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
-import io.github.facilityapi.intellij.FsdFileType
 import io.github.facilityapi.intellij.reference.FsdReference
 import io.github.facilityapi.intellij.reference.createTypeDefinition
 
@@ -14,8 +13,9 @@ object FsdPsiImplUtil {
 
     @JvmStatic
     fun FsdTypeIdentifier.setName(name: String): PsiElement {
-        val dataType = createTypeDefinition(project, name)
-        val newNode = dataType.node
+        val declType = parent.node.firstChildNode.text
+        val newDefinition = createTypeDefinition(project, name, declType)
+        val newNode = newDefinition.node
         node.replaceChild(identifier.node, newNode)
         return this
     }
