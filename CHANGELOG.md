@@ -3,6 +3,11 @@
 # FacilityIntellij Changelog
 
 ## [Unreleased]
+### Added
+- Declaration type icons in autocomplete UI
+
+### Fixed
+- Methods shown in autocomplete
 
 ## [0.0.8]
 ### Added
