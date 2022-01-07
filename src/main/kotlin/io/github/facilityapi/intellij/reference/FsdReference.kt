@@ -25,13 +25,13 @@ class FsdReference(element: PsiElement, textRange: TextRange) : PsiReferenceBase
     }
 
     override fun getVariants(): Array<Any> {
-        return findTypeDefinitions(myElement.project).map { type ->
+        return findTypeDefinitions(myElement.project).mapNotNull { type ->
+            if (type.parent is FsdMethodSpec) return@mapNotNull null
+
             val icon = when (type.parent) {
                 is FsdDataSpec -> IconLoader.getIcon("/icons/data.svg", FsdDataSpec::class.java)
                 is FsdEnumSpec -> IconLoader.getIcon("/icons/enum.svg", FsdEnumSpec::class.java)
                 is FsdErrorSetSpec -> IconLoader.getIcon("/icons/error-set.svg", FsdErrorSetSpec::class.java)
-                is FsdMethodSpec -> IconLoader.getIcon("/icons/method.svg", FsdMethodSpec::class.java)
-                is FsdServiceSpec -> IconLoader.getIcon("/icons/service.svg", FsdServiceSpec::class.java)
                 else -> null
             }
 
