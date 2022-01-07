@@ -83,7 +83,9 @@ class FsdBlock(
             prevType == FsdTypes.COMMENT ||
             prevType == FsdTypes.COMMA ||
             prevType == FsdTypes.DECORATED_SERVICE_ITEM ||
-            prevType == FsdTypes.DECORATED_FIELD
+            prevType == FsdTypes.DECORATED_FIELD ||
+            prevType == FsdTypes.DECORATED_ENUM_VALUE ||
+            prevType == FsdTypes.DECORATED_ERROR_SPEC
         ) {
             return ChildAttributes(Indent.getNormalIndent(), null)
         }
@@ -94,8 +96,8 @@ class FsdBlock(
     private fun needsParentAlignment(child: ASTNode): Boolean {
         return DEFINITION_SPECS.contains(node.elementType) &&
             child.elementType != FsdTypes.DECORATED_FIELD &&
-            child.elementType != FsdTypes.ENUM_VALUE &&
-            child.elementType != FsdTypes.ERROR_SPEC
+            child.elementType != FsdTypes.DECORATED_ENUM_VALUE &&
+            child.elementType != FsdTypes.DECORATED_ERROR_SPEC
     }
 
     companion object {
@@ -107,6 +109,8 @@ class FsdBlock(
             FsdTypes.ENUM_SPEC,
             FsdTypes.ERROR_SET_SPEC,
             FsdTypes.DECORATED_FIELD,
+            FsdTypes.DECORATED_ENUM_VALUE,
+            FsdTypes.DECORATED_ERROR_SPEC,
         )
     }
 }
