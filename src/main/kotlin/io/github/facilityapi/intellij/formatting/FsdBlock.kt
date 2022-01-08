@@ -104,6 +104,8 @@ class FsdBlock(
     companion object {
         private val DEFINITION_SPECS: Set<IElementType> = hashSetOf(
             FsdTypes.SERVICE_SPEC,
+            FsdTypes.LEFT_BRACE,
+            FsdTypes.RIGHT_BRACE,
             FsdTypes.DECORATED_SERVICE_ITEM,
             FsdTypes.DATA_SPEC,
             FsdTypes.METHOD_SPEC,
