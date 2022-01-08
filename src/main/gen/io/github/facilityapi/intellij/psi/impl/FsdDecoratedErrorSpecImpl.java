@@ -34,9 +34,9 @@ public class FsdDecoratedErrorSpecImpl extends ASTWrapperPsiElement implements F
   }
 
   @Override
-  @NotNull
+  @Nullable
   public FsdErrorSpec getErrorSpec() {
-    return findNotNullChildByClass(FsdErrorSpec.class);
+    return findChildByClass(FsdErrorSpec.class);
   }
 
 }

@@ -10,7 +10,7 @@ public interface FsdDecoratedErrorSpec extends PsiElement {
   @NotNull
   List<FsdAttributeList> getAttributeListList();
 
-  @NotNull
+  @Nullable
   FsdErrorSpec getErrorSpec();
 
 }

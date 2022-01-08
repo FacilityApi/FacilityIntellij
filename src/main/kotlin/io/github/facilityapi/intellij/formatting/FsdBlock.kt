@@ -83,7 +83,9 @@ class FsdBlock(
             prevType == FsdTypes.COMMENT ||
             prevType == FsdTypes.COMMA ||
             prevType == FsdTypes.DECORATED_SERVICE_ITEM ||
-            prevType == FsdTypes.DECORATED_FIELD
+            prevType == FsdTypes.DECORATED_FIELD ||
+            prevType == FsdTypes.DECORATED_ENUM_VALUE ||
+            prevType == FsdTypes.DECORATED_ERROR_SPEC
         ) {
             return ChildAttributes(Indent.getNormalIndent(), null)
         }
@@ -93,20 +95,25 @@ class FsdBlock(
 
     private fun needsParentAlignment(child: ASTNode): Boolean {
         return DEFINITION_SPECS.contains(node.elementType) &&
+            child.elementType != FsdTypes.COMMENT &&
             child.elementType != FsdTypes.DECORATED_FIELD &&
-            child.elementType != FsdTypes.ENUM_VALUE &&
-            child.elementType != FsdTypes.ERROR_SPEC
+            child.elementType != FsdTypes.DECORATED_ENUM_VALUE &&
+            child.elementType != FsdTypes.DECORATED_ERROR_SPEC
     }
 
     companion object {
         private val DEFINITION_SPECS: Set<IElementType> = hashSetOf(
             FsdTypes.SERVICE_SPEC,
+            FsdTypes.LEFT_BRACE,
+            FsdTypes.RIGHT_BRACE,
             FsdTypes.DECORATED_SERVICE_ITEM,
             FsdTypes.DATA_SPEC,
             FsdTypes.METHOD_SPEC,
             FsdTypes.ENUM_SPEC,
             FsdTypes.ERROR_SET_SPEC,
             FsdTypes.DECORATED_FIELD,
+            FsdTypes.DECORATED_ENUM_VALUE,
+            FsdTypes.DECORATED_ERROR_SPEC,
         )
     }
 }

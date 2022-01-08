@@ -9,6 +9,7 @@
 
 data Widget
 {
+  // a test comment
 [required]
 id: Long;
 }

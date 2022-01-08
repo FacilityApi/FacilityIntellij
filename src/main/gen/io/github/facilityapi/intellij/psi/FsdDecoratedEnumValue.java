@@ -10,7 +10,7 @@ public interface FsdDecoratedEnumValue extends PsiElement {
   @NotNull
   List<FsdAttributeList> getAttributeListList();
 
-  @NotNull
+  @Nullable
   FsdEnumValue getEnumValue();
 
 }

@@ -2,29 +2,24 @@ package io.github.facilityapi.intellij.formatting
 
 import com.intellij.formatting.Indent
 import com.intellij.lang.ASTNode
-import com.intellij.psi.impl.source.tree.FileElement
+import io.github.facilityapi.intellij.psi.FsdDataSpec
+import io.github.facilityapi.intellij.psi.FsdEnumValueList
+import io.github.facilityapi.intellij.psi.FsdErrorList
+import io.github.facilityapi.intellij.psi.FsdMethodSpec
+import io.github.facilityapi.intellij.psi.FsdServiceItems
 import io.github.facilityapi.intellij.psi.FsdTypes
 
 class FsdIndentProcessor {
     fun getIndent(node: ASTNode): Indent {
-        if (node.treeParent is FileElement && (node.elementType == FsdTypes.COMMENT || node.elementType == FsdTypes.ATTRIBUTE_LIST)) {
-            return Indent.getNoneIndent()
-        }
+        val parent = node.psi.parent
+        val elementType = node.elementType
 
-        if (node.elementType in BLOCKS) {
-            return Indent.getNormalIndent()
-        }
+        if (parent is FsdServiceItems && elementType !in setOf(FsdTypes.LEFT_BRACE, FsdTypes.RIGHT_BRACE)) return Indent.getNormalIndent()
+        if (parent is FsdMethodSpec && (elementType == FsdTypes.COMMENT || elementType == FsdTypes.DECORATED_FIELD)) return Indent.getNormalIndent()
+        if (parent is FsdDataSpec && (elementType == FsdTypes.COMMENT || elementType == FsdTypes.DECORATED_FIELD)) return Indent.getNormalIndent()
+        if (parent is FsdEnumValueList && (elementType == FsdTypes.COMMENT || elementType == FsdTypes.DECORATED_ENUM_VALUE)) return Indent.getNormalIndent()
+        if (parent is FsdErrorList && (elementType == FsdTypes.COMMENT || elementType == FsdTypes.DECORATED_ERROR_SPEC)) return Indent.getNormalIndent()
 
         return Indent.getNoneIndent()
-    }
-
-    companion object {
-        val BLOCKS = setOf(
-            FsdTypes.COMMENT,
-            FsdTypes.DECORATED_SERVICE_ITEM,
-            FsdTypes.ENUM_VALUE,
-            FsdTypes.ERROR_SPEC,
-            FsdTypes.DECORATED_FIELD,
-        )
     }
 }
