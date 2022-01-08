@@ -34,9 +34,9 @@ public class FsdDecoratedEnumValueImpl extends ASTWrapperPsiElement implements F
   }
 
   @Override
-  @NotNull
+  @Nullable
   public FsdEnumValue getEnumValue() {
-    return findNotNullChildByClass(FsdEnumValue.class);
+    return findChildByClass(FsdEnumValue.class);
   }
 
 }

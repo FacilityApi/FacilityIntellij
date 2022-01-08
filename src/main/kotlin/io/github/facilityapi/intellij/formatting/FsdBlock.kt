@@ -95,6 +95,7 @@ class FsdBlock(
 
     private fun needsParentAlignment(child: ASTNode): Boolean {
         return DEFINITION_SPECS.contains(node.elementType) &&
+            child.elementType != FsdTypes.COMMENT &&
             child.elementType != FsdTypes.DECORATED_FIELD &&
             child.elementType != FsdTypes.DECORATED_ENUM_VALUE &&
             child.elementType != FsdTypes.DECORATED_ERROR_SPEC
