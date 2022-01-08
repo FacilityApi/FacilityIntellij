@@ -7,7 +7,8 @@
 - Declaration type icons in autocomplete UI
 
 ### Fixed
-- Methods shown in autocomplete
+- Methods are shown in autocomplete
+- Re-indent does not handle comments nor non-data service items well
 
 ## [0.0.8]
 ### Added
