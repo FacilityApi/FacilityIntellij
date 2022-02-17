@@ -1,5 +1,5 @@
 import org.jetbrains.changelog.markdownToHTML
-import org.jetbrains.grammarkit.tasks.GenerateLexer
+import org.jetbrains.grammarkit.tasks.GenerateLexerTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun properties(key: String) = project.findProperty(key).toString()
@@ -8,17 +8,17 @@ plugins {
     // Java support
     id("java")
     // Kotlin support
-    id("org.jetbrains.kotlin.jvm") version "1.6.0"
+    id("org.jetbrains.kotlin.jvm") version "1.6.10"
     // Gradle IntelliJ Plugin
-    id("org.jetbrains.intellij") version "1.3.0"
+    id("org.jetbrains.intellij") version "1.4.0"
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "1.3.1"
     // Gradle Qodana Plugin
     id("org.jetbrains.qodana") version "0.1.13"
     // Gradle GrammarKit Plugin
-    id("org.jetbrains.grammarkit") version "2021.1.3"
+    id("org.jetbrains.grammarkit") version "2021.2.1"
     // ktlint Plugin
-    id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
+    id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
 }
 
 group = properties("pluginGroup")
@@ -78,11 +78,11 @@ tasks {
         gradleVersion = properties("gradleVersion")
     }
 
-    register<GenerateLexer>("generateFsdLexer") {
-        source = "src/main/kotlin/io/github/facilityapi/intellij/lexer/_FsdLexer.flex"
-        targetDir = "src/main/gen/io/github/facilityapi/intellij/lexer/"
-        targetClass = "FsdLexer"
-        purgeOldFiles = true
+    register<GenerateLexerTask>("generateFsdLexer") {
+        source.set("src/main/kotlin/io/github/facilityapi/intellij/lexer/_FsdLexer.flex")
+        targetDir.set("src/main/gen/io/github/facilityapi/intellij/lexer/")
+        targetClass.set("FsdLexer")
+        purgeOldFiles.set(true)
     }
 
     patchPluginXml {
@@ -143,5 +143,5 @@ tasks {
 }
 
 ktlint {
-    version.set("0.43.0")
+    version.set("0.44.0")
 }
