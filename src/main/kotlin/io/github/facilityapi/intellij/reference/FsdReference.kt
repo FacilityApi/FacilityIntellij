@@ -11,7 +11,6 @@ import io.github.facilityapi.intellij.psi.FsdDataSpec
 import io.github.facilityapi.intellij.psi.FsdEnumSpec
 import io.github.facilityapi.intellij.psi.FsdErrorSetSpec
 import io.github.facilityapi.intellij.psi.FsdMethodSpec
-import io.github.facilityapi.intellij.psi.FsdServiceSpec
 
 class FsdReference(element: PsiElement, textRange: TextRange) : PsiReferenceBase<PsiElement>(element, textRange) {
 
