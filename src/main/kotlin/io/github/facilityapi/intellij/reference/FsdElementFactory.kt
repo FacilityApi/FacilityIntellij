@@ -1,8 +1,8 @@
 package io.github.facilityapi.intellij.reference
 
 import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFileFactory
-import com.intellij.psi.util.descendants
 import io.github.facilityapi.intellij.FsdFile
 import io.github.facilityapi.intellij.FsdFileType
 import io.github.facilityapi.intellij.psi.FsdNamedElement
@@ -19,7 +19,7 @@ fun createTypeDefinition(project: Project, name: String, declType: String): FsdN
         }
     """.trimIndent()
     val file = PsiFileFactory.getInstance(project).createFileFromText(fileName, FsdFileType, serviceText) as FsdFile
-    return file.descendants(true).filterIsInstance<FsdNamedElement>().first()
+    return file.descendants.filterIsInstance<FsdNamedElement>().first()
 }
 
 fun createTypeReference(project: Project, name: String): FsdReferenceType {
@@ -34,5 +34,24 @@ fun createTypeReference(project: Project, name: String): FsdReferenceType {
         }
     """.trimIndent()
     val file = PsiFileFactory.getInstance(project).createFileFromText(fileName, FsdFileType, serviceText) as FsdFile
-    return file.descendants(true).filterIsInstance<FsdReferenceType>().first()
+    return file.descendants.filterIsInstance<FsdReferenceType>().first()
+}
+
+// These are copied because of a source breaking change in the framework
+// JetBrains Platform Slack: https://app.slack.com/client/T5P9YATH9/threads
+private val PsiElement.descendants: Sequence<PsiElement>
+    get() = sequence {
+        val root = this@descendants
+        yieldAndVisitChildren(root)
+    }
+
+private suspend fun SequenceScope<PsiElement>.yieldAndVisitChildren(element: PsiElement) {
+    yield(element)
+
+    var child = element.firstChild
+
+    while (child != null) {
+        yieldAndVisitChildren(child)
+        child = child.nextSibling
+    }
 }
