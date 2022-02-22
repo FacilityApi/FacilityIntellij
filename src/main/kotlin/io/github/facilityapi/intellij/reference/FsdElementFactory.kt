@@ -46,12 +46,12 @@ private val PsiElement.descendants: Sequence<PsiElement>
     }
 
 private suspend fun SequenceScope<PsiElement>.yieldAndVisitChildren(element: PsiElement) {
-    yield(element)
-
     var child = element.firstChild
 
     while (child != null) {
         yieldAndVisitChildren(child)
         child = child.nextSibling
     }
+
+    yield(element)
 }
