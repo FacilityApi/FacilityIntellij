@@ -42,14 +42,14 @@ fun createTypeReference(project: Project, name: String): FsdReferenceType {
 private val PsiElement.descendants: Sequence<PsiElement>
     get() = sequence {
         val root = this@descendants
-        yieldAndVisitChildren(root)
+        visitChildrenAndYield(root)
     }
 
-private suspend fun SequenceScope<PsiElement>.yieldAndVisitChildren(element: PsiElement) {
+private suspend fun SequenceScope<PsiElement>.visitChildrenAndYield(element: PsiElement) {
     var child = element.firstChild
 
     while (child != null) {
-        yieldAndVisitChildren(child)
+        visitChildrenAndYield(child)
         child = child.nextSibling
     }
 
