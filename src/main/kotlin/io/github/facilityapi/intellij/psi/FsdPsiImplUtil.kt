@@ -9,24 +9,23 @@ import io.github.facilityapi.intellij.reference.createTypeDefinition
 
 object FsdPsiImplUtil {
     @JvmStatic
-    fun FsdIdentifierDeclaration.getName(): String = identifier.text
+    fun getName(identifierDeclaration: FsdIdentifierDeclaration): String = identifierDeclaration.identifier.text
 
     @JvmStatic
-    fun FsdIdentifierDeclaration.setName(name: String): PsiElement {
+    fun setName(identifierDeclaration: FsdIdentifierDeclaration, name: String): PsiElement {
+        val parent = identifierDeclaration.parent
         val declType = parent.node.firstChildNode.text
-        val newDefinition = createTypeDefinition(project, name, declType)
+        val newDefinition = createTypeDefinition(identifierDeclaration.project, name, declType)
         val newNode = newDefinition.node
-        node.replaceChild(identifier.node, newNode)
-        return this
+        parent.node.replaceChild(identifierDeclaration.node, newNode)
+        return identifierDeclaration
     }
 
     @JvmStatic
-    fun FsdIdentifierDeclaration.getNameIdentifier(): PsiElement {
-        return identifier
-    }
+    fun getNameIdentifier(identifierDeclaration: FsdIdentifierDeclaration): PsiElement = identifierDeclaration.identifier
 
     @JvmStatic
-    fun FsdReferenceType.getReference(): PsiReference = FsdReference(this, textRangeInParent)
+    fun getReference(reference: FsdReferenceType): PsiReference = FsdReference(reference, reference.textRangeInParent)
 
     @JvmStatic
     fun FsdNamedElement.getPresentation(): ItemPresentation {
