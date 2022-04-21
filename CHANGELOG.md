@@ -3,6 +3,8 @@
 # FacilityIntellij Changelog
 
 ## [Unreleased]
+
+## [0.0.10]
 - Added support for the 2022.1 Intellij platform
 
 ## [0.0.9]
