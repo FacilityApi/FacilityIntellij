@@ -79,6 +79,14 @@
             language="FSD"
             implementationClass="io.github.facilityapi.intellij.FsdBraceMatcher" />
 
+        <localInspection
+            language="FSD"
+            displayName="DuplicateName"
+            groupBundle="messages.FsdBundle"
+            groupKey="inspections.bugs.duplicatename"
+            enabledByDefault="true"
+            level="ERROR"
+            implementationClass="io.github.facilityapi.intellij.DuplicateNameInspection" />
     </extensions>
 
     <actions>
