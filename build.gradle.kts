@@ -30,6 +30,7 @@ repositories {
 }
 
 dependencies {
+    implementation(kotlin("stdlib"))
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.25")
 }
 
