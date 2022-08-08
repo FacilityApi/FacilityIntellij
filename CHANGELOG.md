@@ -3,6 +3,8 @@
 # FacilityIntellij Changelog
 
 ## [Unreleased]
+### Added
+- Inspection for duplicate field names, enum, and error values
 
 ## [0.0.11]
 - Added support for the 2022.2 Intellij platform
