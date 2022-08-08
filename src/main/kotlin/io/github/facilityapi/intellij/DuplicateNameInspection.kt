@@ -20,14 +20,14 @@ class DuplicateNameInspection : LocalInspectionTool() {
         override fun visitElement(element: PsiElement) {
             if (element is FsdMethodSpec) {
                 val requestFields = element.requestFields?.decoratedFieldList ?: emptyList()
-                checkForFieldDuplicates(requestFields)
+                checkForFieldDuplicates(requestFields, "Duplicate request field")
 
                 val responseFields = element.responseFields?.decoratedFieldList ?: emptyList()
-                checkForFieldDuplicates(responseFields)
+                checkForFieldDuplicates(responseFields, "Duplicate response field")
             }
 
             if (element is FsdDataSpec) {
-                checkForFieldDuplicates(element.decoratedFieldList)
+                checkForFieldDuplicates(element.decoratedFieldList, "Duplicate field")
             }
 
             if (element is FsdEnumSpec) {
@@ -35,7 +35,7 @@ class DuplicateNameInspection : LocalInspectionTool() {
                 for (case in element.enumValueList?.decoratedEnumValueList ?: emptyList()) {
                     val caseName = case.enumValue!!.identifier.text
                     if (!seenCases.add(caseName)) {
-                        holder.registerProblem(case, "Duplicate enum value: $caseName")
+                        holder.registerProblem(case, "Duplicate enumerated value: $caseName")
                     }
                 }
             }
@@ -51,13 +51,13 @@ class DuplicateNameInspection : LocalInspectionTool() {
             }
         }
 
-        private fun checkForFieldDuplicates(fields: List<FsdDecoratedField>) {
+        private fun checkForFieldDuplicates(fields: List<FsdDecoratedField>, message: String) {
             val seenFields = mutableSetOf<String>()
 
             for (decoratedField in fields) {
                 val fieldName = decoratedField.field.identifier.text
                 if (!seenFields.add(fieldName)) {
-                    holder.registerProblem(decoratedField, "Illegal field redeclaration: $fieldName")
+                    holder.registerProblem(decoratedField, "$message: $fieldName")
                 }
             }
         }
