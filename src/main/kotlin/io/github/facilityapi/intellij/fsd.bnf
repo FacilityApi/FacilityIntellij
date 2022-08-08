@@ -46,9 +46,13 @@ decorated_service_item ::= attribute_list* service_item
 private service_item ::=  (enum_spec | data_spec | method_spec | error_set_spec) { recoverWhile=service_item_recover }
 private service_item_recover ::= !('[' | '}' | enum | data | errors | method)
 
-method_spec ::= method identifier_declaration '{' (comment+ | decorated_field)* '}' (':' '{' (comment+ | decorated_field)* '}') { pin=1 }
+private decorated_field_list ::= '{' (comment+ | decorated_field)* '}' { pin=1 }
 
-data_spec ::= data identifier_declaration '{' (comment+ | decorated_field)* '}' { pin=1 }
+request_fields ::= decorated_field_list
+response_fields ::= decorated_field_list
+method_spec ::= method identifier_declaration request_fields ':' response_fields { pin=1 }
+
+data_spec ::= data identifier_declaration decorated_field_list { pin=1 }
 
 enum_spec ::= enum identifier_declaration enum_value_list { pin=1 }
 enum_value_list ::= '{' [ decorated_enum_value (',' (decorated_enum_value | &'}'))* ] '}' { pin(".*")=1 }

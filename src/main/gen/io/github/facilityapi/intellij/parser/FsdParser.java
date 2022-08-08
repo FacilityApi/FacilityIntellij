@@ -153,7 +153,7 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // data identifier_declaration '{' (comment+ | decorated_field)* '}'
+  // data identifier_declaration decorated_field_list
   public static boolean data_spec(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "data_spec")) return false;
     if (!nextTokenIs(b, DATA)) return false;
@@ -162,48 +162,9 @@ public class FsdParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, DATA);
     p = r; // pin = 1
     r = r && report_error_(b, identifier_declaration(b, l + 1));
-    r = p && report_error_(b, consumeToken(b, LEFT_BRACE)) && r;
-    r = p && report_error_(b, data_spec_3(b, l + 1)) && r;
-    r = p && consumeToken(b, RIGHT_BRACE) && r;
+    r = p && decorated_field_list(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
-  }
-
-  // (comment+ | decorated_field)*
-  private static boolean data_spec_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "data_spec_3")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!data_spec_3_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "data_spec_3", c)) break;
-    }
-    return true;
-  }
-
-  // comment+ | decorated_field
-  private static boolean data_spec_3_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "data_spec_3_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = data_spec_3_0_0(b, l + 1);
-    if (!r) r = decorated_field(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // comment+
-  private static boolean data_spec_3_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "data_spec_3_0_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMENT);
-    while (r) {
-      int c = current_position_(b);
-      if (!consumeToken(b, COMMENT)) break;
-      if (!empty_element_parsed_guard_(b, "data_spec_3_0_0", c)) break;
-    }
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */
@@ -326,6 +287,58 @@ public class FsdParser implements PsiParser, LightPsiParser {
       if (!empty_element_parsed_guard_(b, "decorated_field_0", c)) break;
     }
     return true;
+  }
+
+  /* ********************************************************** */
+  // '{' (comment+ | decorated_field)* '}'
+  static boolean decorated_field_list(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "decorated_field_list")) return false;
+    if (!nextTokenIs(b, LEFT_BRACE)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = consumeToken(b, LEFT_BRACE);
+    p = r; // pin = 1
+    r = r && report_error_(b, decorated_field_list_1(b, l + 1));
+    r = p && consumeToken(b, RIGHT_BRACE) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // (comment+ | decorated_field)*
+  private static boolean decorated_field_list_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "decorated_field_list_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!decorated_field_list_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "decorated_field_list_1", c)) break;
+    }
+    return true;
+  }
+
+  // comment+ | decorated_field
+  private static boolean decorated_field_list_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "decorated_field_list_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = decorated_field_list_1_0_0(b, l + 1);
+    if (!r) r = decorated_field(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // comment+
+  private static boolean decorated_field_list_1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "decorated_field_list_1_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMENT);
+    while (r) {
+      int c = current_position_(b);
+      if (!consumeToken(b, COMMENT)) break;
+      if (!empty_element_parsed_guard_(b, "decorated_field_list_1_0_0", c)) break;
+    }
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   /* ********************************************************** */
@@ -656,7 +669,7 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // method identifier_declaration '{' (comment+ | decorated_field)* '}' (':' '{' (comment+ | decorated_field)* '}')
+  // method identifier_declaration request_fields ':' response_fields
   public static boolean method_spec(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "method_spec")) return false;
     if (!nextTokenIs(b, METHOD)) return false;
@@ -665,98 +678,11 @@ public class FsdParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, METHOD);
     p = r; // pin = 1
     r = r && report_error_(b, identifier_declaration(b, l + 1));
-    r = p && report_error_(b, consumeToken(b, LEFT_BRACE)) && r;
-    r = p && report_error_(b, method_spec_3(b, l + 1)) && r;
-    r = p && report_error_(b, consumeToken(b, RIGHT_BRACE)) && r;
-    r = p && method_spec_5(b, l + 1) && r;
+    r = p && report_error_(b, request_fields(b, l + 1)) && r;
+    r = p && report_error_(b, consumeToken(b, COLON)) && r;
+    r = p && response_fields(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
-  }
-
-  // (comment+ | decorated_field)*
-  private static boolean method_spec_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "method_spec_3")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!method_spec_3_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "method_spec_3", c)) break;
-    }
-    return true;
-  }
-
-  // comment+ | decorated_field
-  private static boolean method_spec_3_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "method_spec_3_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = method_spec_3_0_0(b, l + 1);
-    if (!r) r = decorated_field(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // comment+
-  private static boolean method_spec_3_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "method_spec_3_0_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMENT);
-    while (r) {
-      int c = current_position_(b);
-      if (!consumeToken(b, COMMENT)) break;
-      if (!empty_element_parsed_guard_(b, "method_spec_3_0_0", c)) break;
-    }
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // ':' '{' (comment+ | decorated_field)* '}'
-  private static boolean method_spec_5(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "method_spec_5")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, COLON, LEFT_BRACE);
-    r = r && method_spec_5_2(b, l + 1);
-    r = r && consumeToken(b, RIGHT_BRACE);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (comment+ | decorated_field)*
-  private static boolean method_spec_5_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "method_spec_5_2")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!method_spec_5_2_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "method_spec_5_2", c)) break;
-    }
-    return true;
-  }
-
-  // comment+ | decorated_field
-  private static boolean method_spec_5_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "method_spec_5_2_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = method_spec_5_2_0_0(b, l + 1);
-    if (!r) r = decorated_field(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // comment+
-  private static boolean method_spec_5_2_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "method_spec_5_2_0_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMENT);
-    while (r) {
-      int c = current_position_(b);
-      if (!consumeToken(b, COMMENT)) break;
-      if (!empty_element_parsed_guard_(b, "method_spec_5_2_0_0", c)) break;
-    }
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */
@@ -768,6 +694,30 @@ public class FsdParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeToken(b, TYPENAME);
     exit_section_(b, m, REFERENCE_TYPE, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // decorated_field_list
+  public static boolean request_fields(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "request_fields")) return false;
+    if (!nextTokenIs(b, LEFT_BRACE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = decorated_field_list(b, l + 1);
+    exit_section_(b, m, REQUEST_FIELDS, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // decorated_field_list
+  public static boolean response_fields(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "response_fields")) return false;
+    if (!nextTokenIs(b, LEFT_BRACE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = decorated_field_list(b, l + 1);
+    exit_section_(b, m, RESPONSE_FIELDS, r);
     return r;
   }
 

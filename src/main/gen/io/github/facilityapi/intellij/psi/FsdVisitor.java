@@ -83,6 +83,14 @@ public class FsdVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitRequestFields(@NotNull FsdRequestFields o) {
+    visitPsiElement(o);
+  }
+
+  public void visitResponseFields(@NotNull FsdResponseFields o) {
+    visitPsiElement(o);
+  }
+
   public void visitServiceItems(@NotNull FsdServiceItems o) {
     visitPsiElement(o);
   }
