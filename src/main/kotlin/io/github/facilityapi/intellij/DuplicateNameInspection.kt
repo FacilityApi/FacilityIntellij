@@ -2,7 +2,10 @@ package io.github.facilityapi.intellij
 
 import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.codeInspection.LocalInspectionToolSession
+import com.intellij.codeInspection.LocalQuickFix
+import com.intellij.codeInspection.ProblemDescriptor
 import com.intellij.codeInspection.ProblemsHolder
+import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementVisitor
 import io.github.facilityapi.intellij.psi.FsdDataSpec
@@ -17,6 +20,8 @@ class DuplicateNameInspection : LocalInspectionTool() {
         isOnTheFly: Boolean,
         session: LocalInspectionToolSession
     ): PsiElementVisitor = object : PsiElementVisitor() {
+        private val fix = Fix()
+
         override fun visitElement(element: PsiElement) {
             if (element is FsdMethodSpec) {
                 val requestFields = element.requestFields?.decoratedFieldList ?: emptyList()
@@ -35,7 +40,7 @@ class DuplicateNameInspection : LocalInspectionTool() {
                 for (case in element.enumValueList?.decoratedEnumValueList ?: emptyList()) {
                     val caseName = case.enumValue!!.identifier.text
                     if (!seenCases.add(caseName)) {
-                        holder.registerProblem(case, "Duplicate enumerated value: $caseName")
+                        holder.registerProblem(case, "Duplicate enumerated value: $caseName", fix)
                     }
                 }
             }
@@ -45,7 +50,7 @@ class DuplicateNameInspection : LocalInspectionTool() {
                 for (decoratedError in element.decoratedErrorSpecList) {
                     val errorName = decoratedError.errorSpec!!.identifier.text
                     if (!seenFields.add(errorName)) {
-                        holder.registerProblem(decoratedError, "Duplicate error: $errorName")
+                        holder.registerProblem(decoratedError, "Duplicate error: $errorName", fix)
                     }
                 }
             }
@@ -57,9 +62,17 @@ class DuplicateNameInspection : LocalInspectionTool() {
             for (decoratedField in fields) {
                 val fieldName = decoratedField.field.identifier.text
                 if (!seenFields.add(fieldName)) {
-                    holder.registerProblem(decoratedField, "$message: $fieldName")
+                    holder.registerProblem(decoratedField, "$message: $fieldName", fix)
                 }
             }
+        }
+    }
+
+    class Fix : LocalQuickFix {
+        override fun getFamilyName(): String = "Replace with bundle?"
+
+        override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
+            descriptor.psiElement.delete()
         }
     }
 }
