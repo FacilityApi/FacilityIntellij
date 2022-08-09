@@ -40,7 +40,7 @@ class DuplicateNameInspection : LocalInspectionTool() {
                 for (case in element.enumValueList?.decoratedEnumValueList ?: emptyList()) {
                     val caseName = case.enumValue!!.identifier.text
                     if (!seenCases.add(caseName)) {
-                        val message = FsdBundle.getMessage("inspections.bugs.duplicatename.enumerated", case)
+                        val message = FsdBundle.getMessage("inspections.bugs.duplicatename.enumerated", caseName)
                         holder.registerProblem(case, message, fix)
                     }
                 }
@@ -72,12 +72,14 @@ class DuplicateNameInspection : LocalInspectionTool() {
     }
 
     class Fix : LocalQuickFix {
-        override fun getFamilyName(): String {
-            return FsdBundle.getMessage("inspections.bugs.duplicatenames.quickfix")
-        }
+        override fun getFamilyName() = NAME
 
         override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
             descriptor.psiElement.delete()
+        }
+
+        companion object {
+            val NAME = FsdBundle.getMessage("inspections.bugs.duplicatenames.quickfix")
         }
     }
 }
