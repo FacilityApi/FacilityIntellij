@@ -25,51 +25,56 @@ class DuplicateNameInspection : LocalInspectionTool() {
         override fun visitElement(element: PsiElement) {
             if (element is FsdMethodSpec) {
                 val requestFields = element.requestFields?.decoratedFieldList ?: emptyList()
-                checkForFieldDuplicates(requestFields, "Duplicate request field")
+                checkForFieldDuplicates(requestFields, "inspections.bugs.duplicatename.requestfield")
 
                 val responseFields = element.responseFields?.decoratedFieldList ?: emptyList()
-                checkForFieldDuplicates(responseFields, "Duplicate response field")
+                checkForFieldDuplicates(responseFields, "inspections.bugs.duplicatename.responsefield")
             }
 
             if (element is FsdDataSpec) {
-                checkForFieldDuplicates(element.decoratedFieldList, "Duplicate field")
+                checkForFieldDuplicates(element.decoratedFieldList, "inspections.bugs.duplicatename.field")
             }
 
             if (element is FsdEnumSpec) {
-                val seenCases = mutableSetOf<String>()
+                val seenCases = hashSetOf<String>()
                 for (case in element.enumValueList?.decoratedEnumValueList ?: emptyList()) {
                     val caseName = case.enumValue!!.identifier.text
                     if (!seenCases.add(caseName)) {
-                        holder.registerProblem(case, "Duplicate enumerated value: $caseName", fix)
+                        val message = FsdBundle.getMessage("inspections.bugs.duplicatename.enumerated", case)
+                        holder.registerProblem(case, message, fix)
                     }
                 }
             }
 
             if (element is FsdErrorList) {
-                val seenFields = mutableSetOf<String>()
+                val seenFields = hashSetOf<String>()
                 for (decoratedError in element.decoratedErrorSpecList) {
                     val errorName = decoratedError.errorSpec!!.identifier.text
                     if (!seenFields.add(errorName)) {
-                        holder.registerProblem(decoratedError, "Duplicate error: $errorName", fix)
+                        val message = FsdBundle.getMessage("inspections.bugs.duplicatename.error", errorName)
+                        holder.registerProblem(decoratedError, message, fix)
                     }
                 }
             }
         }
 
-        private fun checkForFieldDuplicates(fields: List<FsdDecoratedField>, message: String) {
-            val seenFields = mutableSetOf<String>()
+        private fun checkForFieldDuplicates(fields: List<FsdDecoratedField>, bundleKey: String) {
+            val seenFields = hashSetOf<String>()
 
             for (decoratedField in fields) {
                 val fieldName = decoratedField.field.identifier.text
                 if (!seenFields.add(fieldName)) {
-                    holder.registerProblem(decoratedField, "$message: $fieldName", fix)
+                    val message = FsdBundle.getMessage(bundleKey, fieldName)
+                    holder.registerProblem(decoratedField, message, fix)
                 }
             }
         }
     }
 
     class Fix : LocalQuickFix {
-        override fun getFamilyName(): String = "Replace with bundle?"
+        override fun getFamilyName(): String {
+            return FsdBundle.getMessage("inspections.bugs.duplicatenames.quickfix")
+        }
 
         override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
             descriptor.psiElement.delete()
