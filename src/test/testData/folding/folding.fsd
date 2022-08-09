@@ -1,5 +1,23 @@
 service FoldingService  {<fold text='...'>
-    data Shirt  {<fold text='...'>
+    method getFoldedShirts {<fold text='...'>
+	    count: int32;
+    </fold>}:
+    {<fold text='...'>
+        shirts: Shirt[];
+    </fold>}
+
+    data Shirt {<fold text='...'>
+        type: ShirtType;
         fabric: Fabric;
-     </fold>}
+    </fold>}
+
+	enum ShirtType {<fold text='...'>
+		tshirt,
+		collar,
+		buttonDown
+	</fold>}
+
+	errors FoldError {<fold text='...'>
+		UnknownShirtType
+	</fold>}
 </fold>}
