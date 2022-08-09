@@ -1,4 +1,4 @@
-service FoldingService  {<fold text='...'>
+service FoldingService {<fold text='...'>
     method getFoldedShirts {<fold text='...'>
 	    count: int32;
     </fold>}:

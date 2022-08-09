@@ -15,7 +15,6 @@ import io.github.facilityapi.intellij.psi.FsdEnumSpec
 import io.github.facilityapi.intellij.psi.FsdEnumValueList
 import io.github.facilityapi.intellij.psi.FsdErrorList
 import io.github.facilityapi.intellij.psi.FsdErrorSetSpec
-import io.github.facilityapi.intellij.psi.FsdMethodSpec
 import io.github.facilityapi.intellij.psi.FsdRequestFields
 import io.github.facilityapi.intellij.psi.FsdResponseFields
 import io.github.facilityapi.intellij.psi.FsdServiceSpec
@@ -32,12 +31,11 @@ class FsdFoldingBuilder : FoldingBuilderEx(), DumbAware {
                         val startOffset = serviceItems.textRange.startOffset + 1
                         val endOffset = serviceItems.textRange.endOffset - 1
 
-                        if (startOffset >= endOffset) return@mapNotNull null
-
-                        FoldingDescriptor(
+                        createFoldingDescriptor(
                             child.node,
-                            TextRange(startOffset, endOffset),
-                            FoldingGroup.newGroup("Fsd Service Folding Group ${child.identifier}")
+                            startOffset,
+                            endOffset,
+                            "Fsd Service Folding Group ${child.identifier}"
                         )
                     }
 
@@ -45,52 +43,28 @@ class FsdFoldingBuilder : FoldingBuilderEx(), DumbAware {
                     is FsdRequestFields -> {
                         val startOffset = child.textOffset + 1
                         val endOffset = child.endOffset - 1
-                        if (endOffset > startOffset && child.node != null) {
-                            val range = TextRange(startOffset, endOffset)
-                            val group = FoldingGroup.newGroup("Fsd Service Item Body Group")
-                            FoldingDescriptor(child.node, range, group)
-                        } else {
-                            null
-                        }
+                        createFoldingDescriptor(child.node, startOffset, endOffset, "Fsd Method Parameter Body Group")
                     }
 
                     is FsdDataSpec -> {
                         val start = PsiTreeUtil.findSiblingForward(child.firstChild, FsdTypes.LEFT_BRACE, null) ?: return@mapNotNull null
                         val startOffset = start.textOffset + 1
                         val endOffset = child.endOffset - 1
-                        if (endOffset > startOffset && child.node != null) {
-                            val range = TextRange(startOffset, endOffset)
-                            val group = FoldingGroup.newGroup("Fsd Service Item Body Group")
-                            FoldingDescriptor(child.node, range, group)
-                        } else {
-                            null
-                        }
+                        createFoldingDescriptor(child.node, startOffset, endOffset, "Fsd Data Body Group")
                     }
 
                     is FsdEnumSpec -> {
                         val start = PsiTreeUtil.findChildOfType(child, FsdEnumValueList::class.java) ?: return@mapNotNull null
                         val startOffset = start.textOffset + 1
                         val endOffset = child.endOffset - 1
-                        if (endOffset > startOffset && child.node != null) {
-                            val range = TextRange(startOffset, endOffset)
-                            val group = FoldingGroup.newGroup("Fsd Service Item Body Group")
-                            FoldingDescriptor(child.node, range, group)
-                        } else {
-                            null
-                        }
+                        createFoldingDescriptor(child.node, startOffset, endOffset, "Fsd Enumerated Value Body Group")
                     }
 
                     is FsdErrorSetSpec -> {
                         val start = PsiTreeUtil.findChildOfType(child, FsdErrorList::class.java) ?: return@mapNotNull null
                         val startOffset = start.textOffset + 1
                         val endOffset = child.endOffset - 1
-                        if (endOffset > startOffset && child.node != null) {
-                            val range = TextRange(startOffset, endOffset)
-                            val group = FoldingGroup.newGroup("Fsd Service Item Body Group")
-                            FoldingDescriptor(child.node, range, group)
-                        } else {
-                            null
-                        }
+                        createFoldingDescriptor(child.node, startOffset, endOffset, "Fsd Error Set Body Group")
                     }
 
                     else -> null
@@ -102,6 +76,19 @@ class FsdFoldingBuilder : FoldingBuilderEx(), DumbAware {
     override fun getPlaceholderText(node: ASTNode): String = "..."
 
     override fun isCollapsedByDefault(node: ASTNode): Boolean = false
+
+    private fun createFoldingDescriptor(
+        node: ASTNode?,
+        startOffset: Int,
+        endOffset: Int,
+        debugMessage: String
+    ): FoldingDescriptor? {
+        if (endOffset <= startOffset || node == null) return null
+
+        val range = TextRange(startOffset, endOffset)
+        val group = FoldingGroup.newGroup(debugMessage)
+        return FoldingDescriptor(node, range, group)
+    }
 
     companion object {
         val FOLDABLES = setOf(
