@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFileFactory
 import io.github.facilityapi.intellij.FsdFile
 import io.github.facilityapi.intellij.FsdFileType
+import io.github.facilityapi.intellij.psi.FsdAttributeList
 import io.github.facilityapi.intellij.psi.FsdNamedElement
 import io.github.facilityapi.intellij.psi.FsdReferenceType
 
@@ -35,6 +36,19 @@ fun createTypeReference(project: Project, name: String): FsdReferenceType {
     """.trimIndent()
     val file = PsiFileFactory.getInstance(project).createFileFromText(fileName, FsdFileType, serviceText) as FsdFile
     return file.descendants.filterIsInstance<FsdReferenceType>().first()
+}
+
+fun createAttribute(project: Project, name: String): FsdAttributeList {
+    val fileName = "dummy.fsd"
+    // This is a silly way to do this on the surface, but the docs recommend it
+    // https://plugins.jetbrains.com/docs/intellij/rename-refactoring.html
+    val serviceText = """
+        [$name]
+        service dummy {
+        }
+    """.trimIndent()
+    val file = PsiFileFactory.getInstance(project).createFileFromText(fileName, FsdFileType, serviceText) as FsdFile
+    return file.descendants.filterIsInstance<FsdAttributeList>().first()
 }
 
 // These are copied because of a source breaking change in the framework

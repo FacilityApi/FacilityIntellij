@@ -88,6 +88,13 @@
             enabledByDefault="true"
             level="ERROR"
             implementationClass="io.github.facilityapi.intellij.DuplicateNameInspection" />
+
+        <!-- Add validation attribute to field or type -->
+        <intentionAction>
+            <className>io.github.facilityapi.intellij.ValidateIntention</className>
+            <category>FSD intentions</category>
+        </intentionAction>
+
     </extensions>
 
     <actions>
