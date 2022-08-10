@@ -7,10 +7,13 @@ import com.intellij.psi.PsiElement;
 
 public interface FsdMethodSpec extends PsiElement {
 
-  @NotNull
-  List<FsdDecoratedField> getDecoratedFieldList();
-
   @Nullable
   FsdIdentifierDeclaration getIdentifierDeclaration();
+
+  @Nullable
+  FsdRequestFields getRequestFields();
+
+  @Nullable
+  FsdResponseFields getResponseFields();
 
 }

@@ -7,7 +7,7 @@ import javax.swing.Icon
 
 object FsdFileType : LanguageFileType(FsdLanguage) {
     override fun getIcon(): Icon = IconLoader.getIcon("/icons/fsd.svg", FsdFileType::class.java)
-    override fun getName(): String = "Facility Service Definition"
+    override fun getName(): String = FsdLanguage.displayName
     override fun getDefaultExtension(): String = "fsd"
     override fun getDescription(): String = "API specifications using the Facility Service Definition language."
     override fun getCharset(file: VirtualFile, content: ByteArray): String = "UTF-8"

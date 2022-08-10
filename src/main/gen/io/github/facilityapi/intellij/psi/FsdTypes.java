@@ -27,6 +27,8 @@ public interface FsdTypes {
   IElementType MARKDOWN_REMARKS = new FsdElementType("MARKDOWN_REMARKS");
   IElementType METHOD_SPEC = new FsdElementType("METHOD_SPEC");
   IElementType REFERENCE_TYPE = new FsdElementType("REFERENCE_TYPE");
+  IElementType REQUEST_FIELDS = new FsdElementType("REQUEST_FIELDS");
+  IElementType RESPONSE_FIELDS = new FsdElementType("RESPONSE_FIELDS");
   IElementType SERVICE_ITEMS = new FsdElementType("SERVICE_ITEMS");
   IElementType SERVICE_SPEC = new FsdElementType("SERVICE_SPEC");
   IElementType TYPE = new FsdElementType("TYPE");
@@ -128,6 +130,12 @@ public interface FsdTypes {
       }
       else if (type == REFERENCE_TYPE) {
         return new FsdReferenceTypeImpl(node);
+      }
+      else if (type == REQUEST_FIELDS) {
+        return new FsdRequestFieldsImpl(node);
+      }
+      else if (type == RESPONSE_FIELDS) {
+        return new FsdResponseFieldsImpl(node);
       }
       else if (type == SERVICE_ITEMS) {
         return new FsdServiceItemsImpl(node);

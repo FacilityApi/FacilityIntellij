@@ -79,6 +79,15 @@
             language="FSD"
             implementationClass="io.github.facilityapi.intellij.FsdBraceMatcher" />
 
+        <!-- Check for duplicate names in service item definitions -->
+        <localInspection
+            language="FSD"
+            displayName="DuplicateName"
+            groupBundle="messages.FsdBundle"
+            groupKey="inspections.bugs.duplicatename"
+            enabledByDefault="true"
+            level="ERROR"
+            implementationClass="io.github.facilityapi.intellij.DuplicateNameInspection" />
     </extensions>
 
     <actions>

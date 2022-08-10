@@ -11,14 +11,14 @@ import static io.github.facilityapi.intellij.psi.FsdTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.facilityapi.intellij.psi.*;
 
-public class FsdMethodSpecImpl extends ASTWrapperPsiElement implements FsdMethodSpec {
+public class FsdResponseFieldsImpl extends ASTWrapperPsiElement implements FsdResponseFields {
 
-  public FsdMethodSpecImpl(@NotNull ASTNode node) {
+  public FsdResponseFieldsImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull FsdVisitor visitor) {
-    visitor.visitMethodSpec(this);
+    visitor.visitResponseFields(this);
   }
 
   @Override
@@ -28,21 +28,9 @@ public class FsdMethodSpecImpl extends ASTWrapperPsiElement implements FsdMethod
   }
 
   @Override
-  @Nullable
-  public FsdIdentifierDeclaration getIdentifierDeclaration() {
-    return findChildByClass(FsdIdentifierDeclaration.class);
-  }
-
-  @Override
-  @Nullable
-  public FsdRequestFields getRequestFields() {
-    return findChildByClass(FsdRequestFields.class);
-  }
-
-  @Override
-  @Nullable
-  public FsdResponseFields getResponseFields() {
-    return findChildByClass(FsdResponseFields.class);
+  @NotNull
+  public List<FsdDecoratedField> getDecoratedFieldList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdDecoratedField.class);
   }
 
 }
