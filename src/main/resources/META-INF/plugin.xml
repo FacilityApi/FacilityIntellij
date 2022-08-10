@@ -79,6 +79,7 @@
             language="FSD"
             implementationClass="io.github.facilityapi.intellij.FsdBraceMatcher" />
 
+        <!-- Check for duplicate names in service item definitions -->
         <localInspection
             language="FSD"
             displayName="DuplicateName"
