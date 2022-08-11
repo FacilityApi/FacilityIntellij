@@ -93,8 +93,8 @@
         <intentionAction>
             <className>io.github.facilityapi.intellij.EnumValidateIntention</className>
 
-            <!--suppress PluginXmlCapitalization -->
-            <category>Facility Service Definition</category>
+            <bundleName>messages.FsdBundle</bundleName>
+            <categoryKey>intentions.validate.enum.category</categoryKey>
         </intentionAction>
 
     </extensions>
