@@ -91,7 +91,7 @@
 
         <!-- Add validation attribute to field or type -->
         <intentionAction>
-            <className>io.github.facilityapi.intellij.ValidateIntention</className>
+            <className>io.github.facilityapi.intellij.EnumValidateIntention</className>
             <category>FSD intentions</category>
         </intentionAction>
 

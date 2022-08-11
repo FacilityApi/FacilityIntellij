@@ -7,25 +7,16 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.codeStyle.CodeStyleManager
-import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.descendants
 import com.intellij.psi.util.elementType
 import com.intellij.psi.util.siblings
-import io.github.facilityapi.intellij.psi.FsdAttributeList
-import io.github.facilityapi.intellij.psi.FsdDataSpec
-import io.github.facilityapi.intellij.psi.FsdDecoratedEnumValue
 import io.github.facilityapi.intellij.psi.FsdDecoratedServiceItem
-import io.github.facilityapi.intellij.psi.FsdElementType
-import io.github.facilityapi.intellij.psi.FsdEnumSpec
-import io.github.facilityapi.intellij.psi.FsdErrorSetSpec
 import io.github.facilityapi.intellij.psi.FsdIdentifierDeclaration
-import io.github.facilityapi.intellij.psi.FsdRequestFields
-import io.github.facilityapi.intellij.psi.FsdResponseFields
 import io.github.facilityapi.intellij.psi.FsdTypes
 import io.github.facilityapi.intellij.reference.createAttribute
 
-class ValidateIntention : PsiElementBaseIntentionAction(),  IntentionAction {
+class EnumValidateIntention : PsiElementBaseIntentionAction(),  IntentionAction {
     override fun startInWriteAction(): Boolean = true
 
     override fun getText(): String = "Add [validate] attribute"
