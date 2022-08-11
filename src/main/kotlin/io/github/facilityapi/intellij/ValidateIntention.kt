@@ -11,13 +11,17 @@ import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.descendants
 import com.intellij.psi.util.elementType
+import com.intellij.psi.util.siblings
 import io.github.facilityapi.intellij.psi.FsdAttributeList
 import io.github.facilityapi.intellij.psi.FsdDataSpec
 import io.github.facilityapi.intellij.psi.FsdDecoratedEnumValue
 import io.github.facilityapi.intellij.psi.FsdDecoratedServiceItem
 import io.github.facilityapi.intellij.psi.FsdElementType
 import io.github.facilityapi.intellij.psi.FsdEnumSpec
+import io.github.facilityapi.intellij.psi.FsdErrorSetSpec
 import io.github.facilityapi.intellij.psi.FsdIdentifierDeclaration
+import io.github.facilityapi.intellij.psi.FsdRequestFields
+import io.github.facilityapi.intellij.psi.FsdResponseFields
 import io.github.facilityapi.intellij.psi.FsdTypes
 import io.github.facilityapi.intellij.reference.createAttribute
 
@@ -29,14 +33,19 @@ class ValidateIntention : PsiElementBaseIntentionAction(),  IntentionAction {
     override fun getFamilyName(): String = "FacilityValidation"
 
     override fun isAvailable(project: Project, editor: Editor?, element: PsiElement): Boolean {
-        // todo: also show intention on decl keyword
-        return element.elementType == FsdTypes.IDENTIFIER
+        val attributes = PsiTreeUtil.getParentOfType(element, FsdDecoratedServiceItem::class.java)?.attributeListList?.flatMap { it.attributeList }
+
+        val isEnumSpec = element.elementType == FsdTypes.ENUM ||
+            (element.parent is FsdIdentifierDeclaration &&
+                element.parent.siblings(false).any { it.elementType == FsdTypes.ENUM })
+
+        return isEnumSpec && attributes?.none { it.attributename.text == "validate" } ?: true
     }
 
     override fun invoke(project: Project, editor: Editor?, element: PsiElement) {
         val codeStylist = CodeStyleManager.getInstance(project)
         val decoratedItem = PsiTreeUtil.getParentOfType(element, FsdDecoratedServiceItem::class.java)
-        val whiteSpace = element.containingFile.descendants().first { it.text == "\n" }
+        val whiteSpace = element.containingFile.descendants().first { it is PsiWhiteSpace && it.text.endsWith("\n") }
 
         val enumSpecNew = decoratedItem?.copy()
 
@@ -49,6 +58,6 @@ class ValidateIntention : PsiElementBaseIntentionAction(),  IntentionAction {
         enumSpecNew?.addBefore(attribute, enumSpecNew.firstChild)
 
         if (enumSpecNew != null)
-            decoratedItem?.replace(codeStylist.reformat(enumSpecNew))
+            decoratedItem.replace(codeStylist.reformat(enumSpecNew))
     }
 }
