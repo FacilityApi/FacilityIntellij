@@ -92,7 +92,9 @@
         <!-- Add validation attribute to field or type -->
         <intentionAction>
             <className>io.github.facilityapi.intellij.EnumValidateIntention</className>
-            <category>FSD intentions</category>
+
+            <!--suppress PluginXmlCapitalization -->
+            <category>Facility Service Definition</category>
         </intentionAction>
 
     </extensions>

@@ -21,7 +21,7 @@ class EnumValidateIntention : PsiElementBaseIntentionAction(),  IntentionAction 
 
     override fun getText(): String = "Add [validate] attribute"
 
-    override fun getFamilyName(): String = "FacilityValidation"
+    override fun getFamilyName(): String = "Validation"
 
     override fun isAvailable(project: Project, editor: Editor?, element: PsiElement): Boolean {
         val attributes = PsiTreeUtil.getParentOfType(element, FsdDecoratedServiceItem::class.java)?.attributeListList?.flatMap { it.attributeList }
