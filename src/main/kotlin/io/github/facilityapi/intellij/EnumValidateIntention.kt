@@ -34,8 +34,8 @@ class EnumValidateIntention : PsiElementBaseIntentionAction(),  IntentionAction 
     }
 
     override fun invoke(project: Project, editor: Editor?, element: PsiElement) {
-        val newEnumSpec = PsiTreeUtil.getParentOfType(element, FsdDecoratedServiceItem::class.java)
-            ?.copy() ?: return
+        val serviceItem = PsiTreeUtil.getParentOfType(element, FsdDecoratedServiceItem::class.java) ?: return
+        val newEnumSpec = serviceItem.copy()
 
         val codeStylist = CodeStyleManager.getInstance(project)
         val whiteSpace = element.containingFile.descendants()
@@ -45,6 +45,6 @@ class EnumValidateIntention : PsiElementBaseIntentionAction(),  IntentionAction 
         newEnumSpec.addBefore(whiteSpace, newEnumSpec.firstChild)
         newEnumSpec.addBefore(createAttribute(project, "validate"), newEnumSpec.firstChild)
 
-        newEnumSpec.replace(codeStylist.reformat(newEnumSpec))
+        serviceItem.replace(codeStylist.reformat(newEnumSpec))
     }
 }
