@@ -2,24 +2,19 @@ package io.github.facilityapi.intellij
 
 import com.intellij.codeInsight.intention.IntentionAction
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction
-import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.psi.util.descendants
-import com.intellij.psi.util.elementType
-import com.intellij.psi.util.siblings
 import io.github.facilityapi.intellij.psi.FsdAttributeList
 import io.github.facilityapi.intellij.psi.FsdDecoratedServiceItem
 import io.github.facilityapi.intellij.psi.FsdEnumSpec
-import io.github.facilityapi.intellij.psi.FsdIdentifierDeclaration
-import io.github.facilityapi.intellij.psi.FsdTypes
 import io.github.facilityapi.intellij.reference.createAttribute
+import io.github.facilityapi.intellij.reference.createFromText
 
-class EnumValidateIntention : PsiElementBaseIntentionAction(),  IntentionAction {
+class EnumValidateIntention : PsiElementBaseIntentionAction(), IntentionAction {
     override fun startInWriteAction(): Boolean = true
 
     override fun getText() = FsdBundle.getMessage("intentions.validate.enum.text")
@@ -39,11 +34,11 @@ class EnumValidateIntention : PsiElementBaseIntentionAction(),  IntentionAction 
         val newEnumSpec = serviceItem.copy()
 
         val codeStylist = CodeStyleManager.getInstance(project)
-        val whiteSpace = element.containingFile.descendants()
+        val newLine = createFromText(project, "[dummy]\n")
             .filterIsInstance<PsiWhiteSpace>()
-            .first { it.text.endsWith("\n") }
+            .first()
 
-        newEnumSpec.addBefore(whiteSpace, newEnumSpec.firstChild)
+        newEnumSpec.addBefore(newLine, newEnumSpec.firstChild)
         newEnumSpec.addBefore(createAttribute(project, "validate"), newEnumSpec.firstChild)
 
         serviceItem.replace(codeStylist.reformat(newEnumSpec))

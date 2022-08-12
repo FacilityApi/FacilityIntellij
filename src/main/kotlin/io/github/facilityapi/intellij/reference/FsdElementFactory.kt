@@ -10,23 +10,19 @@ import io.github.facilityapi.intellij.psi.FsdNamedElement
 import io.github.facilityapi.intellij.psi.FsdReferenceType
 
 fun createTypeDefinition(project: Project, name: String, declType: String): FsdNamedElement {
-    val fileName = "dummy.fsd"
-    // This is a silly way to do this on the surface, but the docs recommend it
-    // https://plugins.jetbrains.com/docs/intellij/rename-refactoring.html
     val serviceText = """
         service dummy {
             $declType $name {
             }
         }
     """.trimIndent()
-    val file = PsiFileFactory.getInstance(project).createFileFromText(fileName, FsdFileType, serviceText) as FsdFile
-    return file.descendants.filterIsInstance<FsdNamedElement>().first()
+
+    return createFromText(project, serviceText)
+        .filterIsInstance<FsdNamedElement>()
+        .first()
 }
 
 fun createTypeReference(project: Project, name: String): FsdReferenceType {
-    val fileName = "dummy.fsd"
-    // This is a silly way to do this on the surface, but the docs recommend it
-    // https://plugins.jetbrains.com/docs/intellij/rename-refactoring.html
     val serviceText = """
         service dummy {
             data dummy {
@@ -34,21 +30,33 @@ fun createTypeReference(project: Project, name: String): FsdReferenceType {
             }
         }
     """.trimIndent()
-    val file = PsiFileFactory.getInstance(project).createFileFromText(fileName, FsdFileType, serviceText) as FsdFile
-    return file.descendants.filterIsInstance<FsdReferenceType>().first()
+
+    return createFromText(project, serviceText)
+        .filterIsInstance<FsdReferenceType>()
+        .first()
 }
 
 fun createAttribute(project: Project, name: String): FsdAttributeList {
-    val fileName = "dummy.fsd"
-    // This is a silly way to do this on the surface, but the docs recommend it
-    // https://plugins.jetbrains.com/docs/intellij/rename-refactoring.html
     val serviceText = """
         [$name]
         service dummy {
         }
     """.trimIndent()
-    val file = PsiFileFactory.getInstance(project).createFileFromText(fileName, FsdFileType, serviceText) as FsdFile
-    return file.descendants.filterIsInstance<FsdAttributeList>().first()
+
+    return createFromText(project, serviceText)
+        .filterIsInstance<FsdAttributeList>()
+        .first()
+}
+
+fun createFromText(project: Project, text: String): Sequence<PsiElement> {
+    val fileName = "dummy.fsd"
+
+    // For internal parser consistency, psi elements must be created this way
+    // https://plugins.jetbrains.com/docs/intellij/rename-refactoring.html
+    val file = PsiFileFactory.getInstance(project)
+        .createFileFromText(fileName, FsdFileType, text) as FsdFile
+
+    return file.descendants
 }
 
 // These are copied because of a source breaking change in the framework
