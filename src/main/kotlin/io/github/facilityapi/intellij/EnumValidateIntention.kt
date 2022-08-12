@@ -17,9 +17,9 @@ import io.github.facilityapi.intellij.reference.createFromText
 class EnumValidateIntention : PsiElementBaseIntentionAction(), IntentionAction {
     override fun startInWriteAction(): Boolean = true
 
-    override fun getText() = FsdBundle.getMessage("intentions.validate.enum.text")
+    override fun getText() = TEXT
 
-    override fun getFamilyName() = FsdBundle.getMessage("intentions.validate.enum.familyname")
+    override fun getFamilyName() = FAMILY_NAME
 
     override fun isAvailable(project: Project, editor: Editor?, element: PsiElement): Boolean {
         val serviceItem = PsiTreeUtil.getParentOfType(element, FsdDecoratedServiceItem::class.java) ?: return false
@@ -42,5 +42,10 @@ class EnumValidateIntention : PsiElementBaseIntentionAction(), IntentionAction {
         newEnumSpec.addBefore(createAttribute(project, "validate"), newEnumSpec.firstChild)
 
         serviceItem.replace(codeStylist.reformat(newEnumSpec))
+    }
+
+    companion object {
+        val TEXT = FsdBundle.getMessage("intentions.validate.enum.text")
+        val FAMILY_NAME = FsdBundle.getMessage("intentions.validate.enum.familyname")
     }
 }
