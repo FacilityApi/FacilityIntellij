@@ -75,6 +75,9 @@ jobs:
 
           ./gradlew listProductsReleases # prepare list of IDEs for Plugin Verifier
 
+      - name: Run ktlint
+        run: ./gradlew ktlintCheck
+
       # Run tests
       - name: Run Tests
         run: ./gradlew test

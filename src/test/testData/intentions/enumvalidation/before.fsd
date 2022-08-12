@@ -1,0 +1,16 @@
+service ExampleApi
+{
+    /// Identifies a widget field.
+    en<caret>um WidgetField
+    {
+        /// The 'id' field.
+        id,
+
+        /// The 'name' field.
+        name,
+
+        /// The 'weight' field.
+        [obsolete]
+        weight,
+    }
+}

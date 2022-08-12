@@ -1,0 +1,16 @@
+service ExampleApi
+{
+	/// Identifies a widget field.
+	<spot>enum WidgetField</spot>
+	{
+		/// The 'id' field.
+		id,
+
+		/// The 'name' field.
+		name,
+
+		/// The 'weight' field.
+		[obsolete]
+		weight,
+	}
+}

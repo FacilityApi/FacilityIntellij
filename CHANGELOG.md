@@ -5,6 +5,10 @@
 ## [Unreleased]
 ### Added
 - Inspection for duplicate field names, enum, and error values
+- Intention to add `[validate]` to enum declarations
+
+### Fixed
+- Code folding for method, enum, and error bodies
 
 ## [0.0.11]
 - Added support for the 2022.2 Intellij platform
