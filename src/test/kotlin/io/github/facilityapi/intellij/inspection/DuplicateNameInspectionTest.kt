@@ -1,6 +1,7 @@
-package io.github.facilityapi.intellij
+package io.github.facilityapi.intellij.inspection
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import io.github.facilityapi.intellij.FsdFileType
 
 class DuplicateNameInspectionTest : BasePlatformTestCase() {
 

@@ -87,11 +87,11 @@
             groupKey="inspections.bugs.duplicatename"
             enabledByDefault="true"
             level="ERROR"
-            implementationClass="io.github.facilityapi.intellij.DuplicateNameInspection" />
+            implementationClass="io.github.facilityapi.intellij.inspection.DuplicateNameInspection" />
 
         <!-- Add validation attribute to field or type -->
         <intentionAction>
-            <className>io.github.facilityapi.intellij.EnumValidateIntention</className>
+            <className>io.github.facilityapi.intellij.intention.EnumValidateIntention</className>
 
             <bundleName>messages.FsdBundle</bundleName>
             <categoryKey>intentions.validate.enum.category</categoryKey>

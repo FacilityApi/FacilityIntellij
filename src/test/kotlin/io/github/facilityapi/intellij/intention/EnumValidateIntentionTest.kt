@@ -1,6 +1,7 @@
-package io.github.facilityapi.intellij
+package io.github.facilityapi.intellij.intention
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import io.github.facilityapi.intellij.intention.EnumValidateIntention
 
 class EnumValidateIntentionTest : BasePlatformTestCase() {
     override fun getTestDataPath() = "src/test/testData"
