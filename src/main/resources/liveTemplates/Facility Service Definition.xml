@@ -1,0 +1,21 @@
+<templateSet group="Facility Service Definition">
+  <template name="svalid" value="[validate(regex: &quot;$REGEX$&quot;, length: $RANGE$)]" description="String Validate" toReformat="true" toShortenFQNames="true">
+    <variable name="REGEX" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="RANGE" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="FSD" value="true"/>
+    </context>
+  </template>
+  <template name="cvalid" value="[validate(count: $RANGE$)]" description="Collection Validate" toReformat="true" toShortenFQNames="true">
+    <variable name="RANGE" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="FSD" value="true"/>
+    </context>
+  </template>
+  <template name="nvalid" value="[validate(value: $RANGE$)]" description="Number Validate" toReformat="true" toShortenFQNames="true">
+    <variable name="RANGE" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="FSD" value="true"/>
+    </context>
+  </template>
+</templateSet>

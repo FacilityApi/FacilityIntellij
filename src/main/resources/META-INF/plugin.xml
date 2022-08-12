@@ -79,6 +79,10 @@
             language="FSD"
             implementationClass="io.github.facilityapi.intellij.FsdBraceMatcher" />
 
+        <defaultLiveTemplates file="/liveTemplates/Facility Service Definition.xml"/>
+        <liveTemplateContext
+            implementation="io.github.facilityapi.intellij.FsdLiveTemplateContext"/>
+
         <!-- Check for duplicate names in service item definitions -->
         <localInspection
             language="FSD"
@@ -87,13 +91,14 @@
             groupKey="inspections.bugs.duplicatename"
             enabledByDefault="true"
             level="ERROR"
-            implementationClass="io.github.facilityapi.intellij.DuplicateNameInspection" />
+            implementationClass="io.github.facilityapi.intellij.inspection.DuplicateNameInspection" />
 
         <!-- Add validation attribute to field or type -->
         <intentionAction>
-            <className>io.github.facilityapi.intellij.EnumValidateIntention</className>
-
+            <className>io.github.facilityapi.intellij.intention.EnumValidateIntention</className>
             <bundleName>messages.FsdBundle</bundleName>
+
+            <!--suppress PluginXmlCapitalization -->
             <categoryKey>intentions.validate.enum.category</categoryKey>
         </intentionAction>
 

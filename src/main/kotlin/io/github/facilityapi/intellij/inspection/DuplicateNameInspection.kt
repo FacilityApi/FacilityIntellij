@@ -1,4 +1,4 @@
-package io.github.facilityapi.intellij
+package io.github.facilityapi.intellij.inspection
 
 import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.codeInspection.LocalInspectionToolSession
@@ -8,6 +8,7 @@ import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementVisitor
+import io.github.facilityapi.intellij.FsdBundle
 import io.github.facilityapi.intellij.psi.FsdDataSpec
 import io.github.facilityapi.intellij.psi.FsdDecoratedField
 import io.github.facilityapi.intellij.psi.FsdEnumSpec

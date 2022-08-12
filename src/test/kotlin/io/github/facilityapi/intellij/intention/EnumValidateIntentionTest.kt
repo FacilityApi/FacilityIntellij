@@ -1,4 +1,4 @@
-package io.github.facilityapi.intellij
+package io.github.facilityapi.intellij.intention
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
