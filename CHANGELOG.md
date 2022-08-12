@@ -6,6 +6,10 @@
 ### Added
 - Inspection for duplicate field names, enum, and error values
 - Intention to add `[validate]` to enum declarations
+- Live Templates for validation attributes
+  - svalid: `[validate(regex: $REGEX$, length: $RANGE$)]`
+  - nvalid: `[validate(value: $RANGE$)]`
+  - cvalid: `[validate(count: $RANGE$)]`
 
 ### Fixed
 - Code folding for method, enum, and error bodies
