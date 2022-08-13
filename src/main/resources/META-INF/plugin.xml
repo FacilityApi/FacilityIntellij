@@ -99,7 +99,7 @@
             <bundleName>messages.FsdBundle</bundleName>
 
             <!--suppress PluginXmlCapitalization -->
-            <categoryKey>intentions.validate.enum.category</categoryKey>
+            <categoryKey>intentions.validate.category</categoryKey>
         </intentionAction>
 
     </extensions>
