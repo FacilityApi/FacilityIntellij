@@ -5,6 +5,7 @@ import com.intellij.codeInsight.template.Template
 import com.intellij.codeInsight.template.TemplateActionContext
 import com.intellij.codeInsight.template.TemplateManager
 import com.intellij.codeInsight.template.impl.TemplateEditorUtil
+import com.intellij.codeInsight.template.impl.TemplateSettings
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
@@ -12,6 +13,8 @@ import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.util.PsiTreeUtil
 import io.github.facilityapi.intellij.FsdBundle
+import io.github.facilityapi.intellij.FsdLanguage
+import io.github.facilityapi.intellij.FsdLiveTemplateContext
 import io.github.facilityapi.intellij.psi.FsdAttributeList
 import io.github.facilityapi.intellij.psi.FsdDecoratedField
 import io.github.facilityapi.intellij.reference.createFromText
@@ -44,13 +47,8 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
 
         editor.caretModel.currentCaret.moveToOffset(decoratedField.textOffset)
 
-        // todo: this doesn't work - figure out how to get existing live template by key
-        // val group = FsdBundle.getMessage("intentions.validate.category")
-        // val template = templateManager.createTemplate("cvalid", group)
-        // templateManager.startTemplate(editor, template)
-
-        newField.addBefore(newLine, newField.firstChild)
-        decoratedField.replace(codeStylist.reformat(newField))
+        val template = TemplateSettings.getInstance().getTemplate("cvalid", FsdLanguage.displayName)!!
+        templateManager.startTemplate(editor, template)
     }
 
     companion object {

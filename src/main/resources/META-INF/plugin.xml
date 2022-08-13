@@ -80,6 +80,7 @@
             implementationClass="io.github.facilityapi.intellij.FsdBraceMatcher" />
 
         <defaultLiveTemplates file="/liveTemplates/Facility Service Definition.xml"/>
+
         <liveTemplateContext
             implementation="io.github.facilityapi.intellij.FsdLiveTemplateContext"/>
 
