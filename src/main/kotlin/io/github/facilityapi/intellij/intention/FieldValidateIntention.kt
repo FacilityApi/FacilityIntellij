@@ -17,6 +17,7 @@ import io.github.facilityapi.intellij.FsdLanguage
 import io.github.facilityapi.intellij.FsdLiveTemplateContext
 import io.github.facilityapi.intellij.psi.FsdAttributeList
 import io.github.facilityapi.intellij.psi.FsdDecoratedField
+import io.github.facilityapi.intellij.psi.FsdField
 import io.github.facilityapi.intellij.reference.createFromText
 
 class FieldValidateIntention : PsiElementBaseIntentionAction() {
@@ -36,16 +37,24 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
     override fun invoke(project: Project, editor: Editor?, element: PsiElement) {
         if (editor == null) return
 
-        val decoratedField = PsiTreeUtil.getParentOfType(element, FsdDecoratedField::class.java) ?: return
-        val newField = decoratedField.copy()
+        val field = PsiTreeUtil.getParentOfType(element, FsdField::class.java) ?: return
+        val decoratedField = PsiTreeUtil.getParentOfType(field, FsdDecoratedField::class.java) ?: return
 
         val codeStylist = CodeStyleManager.getInstance(project)
         val templateManager = TemplateManager.getInstance(project)
-        val newLine = createFromText(project, "[dummy]\n")
+        val newline = createFromText(project, "[dummy]\n")
             .filterIsInstance<PsiWhiteSpace>()
             .first()
 
-        editor.caretModel.currentCaret.moveToOffset(decoratedField.textOffset)
+        val newField = decoratedField.copy()
+        val firstNewline = newField.addBefore(newline, field)
+        newField.addBefore(newline, firstNewline)
+        val addedAfter = newField.addAfter(newline, field)
+        newField.addAfter(newline, addedAfter)
+
+        editor.caretModel.moveToOffset(firstNewline.textOffset)
+
+        decoratedField.replace(codeStylist.reformat(newField))
 
         val template = TemplateSettings.getInstance().getTemplate("cvalid", FsdLanguage.displayName)!!
         templateManager.startTemplate(editor, template)
