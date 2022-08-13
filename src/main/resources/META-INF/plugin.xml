@@ -93,9 +93,18 @@
             level="ERROR"
             implementationClass="io.github.facilityapi.intellij.inspection.DuplicateNameInspection" />
 
-        <!-- Add validation attribute to field or type -->
+        <!-- Add validation attribute to enum -->
         <intentionAction>
             <className>io.github.facilityapi.intellij.intention.EnumValidateIntention</className>
+            <bundleName>messages.FsdBundle</bundleName>
+
+            <!--suppress PluginXmlCapitalization -->
+            <categoryKey>intentions.validate.category</categoryKey>
+        </intentionAction>
+
+        <!-- Add validation attribute to field or type -->
+        <intentionAction>
+            <className>io.github.facilityapi.intellij.intention.FieldValidateIntention</className>
             <bundleName>messages.FsdBundle</bundleName>
 
             <!--suppress PluginXmlCapitalization -->
