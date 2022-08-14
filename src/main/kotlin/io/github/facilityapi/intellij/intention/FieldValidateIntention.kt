@@ -20,6 +20,7 @@ import io.github.facilityapi.intellij.psi.FsdAttributeList
 import io.github.facilityapi.intellij.psi.FsdDecoratedField
 import io.github.facilityapi.intellij.psi.FsdEnumSpec
 import io.github.facilityapi.intellij.psi.FsdField
+import io.github.facilityapi.intellij.reference.createAttribute
 import io.github.facilityapi.intellij.reference.createFromText
 
 class FieldValidateIntention : PsiElementBaseIntentionAction() {
@@ -34,15 +35,8 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
         val decoratedField = PsiTreeUtil.getParentOfType(field, FsdDecoratedField::class.java) ?: return false
         val attributes = decoratedField.attributeListList.flatMap(FsdAttributeList::getAttributeList)
 
-        val type = field.type.text
-        val isApplicableType = type == "string" ||
-            type == "bytes" ||
-            type == "int32" ||
-            type == "int64" ||
-            type.endsWith("[]") ||
-            type.startsWith("map<") ||
-            // this suggests there may be a better parse tree structure here
-            field.type.referenceType?.reference?.resolve()?.parent is FsdEnumSpec
+        val isEnumTyped = field.type.referenceType?.reference?.resolve()?.parent is FsdEnumSpec
+        val isApplicableType = getValidateTemplateForField(field) != null || isEnumTyped
 
         return isApplicableType && attributes.none { it.attributename.text == "validate" }
     }
@@ -52,6 +46,21 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
 
         val field = PsiTreeUtil.getParentOfType(element, FsdField::class.java) ?: return
         val decoratedField = PsiTreeUtil.getParentOfType(field, FsdDecoratedField::class.java) ?: return
+
+        if (field.type.referenceType?.reference?.resolve()?.parent is FsdEnumSpec) {
+            val newEnumSpec = decoratedField.copy()
+
+            val codeStylist = CodeStyleManager.getInstance(project)
+            val newLine = createFromText(project, "[dummy]\n")
+                .filterIsInstance<PsiWhiteSpace>()
+                .first()
+
+            newEnumSpec.addBefore(newLine, newEnumSpec.firstChild)
+            newEnumSpec.addBefore(createAttribute(project, "validate"), newEnumSpec.firstChild)
+
+            decoratedField.replace(codeStylist.reformat(newEnumSpec))
+            return
+        }
 
         val codeStylist = CodeStyleManager.getInstance(project)
         val templateManager = TemplateManager.getInstance(project)
@@ -69,13 +78,33 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
 
         decoratedField.replace(codeStylist.reformat(newField))
 
-        val template = TemplateSettings.getInstance().getTemplate("cvalid", FsdLanguage.displayName)!!
-        templateManager.startTemplate(editor, template)
+        val template = getValidateTemplateForField(field)
+        if (template != null) {
+            templateManager.startTemplate(editor, template)
+        }
     }
+
+    private fun getValidateTemplateForField(field: FsdField): Template? {
+        val type = field.type.text
+
+        val templateKey = when {
+            type == "string" -> "svalid"
+            isCollection(type) -> "cvalid"
+            isNumber(type) -> "nvalid"
+            else -> return null
+        }
+
+        return TemplateSettings.getInstance().getTemplate(templateKey, FsdLanguage.displayName)
+    }
+
+    private fun isCollection(typeName: String) = typeName == "bytes" ||
+        typeName.startsWith("map<") ||
+        typeName.endsWith("[]")
+
+    private fun isNumber(typeName: String) = typeName == "int32" || typeName == "int64"
 
     companion object {
         val TEXT = FsdBundle.getMessage("intentions.validate.field.text")
         val FAMILY_NAME = FsdBundle.getMessage("intentions.validate.field.familyname")
-        val NUMBER_TYPES: Set<String> = hashSetOf("int32", "int64") // todo: flesh out / double check all number apply
     }
 }
