@@ -15,8 +15,10 @@ import com.intellij.psi.util.PsiTreeUtil
 import io.github.facilityapi.intellij.FsdBundle
 import io.github.facilityapi.intellij.FsdLanguage
 import io.github.facilityapi.intellij.FsdLiveTemplateContext
+import io.github.facilityapi.intellij.lexer.FsdLexerAdapter
 import io.github.facilityapi.intellij.psi.FsdAttributeList
 import io.github.facilityapi.intellij.psi.FsdDecoratedField
+import io.github.facilityapi.intellij.psi.FsdEnumSpec
 import io.github.facilityapi.intellij.psi.FsdField
 import io.github.facilityapi.intellij.reference.createFromText
 
@@ -28,10 +30,21 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
     override fun getFamilyName() = FAMILY_NAME
 
     override fun isAvailable(project: Project, editor: Editor?, element: PsiElement): Boolean {
-        val decoratedField = PsiTreeUtil.getParentOfType(element, FsdDecoratedField::class.java) ?: return false
+        val field = PsiTreeUtil.getParentOfType(element, FsdField::class.java) ?: return false
+        val decoratedField = PsiTreeUtil.getParentOfType(field, FsdDecoratedField::class.java) ?: return false
         val attributes = decoratedField.attributeListList.flatMap(FsdAttributeList::getAttributeList)
 
-        return attributes.none { it.attributename.text == "validate" }
+        val type = field.type.text
+        val isApplicableType = type == "string" ||
+            type == "bytes" ||
+            type == "int32" ||
+            type == "int64" ||
+            type.endsWith("[]") ||
+            type.startsWith("map<") ||
+            // this suggests there may be a better parse tree structure here
+            field.type.referenceType?.reference?.resolve()?.parent is FsdEnumSpec
+
+        return isApplicableType && attributes.none { it.attributename.text == "validate" }
     }
 
     override fun invoke(project: Project, editor: Editor?, element: PsiElement) {
@@ -63,5 +76,6 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
     companion object {
         val TEXT = FsdBundle.getMessage("intentions.validate.field.text")
         val FAMILY_NAME = FsdBundle.getMessage("intentions.validate.field.familyname")
+        val NUMBER_TYPES: Set<String> = hashSetOf("int32", "int64") // todo: flesh out / double check all number apply
     }
 }
