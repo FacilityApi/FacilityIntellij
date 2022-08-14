@@ -2,9 +2,7 @@ package io.github.facilityapi.intellij.intention
 
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction
 import com.intellij.codeInsight.template.Template
-import com.intellij.codeInsight.template.TemplateActionContext
 import com.intellij.codeInsight.template.TemplateManager
-import com.intellij.codeInsight.template.impl.TemplateEditorUtil
 import com.intellij.codeInsight.template.impl.TemplateSettings
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
@@ -14,13 +12,11 @@ import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.util.PsiTreeUtil
 import io.github.facilityapi.intellij.FsdBundle
 import io.github.facilityapi.intellij.FsdLanguage
-import io.github.facilityapi.intellij.FsdLiveTemplateContext
-import io.github.facilityapi.intellij.lexer.FsdLexerAdapter
 import io.github.facilityapi.intellij.psi.FsdAttributeList
 import io.github.facilityapi.intellij.psi.FsdDecoratedField
 import io.github.facilityapi.intellij.psi.FsdEnumSpec
 import io.github.facilityapi.intellij.psi.FsdField
-import io.github.facilityapi.intellij.reference.createAttribute
+import io.github.facilityapi.intellij.reference.addAttribute
 import io.github.facilityapi.intellij.reference.createFromText
 
 class FieldValidateIntention : PsiElementBaseIntentionAction() {
@@ -48,17 +44,7 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
         val decoratedField = PsiTreeUtil.getParentOfType(field, FsdDecoratedField::class.java) ?: return
 
         if (field.type.referenceType?.reference?.resolve()?.parent is FsdEnumSpec) {
-            val newEnumSpec = decoratedField.copy()
-
-            val codeStylist = CodeStyleManager.getInstance(project)
-            val newLine = createFromText(project, "[dummy]\n")
-                .filterIsInstance<PsiWhiteSpace>()
-                .first()
-
-            newEnumSpec.addBefore(newLine, newEnumSpec.firstChild)
-            newEnumSpec.addBefore(createAttribute(project, "validate"), newEnumSpec.firstChild)
-
-            decoratedField.replace(codeStylist.reformat(newEnumSpec))
+            addAttribute(decoratedField, "validate")
             return
         }
 
