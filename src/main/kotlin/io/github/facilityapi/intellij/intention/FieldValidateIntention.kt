@@ -18,6 +18,7 @@ import io.github.facilityapi.intellij.psi.FsdDecoratedField
 import io.github.facilityapi.intellij.psi.FsdEnumSpec
 import io.github.facilityapi.intellij.psi.FsdField
 import io.github.facilityapi.intellij.reference.addAttribute
+import io.github.facilityapi.intellij.reference.createFromText
 
 class FieldValidateIntention : PsiElementBaseIntentionAction() {
     override fun startInWriteAction(): Boolean = true
@@ -54,12 +55,17 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
             .first() as? PsiWhiteSpace)?.let { if (it.textContains('\n')) it else null }
 
         val newFieldParent = decoratedField.parent.copy()
-        val offset = field.textOffset - (previousNewline?.let { it.textLength - 1 } ?: 0)
+        var offset = decoratedField.textOffset
 
         if (previousNewline != null) {
+            val indent = previousNewline.text.trimStart('\r', '\n')
             val newDecoratedField = newFieldParent.children.find { it.textMatches(decoratedField) }
-            val firstWhitespace = newFieldParent.addBefore(previousNewline, newDecoratedField)
-            newFieldParent.addBefore(previousNewline.copy(), firstWhitespace)
+            (newDecoratedField?.prevSibling as? PsiWhiteSpace)?.delete()
+            val whitespace = createFromText(project, """[dummy]
+                |${previousNewline.text}service Test {}
+            """.trimMargin()).filterIsInstance<PsiWhiteSpace>().first()
+            newFieldParent.addBefore(whitespace, newDecoratedField)
+            offset -= indent.length
         }
 
         decoratedField.parent.replace(newFieldParent)
