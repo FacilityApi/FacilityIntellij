@@ -10,6 +10,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.siblings
 import io.github.facilityapi.intellij.FsdBundle
 import io.github.facilityapi.intellij.FsdLanguage
 import io.github.facilityapi.intellij.psi.FsdAttributeList
@@ -17,7 +18,6 @@ import io.github.facilityapi.intellij.psi.FsdDecoratedField
 import io.github.facilityapi.intellij.psi.FsdEnumSpec
 import io.github.facilityapi.intellij.psi.FsdField
 import io.github.facilityapi.intellij.reference.addAttribute
-import io.github.facilityapi.intellij.reference.createFromText
 
 class FieldValidateIntention : PsiElementBaseIntentionAction() {
     override fun startInWriteAction(): Boolean = true
@@ -50,19 +50,22 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
 
         val codeStylist = CodeStyleManager.getInstance(project)
         val templateManager = TemplateManager.getInstance(project)
-        val newline = createFromText(project, "[dummy]\n")
+        val previousNewline = decoratedField.siblings(false)
             .filterIsInstance<PsiWhiteSpace>()
-            .first()
+            .firstOrNull { it.textContains('\n') }
 
-        val newField = decoratedField.copy()
-        val firstNewline = newField.addBefore(newline, field)
-        newField.addBefore(newline, firstNewline)
-        val addedAfter = newField.addAfter(newline, field)
-        newField.addAfter(newline, addedAfter)
+        val newFieldParent = decoratedField.parent.copy()
+        val offset = field.textOffset - (previousNewline?.let { it.textLength - 1 } ?: 0)
 
-        editor.caretModel.moveToOffset(firstNewline.textOffset)
+        if (previousNewline != null) {
+            val newDecoratedField = newFieldParent.children.find { it.textMatches(decoratedField) }
+            val firstWhitespace = newFieldParent.addBefore(previousNewline, newDecoratedField)
+            newFieldParent.addBefore(previousNewline.copy(), firstWhitespace)
+        }
 
-        decoratedField.replace(codeStylist.reformat(newField))
+        decoratedField.parent.replace(newFieldParent)
+
+        editor.caretModel.moveToOffset(offset)
 
         val template = getValidateTemplateForField(field)
         if (template != null) {
