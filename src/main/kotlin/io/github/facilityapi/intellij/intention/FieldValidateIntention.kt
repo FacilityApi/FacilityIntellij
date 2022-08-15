@@ -49,7 +49,6 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
             return
         }
 
-        val codeStylist = CodeStyleManager.getInstance(project)
         val templateManager = TemplateManager.getInstance(project)
         val previousNewline = (decoratedField.siblings(false, false)
             .first() as? PsiWhiteSpace)?.let { if (it.textContains('\n')) it else null }
@@ -58,13 +57,15 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
         var offset = decoratedField.textOffset
 
         if (previousNewline != null) {
-            val indent = previousNewline.text.trimStart('\r', '\n')
             val newDecoratedField = newFieldParent.children.find { it.textMatches(decoratedField) }
-            (newDecoratedField?.prevSibling as? PsiWhiteSpace)?.delete()
-            val whitespace = createFromText(project, """[dummy]
+
+            val indent = previousNewline.text.trimStart('\r', '\n')
+            val newWhitespace = createFromText(project, """[dummy]
                 |${previousNewline.text}service Test {}
             """.trimMargin()).filterIsInstance<PsiWhiteSpace>().first()
-            newFieldParent.addBefore(whitespace, newDecoratedField)
+
+            newFieldParent.addBefore(newWhitespace, newDecoratedField)
+
             offset -= indent.length
         }
 
