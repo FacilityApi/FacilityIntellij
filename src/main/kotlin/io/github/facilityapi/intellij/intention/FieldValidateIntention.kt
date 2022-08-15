@@ -50,9 +50,8 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
 
         val codeStylist = CodeStyleManager.getInstance(project)
         val templateManager = TemplateManager.getInstance(project)
-        val previousNewline = decoratedField.siblings(false)
-            .filterIsInstance<PsiWhiteSpace>()
-            .firstOrNull { it.textContains('\n') }
+        val previousNewline = (decoratedField.siblings(false, false)
+            .first() as? PsiWhiteSpace)?.let { if (it.textContains('\n')) it else null }
 
         val newFieldParent = decoratedField.parent.copy()
         val offset = field.textOffset - (previousNewline?.let { it.textLength - 1 } ?: 0)
