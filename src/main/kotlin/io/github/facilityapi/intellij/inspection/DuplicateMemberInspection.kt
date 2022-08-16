@@ -28,18 +28,18 @@ class DuplicateMemberInspection : LocalInspectionTool() {
 
         override fun visitElement(element: PsiElement) {
             if (element is FsdServiceItems) {
-                val seenItems = hashSetOf<String>()
-                for (item in element.decoratedServiceItemList) {
-                    val serviceItemIdentifier = item.dataSpec?.identifierDeclaration ?:
-                    item.methodSpec?.identifierDeclaration ?:
-                    item.errorSetSpec?.identifierDeclaration ?:
-                    item.enumSpec?.identifierDeclaration
+                val nameGroups = element.decoratedServiceItemList
+                    .mapNotNull {
+                        it.dataSpec?.identifierDeclaration ?:
+                        it.methodSpec?.identifierDeclaration ?:
+                        it.errorSetSpec?.identifierDeclaration ?:
+                        it.enumSpec?.identifierDeclaration
+                    }.groupBy { it.identifier.text }
 
-                    val name = serviceItemIdentifier?.identifier?.text
-
-                    if (name != null && !seenItems.add(name)) {
-                        val message = FsdBundle.getMessage("inspections.bugs.duplicate.member.service", name)
-                        holder.registerProblem(serviceItemIdentifier, message, serviceMemberFix)
+                for ((memberName, memberIds) in nameGroups.filter { it.value.size > 1 }) {
+                    val message = FsdBundle.getMessage("inspections.bugs.duplicate.member.service", memberName)
+                    for (memberId in memberIds) {
+                        holder.registerProblem(memberId, message, serviceMemberFix)
                     }
                 }
             }
@@ -57,23 +57,24 @@ class DuplicateMemberInspection : LocalInspectionTool() {
             }
 
             if (element is FsdEnumSpec) {
-                val seenCases = hashSetOf<String>()
-                for (case in element.enumValueList?.decoratedEnumValueList ?: emptyList()) {
-                    val caseName = case.enumValue!!.identifier.text
-                    if (!seenCases.add(caseName)) {
-                        val message = FsdBundle.getMessage("inspections.bugs.duplicate.member.enumerated", caseName)
+                val nameGroups = (element.enumValueList?.decoratedEnumValueList ?: emptyList())
+                    .groupBy { it.enumValue!!.identifier.text }
+
+                for ((caseName, cases) in nameGroups.filter { it.value.size > 1 }) {
+                    val message = FsdBundle.getMessage("inspections.bugs.duplicate.member.enumerated", caseName)
+                    for (case in cases) {
                         holder.registerProblem(case, message, fieldFix)
                     }
                 }
             }
 
             if (element is FsdErrorList) {
-                val seenFields = hashSetOf<String>()
-                for (decoratedError in element.decoratedErrorSpecList) {
-                    val errorName = decoratedError.errorSpec!!.identifier.text
-                    if (!seenFields.add(errorName)) {
-                        val message = FsdBundle.getMessage("inspections.bugs.duplicate.member.error", errorName)
-                        holder.registerProblem(decoratedError, message, fieldFix)
+                val nameGroups = element.decoratedErrorSpecList.groupBy { it.errorSpec!!.identifier.text }
+
+                for ((errorName, errors) in nameGroups.filter { it.value.size > 1 }) {
+                    val message = FsdBundle.getMessage("inspections.bugs.duplicate.member.error", errorName)
+                    for (error in errors) {
+                        holder.registerProblem(error, message, fieldFix)
                     }
                 }
             }
