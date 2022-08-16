@@ -1,6 +1,5 @@
 package io.github.facilityapi.intellij.intention
 
-import com.intellij.psi.search.FileTypeIndex
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 // Note: These tests don't complete the template.
