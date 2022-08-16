@@ -28,8 +28,9 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
     override fun getFamilyName() = FAMILY_NAME
 
     override fun isAvailable(project: Project, editor: Editor?, element: PsiElement): Boolean {
-        val field = PsiTreeUtil.getParentOfType(element, FsdField::class.java) ?: return false
-        val decoratedField = PsiTreeUtil.getParentOfType(field, FsdDecoratedField::class.java) ?: return false
+        val decoratedField = PsiTreeUtil.getParentOfType(element, FsdDecoratedField::class.java) ?: return false
+
+        val field = decoratedField.field
         val attributes = decoratedField.attributeListList.flatMap(FsdAttributeList::getAttributeList)
 
         val isEnumTyped = field.type.referenceType?.reference?.resolve()?.parent is FsdEnumSpec
