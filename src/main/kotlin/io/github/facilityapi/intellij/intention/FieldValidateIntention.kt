@@ -41,8 +41,8 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
     override fun invoke(project: Project, editor: Editor?, element: PsiElement) {
         if (editor == null) return
 
-        val decoratedField = PsiTreeUtil.getParentOfType(element, FsdDecoratedField::class.java) ?: return
-        val field = decoratedField.field
+        val field = PsiTreeUtil.getParentOfType(element, FsdField::class.java) ?: return
+        val decoratedField = PsiTreeUtil.getParentOfType(field, FsdDecoratedField::class.java) ?: return
 
         if (field.type.referenceType?.reference?.resolve()?.parent is FsdEnumSpec) {
             addAttribute(decoratedField, "validate")
