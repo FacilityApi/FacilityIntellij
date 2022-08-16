@@ -80,13 +80,11 @@ class DuplicateMemberInspection : LocalInspectionTool() {
         }
 
         private fun checkForFieldDuplicates(fields: List<FsdDecoratedField>, bundleKey: String) {
-            val seenFields = hashSetOf<String>()
-
-            for (decoratedField in fields) {
-                val fieldName = decoratedField.field.identifier.text
-                if (!seenFields.add(fieldName)) {
-                    val message = FsdBundle.getMessage(bundleKey, fieldName)
-                    holder.registerProblem(decoratedField, message, fieldFix)
+            val nameGroups = fields.groupBy { it.field.identifier.text }
+            for ((fieldName, elements) in nameGroups.filter { it.value.size > 1 }) {
+                val message = FsdBundle.getMessage(bundleKey, fieldName)
+                for (element in elements) {
+                    holder.registerProblem(element, message, fieldFix)
                 }
             }
         }

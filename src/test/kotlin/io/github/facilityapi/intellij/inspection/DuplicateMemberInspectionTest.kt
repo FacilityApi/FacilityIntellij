@@ -355,7 +355,10 @@ class DuplicateMemberInspectionTest : BasePlatformTestCase() {
         myFixture.configureByText(FsdFileType, code)
         myFixture.enableInspections(DuplicateMemberInspection())
         val highlights = myFixture.doHighlighting()
-        assertEquals(errorDescription, highlights.singleOrNull()?.description)
+
+        for (highlight in highlights) {
+            assertEquals(errorDescription, highlight.description)
+        }
     }
 
     private fun checkFix(before: String, after: String) {
