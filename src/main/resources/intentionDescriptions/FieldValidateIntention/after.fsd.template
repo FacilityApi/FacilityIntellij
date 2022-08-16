@@ -1,0 +1,16 @@
+service ExampleApi
+{
+	enum WidgetField
+	{
+		/// The 'id'
+		<spot>[validate(value: 1..)]</spot>
+		id: int32;
+
+		/// The 'name' field.
+		name: string;
+
+		/// The 'weight' field.
+		[obsolete]
+		weight: int32,
+	}
+}
