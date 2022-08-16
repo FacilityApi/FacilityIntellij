@@ -1,0 +1,21 @@
+service ExampleApi
+{
+    data WidgetField
+    {
+        id: int32;
+
+        kind: Widge<caret>tKind;
+
+        name: string;
+
+        [obsolete]
+        weight: int32;
+    }
+
+    enum WidgetKind
+    {
+        used,
+        new,
+        refurbished
+    }
+}

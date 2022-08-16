@@ -1,7 +1,11 @@
 package io.github.facilityapi.intellij.intention
 
+import com.intellij.psi.search.FileTypeIndex
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
+// Note: These tests don't complete the template.
+// That would probably be better, but doesn't seem
+// to be super easy in the test harness.
 class FieldValidateIntentionTest : BasePlatformTestCase() {
     override fun getTestDataPath() = "src/test/testData"
 
@@ -15,6 +19,10 @@ class FieldValidateIntentionTest : BasePlatformTestCase() {
 
     fun `test collection validation attribute is inserted correctly`() {
         checkBeforeAfter("collectionBefore.fsd", "collectionAfter.fsd")
+    }
+
+    fun `test enum valued validation attribute is inserted correctly`() {
+        checkBeforeAfter("enumValuedBefore.fsd", "enumValuedAfter.fsd")
     }
 
     fun `test weird spacing validation attribute is inserted correctly`() {
