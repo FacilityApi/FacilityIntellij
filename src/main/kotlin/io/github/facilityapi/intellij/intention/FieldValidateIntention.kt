@@ -8,7 +8,6 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
-import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.siblings
 import io.github.facilityapi.intellij.FsdBundle
@@ -50,8 +49,10 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
         }
 
         val templateManager = TemplateManager.getInstance(project)
-        val previousNewline = (decoratedField.siblings(false, false)
-            .first() as? PsiWhiteSpace)?.let { if (it.textContains('\n')) it else null }
+        val previousNewline = (
+            decoratedField.siblings(false, false)
+                .first() as? PsiWhiteSpace
+            )?.let { if (it.textContains('\n')) it else null }
 
         val newFieldParent = decoratedField.parent.copy()
         var offset = decoratedField.textOffset
@@ -60,9 +61,12 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
             val newDecoratedField = newFieldParent.children.find { it.textMatches(decoratedField) }
 
             val indent = previousNewline.text.trimStart('\r', '\n')
-            val newWhitespace = createFromText(project, """[dummy]
+            val newWhitespace = createFromText(
+                project,
+                """[dummy]
                 |${previousNewline.text}service Test {}
-            """.trimMargin()).filterIsInstance<PsiWhiteSpace>().first()
+                """.trimMargin()
+            ).filterIsInstance<PsiWhiteSpace>().first()
 
             newFieldParent.addBefore(newWhitespace, newDecoratedField)
 

@@ -8,7 +8,6 @@ import com.intellij.psi.codeStyle.CodeStyleManager
 import io.github.facilityapi.intellij.FsdFile
 import io.github.facilityapi.intellij.FsdFileType
 import io.github.facilityapi.intellij.psi.FsdAttributeList
-import io.github.facilityapi.intellij.psi.FsdDecoratedField
 import io.github.facilityapi.intellij.psi.FsdNamedElement
 import io.github.facilityapi.intellij.psi.FsdReferenceType
 
