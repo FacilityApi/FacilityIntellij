@@ -1,0 +1,13 @@
+service ExampleApi
+{
+    data WidgetField
+    {
+        [validate(value: )]
+        id: int32;
+
+        name: string;
+
+        [obsolete]
+        weight: int32;
+    }
+}

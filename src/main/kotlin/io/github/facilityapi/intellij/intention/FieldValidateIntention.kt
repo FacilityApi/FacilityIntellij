@@ -6,6 +6,7 @@ import com.intellij.codeInsight.template.TemplateManager
 import com.intellij.codeInsight.template.impl.TemplateSettings
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.util.PsiTreeUtil
@@ -79,6 +80,9 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
 
         val template = getValidateTemplateForField(field)
         if (template != null) {
+            PsiDocumentManager.getInstance(project)
+                .doPostponedOperationsAndUnblockDocument(editor.document)
+
             templateManager.startTemplate(editor, template)
         }
     }

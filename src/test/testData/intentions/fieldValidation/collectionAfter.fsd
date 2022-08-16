@@ -1,0 +1,15 @@
+service ExampleApi
+{
+    data Widget
+    {
+        id: int32;
+
+        name: string;
+
+        [validate(count: )]
+        color: int32[];
+
+        [obsolete]
+        weight: int32;
+    }
+}
