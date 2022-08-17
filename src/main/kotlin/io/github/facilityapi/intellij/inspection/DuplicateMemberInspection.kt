@@ -28,15 +28,17 @@ class DuplicateMemberInspection : LocalInspectionTool() {
 
         override fun visitElement(element: PsiElement) {
             if (element is FsdServiceItems) {
-                val nameGroups = element.decoratedServiceItemList
+                val duplicateMembers = element.decoratedServiceItemList.asSequence()
                     .mapNotNull {
                         it.dataSpec?.identifierDeclaration
                             ?: it.methodSpec?.identifierDeclaration
                             ?: it.errorSetSpec?.identifierDeclaration
                             ?: it.enumSpec?.identifierDeclaration
-                    }.groupBy { it.identifier.text }
+                    }
+                    .groupBy { it.identifier.text }
+                    .filter { it.value.size > 1 }
 
-                for ((memberName, memberIds) in nameGroups.filter { it.value.size > 1 }) {
+                for ((memberName, memberIds) in duplicateMembers) {
                     val message = FsdBundle.getMessage("inspections.bugs.duplicate.member.service", memberName)
                     for (memberId in memberIds) {
                         holder.registerProblem(memberId, message, serviceMemberFix)
@@ -57,10 +59,11 @@ class DuplicateMemberInspection : LocalInspectionTool() {
             }
 
             if (element is FsdEnumSpec) {
-                val nameGroups = (element.enumValueList?.decoratedEnumValueList ?: emptyList())
+                val duplicateNames = (element.enumValueList?.decoratedEnumValueList ?: emptyList())
                     .groupBy { it.enumValue!!.identifier.text }
+                    .filter { it.value.size > 1 }
 
-                for ((caseName, cases) in nameGroups.filter { it.value.size > 1 }) {
+                for ((caseName, cases) in duplicateNames) {
                     val message = FsdBundle.getMessage("inspections.bugs.duplicate.member.enumerated", caseName)
                     for (case in cases) {
                         holder.registerProblem(case, message, fieldFix)
@@ -69,9 +72,11 @@ class DuplicateMemberInspection : LocalInspectionTool() {
             }
 
             if (element is FsdErrorList) {
-                val nameGroups = element.decoratedErrorSpecList.groupBy { it.errorSpec!!.identifier.text }
+                val duplicateErrors = element.decoratedErrorSpecList
+                    .groupBy { it.errorSpec!!.identifier.text }
+                    .filter { it.value.size > 1 }
 
-                for ((errorName, errors) in nameGroups.filter { it.value.size > 1 }) {
+                for ((errorName, errors) in duplicateErrors) {
                     val message = FsdBundle.getMessage("inspections.bugs.duplicate.member.error", errorName)
                     for (error in errors) {
                         holder.registerProblem(error, message, fieldFix)
@@ -81,8 +86,11 @@ class DuplicateMemberInspection : LocalInspectionTool() {
         }
 
         private fun checkForFieldDuplicates(fields: List<FsdDecoratedField>, bundleKey: String) {
-            val nameGroups = fields.groupBy { it.field.identifier.text }
-            for ((fieldName, elements) in nameGroups.filter { it.value.size > 1 }) {
+            val duplicateField = fields
+                .groupBy { it.field.identifier.text }
+                .filter { it.value.size > 1 }
+
+            for ((fieldName, elements) in duplicateField) {
                 val message = FsdBundle.getMessage(bundleKey, fieldName)
                 for (element in elements) {
                     holder.registerProblem(element, message, fieldFix)
