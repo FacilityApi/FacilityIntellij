@@ -1,7 +1,6 @@
 package io.github.facilityapi.intellij.intention
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import org.junit.Ignore
 
 // Note: These tests don't complete the template.
 // That would probably be better, but doesn't seem
