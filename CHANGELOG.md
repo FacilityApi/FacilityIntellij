@@ -4,7 +4,7 @@
 
 ## [Unreleased]
 ### Added
-- Inspection for duplicate field names, enum, and error values
+- Inspection for duplicate service member names, field names, enum, and error values
 - Intention to add `[validate]` to enum declarations
 - Live Templates for validation attributes
   - svalid: `[validate(regex: $REGEX$, length: $RANGE$)]`
