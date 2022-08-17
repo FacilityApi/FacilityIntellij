@@ -86,12 +86,12 @@
         <!-- Check for duplicate names in service item definitions -->
         <localInspection
             language="FSD"
-            displayName="DuplicateName"
+            displayName="DuplicateMember"
             groupBundle="messages.FsdBundle"
-            groupKey="inspections.bugs.duplicatename"
+            groupKey="inspections.bugs.duplicate.member"
             enabledByDefault="true"
             level="ERROR"
-            implementationClass="io.github.facilityapi.intellij.inspection.DuplicateNameInspection" />
+            implementationClass="io.github.facilityapi.intellij.inspection.DuplicateMemberInspection" />
 
         <!-- Add validation attribute to field or type -->
         <intentionAction>

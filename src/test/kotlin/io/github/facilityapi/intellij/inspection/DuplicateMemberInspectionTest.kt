@@ -1,11 +1,36 @@
 package io.github.facilityapi.intellij.inspection
 
+import com.intellij.testFramework.UsefulTestCase
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import io.github.facilityapi.intellij.FsdFileType
 
-class DuplicateNameInspectionTest : BasePlatformTestCase() {
+class DuplicateMemberInspectionTest : BasePlatformTestCase() {
 
     override fun getTestDataPath() = "src/test/testData"
+
+    fun testDuplicateServiceMemberInspection() {
+        val code = """
+        service MessageService {
+            enum Message
+            {
+                audio,
+                video,
+                text
+            }
+
+            data Message
+            {
+                /// A unique identifier for the conversation
+                [required]
+                id: int64;
+
+                text: string;
+            }
+        }
+        """
+
+        checkInspection(code, "Duplicate service member: Message")
+    }
 
     fun testDuplicateRequestFieldInspection() {
         val code = """
@@ -108,6 +133,42 @@ class DuplicateNameInspectionTest : BasePlatformTestCase() {
         """
 
         checkInspection(code, "Duplicate error: accountBanned")
+    }
+
+    fun testDuplicateServiceMemberFix() {
+        val before = """
+        service MessageService {
+            enum Message
+            {
+                audio,
+                video,
+                text
+            }
+
+            data Mes<caret>sage
+            {
+                /// A unique identifier for the conversation
+                [required]
+                id: int64;
+
+                text: string;
+            }
+        }
+        """.trimIndent()
+
+        val after = """
+        service MessageService {
+            enum Message
+            {
+                audio,
+                video,
+                text
+            }
+
+            }
+        """.trimIndent()
+
+        checkFix(before, after)
     }
 
     fun testDuplicateRequestFieldFix() {
@@ -293,17 +354,22 @@ class DuplicateNameInspectionTest : BasePlatformTestCase() {
 
     private fun checkInspection(code: String, errorDescription: String) {
         myFixture.configureByText(FsdFileType, code)
-        myFixture.enableInspections(DuplicateNameInspection())
+        myFixture.enableInspections(DuplicateMemberInspection())
         val highlights = myFixture.doHighlighting()
-        assertEquals(errorDescription, highlights.singleOrNull()?.description)
+
+        UsefulTestCase.assertSize(2, highlights)
+
+        for (highlight in highlights) {
+            assertEquals(errorDescription, highlight.description)
+        }
     }
 
     private fun checkFix(before: String, after: String) {
         myFixture.configureByText(FsdFileType, before)
-        myFixture.enableInspections(DuplicateNameInspection())
+        myFixture.enableInspections(DuplicateMemberInspection())
         myFixture.doHighlighting()
 
-        val intention = myFixture.findSingleIntention(DuplicateNameInspection.Fix.NAME)
+        val intention = myFixture.findSingleIntention(DuplicateMemberInspection.FieldFix.NAME)
         myFixture.launchAction(intention)
 
         myFixture.checkResult(after)
