@@ -6,8 +6,6 @@ import io.github.facilityapi.intellij.FsdFileType
 
 class DuplicateMemberInspectionTest : BasePlatformTestCase() {
 
-    override fun getTestDataPath() = "src/test/testData"
-
     fun testDuplicateServiceMemberInspection() {
         val code = """
         service MessageService {

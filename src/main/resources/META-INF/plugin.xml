@@ -84,15 +84,25 @@
         <liveTemplateContext
             implementation="io.github.facilityapi.intellij.FsdLiveTemplateContext"/>
 
-        <!-- Check for duplicate names in service item definitions -->
+        <!-- Check for duplicate names in service definitions -->
         <localInspection
             language="FSD"
             displayName="DuplicateMember"
             groupBundle="messages.FsdBundle"
-            groupKey="inspections.bugs.duplicate.member"
+            groupKey="inspections.bugs.duplicate.member.group"
             enabledByDefault="true"
             level="ERROR"
             implementationClass="io.github.facilityapi.intellij.inspection.DuplicateMemberInspection" />
+
+        <!-- Check for duplicate attributes on service definitions -->
+        <localInspection
+            language="FSD"
+            displayName="DuplicateAttribute"
+            groupBundle="messages.FsdBundle"
+            groupKey="inspections.bugs.duplicate.attribute.group"
+            enabledByDefault="true"
+            level="ERROR"
+            implementationClass="io.github.facilityapi.intellij.inspection.DuplicateAttributeInspection" />
 
         <!-- Add validation attribute to enum -->
         <intentionAction>
