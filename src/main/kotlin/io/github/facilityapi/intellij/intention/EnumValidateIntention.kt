@@ -5,15 +5,12 @@ import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiWhiteSpace
-import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.util.PsiTreeUtil
 import io.github.facilityapi.intellij.FsdBundle
 import io.github.facilityapi.intellij.psi.FsdAttributeList
 import io.github.facilityapi.intellij.psi.FsdDecoratedServiceItem
 import io.github.facilityapi.intellij.psi.FsdEnumSpec
-import io.github.facilityapi.intellij.reference.createAttribute
-import io.github.facilityapi.intellij.reference.createFromText
+import io.github.facilityapi.intellij.reference.addAttribute
 
 class EnumValidateIntention : PsiElementBaseIntentionAction(), IntentionAction {
     override fun startInWriteAction(): Boolean = true
@@ -32,17 +29,7 @@ class EnumValidateIntention : PsiElementBaseIntentionAction(), IntentionAction {
 
     override fun invoke(project: Project, editor: Editor?, element: PsiElement) {
         val serviceItem = PsiTreeUtil.getParentOfType(element, FsdDecoratedServiceItem::class.java) ?: return
-        val newEnumSpec = serviceItem.copy()
-
-        val codeStylist = CodeStyleManager.getInstance(project)
-        val newLine = createFromText(project, "[dummy]\n")
-            .filterIsInstance<PsiWhiteSpace>()
-            .first()
-
-        newEnumSpec.addBefore(newLine, newEnumSpec.firstChild)
-        newEnumSpec.addBefore(createAttribute(project, "validate"), newEnumSpec.firstChild)
-
-        serviceItem.replace(codeStylist.reformat(newEnumSpec))
+        addAttribute(serviceItem, "validate")
     }
 
     companion object {

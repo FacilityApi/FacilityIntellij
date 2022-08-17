@@ -3,6 +3,8 @@ package io.github.facilityapi.intellij.reference
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFileFactory
+import com.intellij.psi.PsiWhiteSpace
+import com.intellij.psi.codeStyle.CodeStyleManager
 import io.github.facilityapi.intellij.FsdFile
 import io.github.facilityapi.intellij.FsdFileType
 import io.github.facilityapi.intellij.psi.FsdAttributeList
@@ -57,6 +59,20 @@ fun createFromText(project: Project, text: String): Sequence<PsiElement> {
         .createFileFromText(fileName, FsdFileType, text) as FsdFile
 
     return file.descendants
+}
+
+fun addAttribute(field: PsiElement, attributeName: String) {
+    val newEnumSpec = field.copy()
+
+    val codeStylist = CodeStyleManager.getInstance(field.project)
+    val newLine = createFromText(field.project, "[dummy]\n")
+        .filterIsInstance<PsiWhiteSpace>()
+        .first()
+
+    newEnumSpec.addBefore(newLine, newEnumSpec.firstChild)
+    newEnumSpec.addBefore(createAttribute(field.project, "validate"), newEnumSpec.firstChild)
+
+    field.replace(codeStylist.reformat(newEnumSpec))
 }
 
 // These are copied because of a source breaking change in the framework

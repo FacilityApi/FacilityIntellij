@@ -1,0 +1,12 @@
+service ExampleApi
+{
+    data WidgetField
+    {
+        id: i<caret>nt32;
+
+        name: string;
+
+        [obsolete]
+        weight: int32;
+    }
+}

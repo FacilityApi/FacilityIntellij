@@ -1,0 +1,13 @@
+service ExampleApi
+{
+    data WidgetField
+    {
+        id: int32;
+
+        // this is a comment
+        name: stri<caret>ng;
+
+        [obsolete]
+        weight: int32;
+    }
+}

@@ -6,11 +6,11 @@ class EnumValidateIntentionTest : BasePlatformTestCase() {
     override fun getTestDataPath() = "src/test/testData"
 
     fun `test enum validation attribute is inserted correctly`() {
-        myFixture.configureByFile("intentions/enumvalidation/before.fsd")
+        myFixture.configureByFile("intentions/enumValidation/before.fsd")
 
         val action = myFixture.findSingleIntention(EnumValidateIntention.TEXT)
         myFixture.launchAction(action)
 
-        myFixture.checkResultByFile("intentions/enumvalidation/after.fsd")
+        myFixture.checkResultByFile("intentions/enumValidation/after.fsd")
     }
 }

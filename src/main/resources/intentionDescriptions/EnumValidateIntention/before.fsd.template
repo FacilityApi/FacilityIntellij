@@ -1,16 +1,10 @@
 service ExampleApi
 {
 	/// Identifies a widget field.
-	<spot>enum WidgetField</spot>
+	<spot>enum WidgetKind</spot>
 	{
-		/// The 'id' field.
-		id,
-
-		/// The 'name' field.
-		name,
-
-		/// The 'weight' field.
-		[obsolete]
-		weight,
+		new,
+		old,
+		refurbished,
 	}
 }

@@ -1,0 +1,15 @@
+service ExampleApi
+{
+	data Widget
+	{
+		/// The 'id'
+		<spot>id: int32;</spot>
+
+		/// The 'name' field.
+		name: string;
+
+		/// The 'weight' field.
+		[obsolete]
+		weight: int32,
+	}
+}

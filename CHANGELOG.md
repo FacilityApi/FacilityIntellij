@@ -10,6 +10,7 @@
   - svalid: `[validate(regex: $REGEX$, length: $RANGE$)]`
   - nvalid: `[validate(value: $RANGE$)]`
   - cvalid: `[validate(count: $RANGE$)]`
+- Intention to add the appropriate validate template (or just `[validate]` when enum-typed) fields
 
 ### Fixed
 - Code folding for method, enum, and error bodies

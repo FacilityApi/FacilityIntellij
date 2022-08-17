@@ -1,0 +1,14 @@
+service ExampleApi
+{
+    data WidgetField
+    {
+        id: int32;
+
+        // this is a comment
+        [validate(regex: "", length: )]
+        name: string;
+
+        [obsolete]
+        weight: int32;
+    }
+}

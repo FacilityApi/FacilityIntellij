@@ -4,14 +4,8 @@ service ExampleApi
 	<spot>[validate]</spot>
 	enum WidgetField
 	{
-		/// The 'id' field.
-		id,
-
-		/// The 'name' field.
-		name,
-
-		/// The 'weight' field.
-		[obsolete]
-		weight,
+        new,
+        old,
+        refurbished,
 	}
 }
