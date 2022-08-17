@@ -30,10 +30,10 @@ class DuplicateMemberInspection : LocalInspectionTool() {
             if (element is FsdServiceItems) {
                 val nameGroups = element.decoratedServiceItemList
                     .mapNotNull {
-                        it.dataSpec?.identifierDeclaration ?:
-                        it.methodSpec?.identifierDeclaration ?:
-                        it.errorSetSpec?.identifierDeclaration ?:
-                        it.enumSpec?.identifierDeclaration
+                        it.dataSpec?.identifierDeclaration
+                            ?: it.methodSpec?.identifierDeclaration
+                            ?: it.errorSetSpec?.identifierDeclaration
+                            ?: it.enumSpec?.identifierDeclaration
                     }.groupBy { it.identifier.text }
 
                 for ((memberName, memberIds) in nameGroups.filter { it.value.size > 1 }) {
