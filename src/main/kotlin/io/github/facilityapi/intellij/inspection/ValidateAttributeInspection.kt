@@ -17,12 +17,13 @@ import io.github.facilityapi.intellij.psi.FsdDecoratedServiceItem
 import io.github.facilityapi.intellij.psi.FsdEnumSpec
 import io.github.facilityapi.intellij.psi.FsdErrorSpec
 import io.github.facilityapi.intellij.supportsValidate
-import org.eclipse.xtext.xbase.lib.ByteExtensions
 
 class ValidateAttributeInspection : LocalInspectionTool() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         return object : PsiElementVisitor() {
             val deleteAttributeFix = DeleteAttributeFix()
+            val deleteParameterFix = DeleteAttributeParameterFix()
+            val deleteParameterListFix = DeleteAttributeParameterListFix()
 
             override fun visitElement(element: PsiElement) {
                 if (element !is FsdAttribute || element.attributename.text != "validate") return
@@ -31,7 +32,9 @@ class ValidateAttributeInspection : LocalInspectionTool() {
                 when (decoratedElement) {
                     is FsdDecoratedServiceItem -> {
                         // The only service item that supports [validate] are enums
-                        if (decoratedElement.enumSpec == null) {
+                        if (decoratedElement.enumSpec != null) {
+                            checkEnumValidate(element)
+                        } else {
                             holder.registerProblem(
                                 element,
                                 "This has no effect.", // todo: i10n & consistent with facility
@@ -88,12 +91,12 @@ class ValidateAttributeInspection : LocalInspectionTool() {
             }
 
             private fun checkEnumValidate(attribute: FsdAttribute) {
-                if (attribute.attributeParameterList.size > 1) {
+                if (attribute.attributeParameterList.isNotEmpty()) {
                     holder.registerProblem(
                         attribute, // todo: make the parameter list a PSI node to highlight just the list
                         "Parameters have no effect", // todo: i10n & consistent with facility
                         ProblemHighlightType.GENERIC_ERROR,
-                        deleteAttributeFix // todo: maybe just delete the parameters?
+                        deleteParameterListFix
                     )
                 }
             }
@@ -113,7 +116,7 @@ class ValidateAttributeInspection : LocalInspectionTool() {
                             parameter,
                             "Invalid parameter: $parameterName", // todo: i10n & consistent with facility
                             ProblemHighlightType.ERROR,
-                            deleteAttributeFix // todo: delete parameter fix
+                            deleteParameterFix
                         )
 
                         continue
@@ -191,7 +194,7 @@ class ValidateAttributeInspection : LocalInspectionTool() {
                                 parameter,
                                 "Invalid value: ${parameter.attributeparametervalue.text}.", // todo: i10n & consistent with facility
                                 ProblemHighlightType.ERROR,
-                                deleteAttributeFix // todo: replace with template?
+                                deleteParameterFix
                             )
                         }
                     }
