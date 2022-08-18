@@ -201,7 +201,7 @@ class DuplicateAttributeInspectionTest : BasePlatformTestCase() {
         myFixture.enableInspections(DuplicateAttributeInspection())
         myFixture.doHighlighting()
 
-        val intention = myFixture.findSingleIntention(DuplicateAttributeInspection.Fix.NAME)
+        val intention = myFixture.findSingleIntention(DeleteAttributeFix.NAME)
         myFixture.launchAction(intention)
 
         myFixture.checkResult(after)
