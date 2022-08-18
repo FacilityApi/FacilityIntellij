@@ -6,6 +6,7 @@ import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.util.PsiTreeUtil
+import io.github.facilityapi.intellij.FsdBundle
 import io.github.facilityapi.intellij.isCollection
 import io.github.facilityapi.intellij.isEnum
 import io.github.facilityapi.intellij.isNumber
@@ -35,23 +36,13 @@ class ValidateAttributeInspection : LocalInspectionTool() {
                         if (decoratedElement.enumSpec != null) {
                             checkEnumValidate(element)
                         } else {
-                            holder.registerProblem(
-                                element,
-                                "This has no effect.", // todo: i10n & consistent with facility
-                                ProblemHighlightType.ERROR,
-                                deleteAttributeFix
-                            )
+                            reportUnexpectedAttribute(element)
                         }
                     }
                     is FsdDecoratedField -> {
                         val field = decoratedElement.field
                         if (!supportsValidate(decoratedElement.field)) {
-                            holder.registerProblem(
-                                element,
-                                "This has no effect.", // todo: i10n & consistent with facility
-                                ProblemHighlightType.ERROR,
-                                deleteAttributeFix
-                            )
+                            reportUnexpectedAttribute(element)
                         }
 
                         if (field.type.text == "string") {
@@ -68,12 +59,7 @@ class ValidateAttributeInspection : LocalInspectionTool() {
                         checkEnumValidate(element)
                     }
                     is FsdErrorSpec -> {
-                        holder.registerProblem(
-                            element,
-                            "This has no effect.", // todo: i10n & consistent with facility
-                            ProblemHighlightType.ERROR,
-                            deleteAttributeFix
-                        )
+                        reportUnexpectedAttribute(element)
                     }
                 }
             }
@@ -94,7 +80,7 @@ class ValidateAttributeInspection : LocalInspectionTool() {
                 if (attribute.attributeParameterList.isNotEmpty()) {
                     holder.registerProblem(
                         attribute, // todo: make the parameter list a PSI node to highlight just the list
-                        "Parameters have no effect", // todo: i10n & consistent with facility
+                        FsdBundle.getMessage("inspections.bugs.attribute.parameters.unexpected"),
                         ProblemHighlightType.GENERIC_ERROR,
                         deleteParameterListFix
                     )
@@ -110,11 +96,17 @@ class ValidateAttributeInspection : LocalInspectionTool() {
                     if (parameterNames.contains(parameterName)) {
                         foundRequiredParameter = true
 
-                        checkParameterValue(parameter)
+                        checkParameterValue(attribute, parameter)
                     } else {
+                        val message = FsdBundle.getMessage(
+                            "inspections.bugs.attribute.parameter.unexpected",
+                            attribute.attributename.text,
+                            parameterName
+                        )
+
                         holder.registerProblem(
                             parameter,
-                            "Invalid parameter: $parameterName", // todo: i10n & consistent with facility
+                            message,
                             ProblemHighlightType.ERROR,
                             deleteParameterFix
                         )
@@ -124,36 +116,32 @@ class ValidateAttributeInspection : LocalInspectionTool() {
                 }
 
                 if (!foundRequiredParameter) {
+                    val message = FsdBundle.getMessage(
+                        "inspections.bugs.attribute.parameter.missing",
+                        attribute.attributename.text,
+                        parameterNames.joinToString()
+                    )
+
                     holder.registerProblem(
                         attribute,
-                        "Missing parameters: ${parameterNames.joinToString()}.", // todo: i10n & consistent with facility
+                        message,
                         ProblemHighlightType.GENERIC_ERROR,
                         deleteAttributeFix // todo: replace with template?
                     )
                 }
             }
 
-            private fun checkParameterValue(parameter: FsdAttributeParameter) {
+            private fun checkParameterValue(attribute: FsdAttribute, parameter: FsdAttributeParameter) {
                 when (parameter.identifier.text) {
                     "regex" -> {
                         if (!Regex("\".*\"").matches(parameter.attributeparametervalue.text)) {
-                            holder.registerProblem(
-                                parameter,
-                                "Invalid ${parameter.identifier.text} value: ${parameter.attributeparametervalue.text}.", // todo: i10n & consistent with facility
-                                ProblemHighlightType.ERROR,
-                                deleteAttributeFix // todo: replace with template?
-                            )
+                            reportInvalidParameterValue(attribute, parameter)
                         }
                     }
                     "length", "count", "value" -> {
                         val valueText = parameter.attributeparametervalue.text
                         if (valueText.isEmpty()) {
-                            holder.registerProblem(
-                                parameter,
-                                "Invalid ${parameter.identifier.text} value: ${parameter.attributeparametervalue.text}.", // todo: i10n & consistent with facility
-                                ProblemHighlightType.ERROR,
-                                deleteAttributeFix // todo: replace with template?
-                            )
+                            reportInvalidParameterValue(attribute, parameter)
                         }
 
                         val exactValue = valueText.toLongOrNull()
@@ -164,41 +152,47 @@ class ValidateAttributeInspection : LocalInspectionTool() {
                         val minimum = first.toLongOrNull()
                         val maximum = second.toLongOrNull()
 
-                        if (first.isNotEmpty() && minimum == null) {
-                            holder.registerProblem(
-                                parameter,
-                                "Invalid value: ${parameter.attributeparametervalue.text}.", // todo: i10n & consistent with facility
-                                ProblemHighlightType.ERROR,
-                                deleteAttributeFix // todo: replace with template?
-                            )
-                        } else if (second.isNotEmpty() && maximum == null) {
-                            holder.registerProblem(
-                                parameter,
-                                "Invalid value: ${parameter.attributeparametervalue.text}.", // todo: i10n & consistent with facility
-                                ProblemHighlightType.ERROR,
-                                deleteAttributeFix // todo: replace with template?
-                            )
-                        }
+                        val noNumberSpecified = minimum == null && maximum == null
+                        val firstIsNotNumber = first.isNotEmpty() && minimum == null
+                        val secondIsNotNumber = second.isNotEmpty() && maximum == null
+                        val invertedRange = minimum != null && maximum != null && minimum > maximum
 
-                        if (minimum == null && maximum == null) {
-                            holder.registerProblem(
-                                parameter,
-                                "Invalid value: ${parameter.attributeparametervalue.text}.", // todo: i10n & consistent with facility
-                                ProblemHighlightType.ERROR,
-                                deleteAttributeFix // todo: replace with template?
-                            )
-                        }
-
-                        if (minimum != null && maximum != null && minimum > maximum) {
-                            holder.registerProblem(
-                                parameter,
-                                "Invalid value: ${parameter.attributeparametervalue.text}.", // todo: i10n & consistent with facility
-                                ProblemHighlightType.ERROR,
-                                deleteParameterFix
-                            )
+                        val isInvalid = noNumberSpecified || firstIsNotNumber || secondIsNotNumber || invertedRange
+                        if (isInvalid) {
+                            reportInvalidParameterValue(attribute, parameter)
                         }
                     }
                 }
+            }
+
+            private fun reportUnexpectedAttribute(attribute: FsdAttribute) {
+                val message = FsdBundle.getMessage(
+                    "inspections.bugs.attribute.unexpected",
+                    attribute.attributename.text
+                )
+
+                holder.registerProblem(
+                    attribute,
+                    message,
+                    ProblemHighlightType.ERROR,
+                    deleteAttributeFix
+                )
+            }
+
+            private fun reportInvalidParameterValue(attribute: FsdAttribute, parameter: FsdAttributeParameter) {
+                val message = FsdBundle.getMessage(
+                    "inspections.bugs.attribute.parameter.value.invalid",
+                    parameter.identifier.text,
+                    parameter.attributeparametervalue.text,
+                    attribute.attributename.text
+                )
+
+                holder.registerProblem(
+                    parameter,
+                    message,
+                    ProblemHighlightType.ERROR,
+                    deleteParameterFix
+                )
             }
         }
     }
