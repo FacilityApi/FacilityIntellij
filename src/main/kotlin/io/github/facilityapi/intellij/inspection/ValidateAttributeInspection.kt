@@ -6,7 +6,11 @@ import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.util.PsiTreeUtil
+import io.github.facilityapi.intellij.isCollection
+import io.github.facilityapi.intellij.isEnum
+import io.github.facilityapi.intellij.isNumber
 import io.github.facilityapi.intellij.psi.FsdAttribute
+import io.github.facilityapi.intellij.psi.FsdAttributeParameter
 import io.github.facilityapi.intellij.psi.FsdDecoratedElement
 import io.github.facilityapi.intellij.psi.FsdDecoratedField
 import io.github.facilityapi.intellij.psi.FsdDecoratedServiceItem
@@ -29,32 +33,104 @@ class ValidateAttributeInspection : LocalInspectionTool() {
                         if (decoratedElement.enumSpec == null) {
                             holder.registerProblem(
                                 element,
-                                "This has no effect.", // todo: i10n & clarify
-                                ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+                                "This has no effect.", // todo: i10n & consistent with facility
+                                ProblemHighlightType.ERROR,
                                 deleteAttributeFix
                             )
                         }
                     }
                     is FsdDecoratedField -> {
+                        val field = decoratedElement.field
                         if (!supportsValidate(decoratedElement.field)) {
                             holder.registerProblem(
                                 element,
-                                "This has no effect.", // todo: i10n & clarify
-                                ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+                                "This has no effect.", // todo: i10n & consistent with facility
+                                ProblemHighlightType.ERROR,
                                 deleteAttributeFix
                             )
                         }
+
+                        if (field.type.text == "string") {
+                            checkStringValidate(element)
+                        } else if (field.type.isCollection) {
+                            checkCollectionValidate(element)
+                        } else if (field.type.isNumber) {
+                            checkNumberValidate(element)
+                        } else if (field.type.isEnum) {
+                            checkEnumValidate(element)
+                        }
                     }
-                    is FsdEnumSpec -> {}
+                    is FsdEnumSpec -> {
+                        checkEnumValidate(element)
+                    }
                     is FsdErrorSpec -> {
                         holder.registerProblem(
                             element,
-                            "This has no effect.", // todo: i10n & clarify
-                            ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+                            "This has no effect.", // todo: i10n & consistent with facility
+                            ProblemHighlightType.ERROR,
                             deleteAttributeFix
                         )
                     }
                 }
+            }
+
+            private fun checkStringValidate(attribute: FsdAttribute) {
+                checkAttributeParameters(attribute, setOf("regex", "length"))
+            }
+
+            private fun checkCollectionValidate(attribute: FsdAttribute) {
+                checkAttributeParameters(attribute, setOf("count"))
+            }
+
+            private fun checkNumberValidate(attribute: FsdAttribute) {
+                checkAttributeParameters(attribute, setOf("value"))
+            }
+
+            private fun checkEnumValidate(attribute: FsdAttribute) {
+                if (attribute.attributeParameterList.size > 1) {
+                    holder.registerProblem(
+                        attribute, // todo: make the parameter list a PSI node to highlight just the list
+                        "Parameters have no effect", // todo: i10n & consistent with facility
+                        ProblemHighlightType.GENERIC_ERROR,
+                        deleteAttributeFix // todo: maybe just delete the parameters?
+                    )
+                }
+            }
+
+            private fun checkAttributeParameters(attribute: FsdAttribute, parameterNames: Set<String>) {
+                var foundRequiredParameter = false
+
+                for (parameter in attribute.attributeParameterList) {
+                    val parameterName = parameter.identifier.text
+
+                    if (parameterNames.contains(parameterName)) {
+                        foundRequiredParameter = true
+
+                        validateParameterValue(parameter)
+                    } else {
+                        holder.registerProblem(
+                            parameter,
+                            "Invalid parameter: $parameterName", // todo: i10n & consistent with facility
+                            ProblemHighlightType.ERROR,
+                            deleteAttributeFix // todo: delete parameter fix
+                        )
+
+                        continue
+                    }
+                }
+
+                if (!foundRequiredParameter) {
+                    holder.registerProblem(
+                        attribute,
+                        "Missing parameters: ${parameterNames.joinToString()}.", // todo: i10n & consistent with facility
+                        ProblemHighlightType.GENERIC_ERROR,
+                        deleteAttributeFix // todo: replace with template?
+                    )
+                }
+            }
+
+            private fun validateParameterValue(parameter: FsdAttributeParameter) {
+
             }
         }
     }
