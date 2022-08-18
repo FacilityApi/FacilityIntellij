@@ -27,7 +27,7 @@ val FsdType.isCollection: Boolean
     get() = text == "bytes" || text.startsWith("map<") || text.endsWith("[]")
 
 val FsdType.isNumber: Boolean
-    get() = text == "int32" || text == "int64"
+    get() = text in setOf("int32", "int64", "float", "double", "decimal")
 
 val FsdType.isEnum: Boolean
     get() = referenceType?.reference?.resolve()?.parent is FsdEnumSpec

@@ -17,6 +17,7 @@ import io.github.facilityapi.intellij.psi.FsdDecoratedServiceItem
 import io.github.facilityapi.intellij.psi.FsdEnumSpec
 import io.github.facilityapi.intellij.psi.FsdErrorSpec
 import io.github.facilityapi.intellij.supportsValidate
+import org.eclipse.xtext.xbase.lib.ByteExtensions
 
 class ValidateAttributeInspection : LocalInspectionTool() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
@@ -106,7 +107,7 @@ class ValidateAttributeInspection : LocalInspectionTool() {
                     if (parameterNames.contains(parameterName)) {
                         foundRequiredParameter = true
 
-                        validateParameterValue(parameter)
+                        checkParameterValue(parameter)
                     } else {
                         holder.registerProblem(
                             parameter,
@@ -129,8 +130,72 @@ class ValidateAttributeInspection : LocalInspectionTool() {
                 }
             }
 
-            private fun validateParameterValue(parameter: FsdAttributeParameter) {
+            private fun checkParameterValue(parameter: FsdAttributeParameter) {
+                when (parameter.identifier.text) {
+                    "regex" -> {
+                        if (!Regex("\".*\"").matches(parameter.attributeparametervalue.text)) {
+                            holder.registerProblem(
+                                parameter,
+                                "Invalid ${parameter.identifier.text} value: ${parameter.attributeparametervalue.text}.", // todo: i10n & consistent with facility
+                                ProblemHighlightType.ERROR,
+                                deleteAttributeFix // todo: replace with template?
+                            )
+                        }
+                    }
+                    "length", "count", "value" -> {
+                        val valueText = parameter.attributeparametervalue.text
+                        if (valueText.isEmpty()) {
+                            holder.registerProblem(
+                                parameter,
+                                "Invalid ${parameter.identifier.text} value: ${parameter.attributeparametervalue.text}.", // todo: i10n & consistent with facility
+                                ProblemHighlightType.ERROR,
+                                deleteAttributeFix // todo: replace with template?
+                            )
+                        }
 
+                        val exactValue = valueText.toLongOrNull()
+                        if (exactValue != null) return
+
+                        val first = valueText.substringBefore("..", "")
+                        val second = valueText.substringAfter("..", "")
+                        val minimum = first.toLongOrNull()
+                        val maximum = second.toLongOrNull()
+
+                        if (first.isNotEmpty() && minimum == null) {
+                            holder.registerProblem(
+                                parameter,
+                                "Invalid value: ${parameter.attributeparametervalue.text}.", // todo: i10n & consistent with facility
+                                ProblemHighlightType.ERROR,
+                                deleteAttributeFix // todo: replace with template?
+                            )
+                        } else if (second.isNotEmpty() && maximum == null) {
+                            holder.registerProblem(
+                                parameter,
+                                "Invalid value: ${parameter.attributeparametervalue.text}.", // todo: i10n & consistent with facility
+                                ProblemHighlightType.ERROR,
+                                deleteAttributeFix // todo: replace with template?
+                            )
+                        }
+
+                        if (minimum == null && maximum == null) {
+                            holder.registerProblem(
+                                parameter,
+                                "Invalid value: ${parameter.attributeparametervalue.text}.", // todo: i10n & consistent with facility
+                                ProblemHighlightType.ERROR,
+                                deleteAttributeFix // todo: replace with template?
+                            )
+                        }
+
+                        if (minimum != null && maximum != null && minimum > maximum) {
+                            holder.registerProblem(
+                                parameter,
+                                "Invalid value: ${parameter.attributeparametervalue.text}.", // todo: i10n & consistent with facility
+                                ProblemHighlightType.ERROR,
+                                deleteAttributeFix // todo: replace with template?
+                            )
+                        }
+                    }
+                }
             }
         }
     }
