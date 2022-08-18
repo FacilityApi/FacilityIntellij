@@ -70,7 +70,7 @@ fun addAttribute(field: PsiElement, attributeName: String) {
         .first()
 
     newEnumSpec.addBefore(newLine, newEnumSpec.firstChild)
-    newEnumSpec.addBefore(createAttribute(field.project, "validate"), newEnumSpec.firstChild)
+    newEnumSpec.addBefore(createAttribute(field.project, attributeName), newEnumSpec.firstChild)
 
     field.replace(codeStylist.reformat(newEnumSpec))
 }

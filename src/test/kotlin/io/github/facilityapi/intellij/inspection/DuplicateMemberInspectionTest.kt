@@ -1,6 +1,9 @@
 package io.github.facilityapi.intellij.inspection
 
-import com.intellij.testFramework.UsefulTestCase
+import assertk.all
+import assertk.assertThat
+import assertk.assertions.containsOnly
+import assertk.assertions.hasSize
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import io.github.facilityapi.intellij.FsdFileType
 
@@ -355,10 +358,9 @@ class DuplicateMemberInspectionTest : BasePlatformTestCase() {
         myFixture.enableInspections(DuplicateMemberInspection())
         val highlights = myFixture.doHighlighting()
 
-        UsefulTestCase.assertSize(2, highlights)
-
-        for (highlight in highlights) {
-            assertEquals(errorDescription, highlight.description)
+        assertThat(highlights.map { it.description }, "inspection failures").all {
+            hasSize(2)
+            containsOnly(errorDescription)
         }
     }
 
