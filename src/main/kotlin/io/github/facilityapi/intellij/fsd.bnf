@@ -36,6 +36,8 @@
     markdownheading='regexp:#[^\r\n]*'
     markdowntext='regexp:.+'
   ]
+
+  implements("decorated_service_item|decorated_field|decorated_enum_value|decorated_error_spec")="io.github.facilityapi.intellij.psi.FsdDecoratedElement"
 }
 
 definition ::= (attribute_list* service_spec) markdown_remarks*

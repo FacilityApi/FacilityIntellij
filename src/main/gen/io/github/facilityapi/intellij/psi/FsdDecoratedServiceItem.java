@@ -3,9 +3,8 @@ package io.github.facilityapi.intellij.psi;
 
 import java.util.List;
 import org.jetbrains.annotations.*;
-import com.intellij.psi.PsiElement;
 
-public interface FsdDecoratedServiceItem extends PsiElement {
+public interface FsdDecoratedServiceItem extends FsdDecoratedElement {
 
   @NotNull
   List<FsdAttributeList> getAttributeListList();
