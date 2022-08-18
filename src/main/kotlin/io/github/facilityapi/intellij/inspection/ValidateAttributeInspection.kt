@@ -13,10 +13,11 @@ import io.github.facilityapi.intellij.isNumber
 import io.github.facilityapi.intellij.psi.FsdAttribute
 import io.github.facilityapi.intellij.psi.FsdAttributeParameter
 import io.github.facilityapi.intellij.psi.FsdDecoratedElement
+import io.github.facilityapi.intellij.psi.FsdDecoratedEnumValue
+import io.github.facilityapi.intellij.psi.FsdDecoratedErrorSpec
 import io.github.facilityapi.intellij.psi.FsdDecoratedField
 import io.github.facilityapi.intellij.psi.FsdDecoratedServiceItem
-import io.github.facilityapi.intellij.psi.FsdEnumSpec
-import io.github.facilityapi.intellij.psi.FsdErrorSpec
+import io.github.facilityapi.intellij.psi.FsdField
 import io.github.facilityapi.intellij.supportsValidate
 
 class ValidateAttributeInspection : LocalInspectionTool() {
@@ -24,7 +25,6 @@ class ValidateAttributeInspection : LocalInspectionTool() {
         return object : PsiElementVisitor() {
             val deleteAttributeFix = DeleteAttributeFix()
             val deleteParameterFix = DeleteAttributeParameterFix()
-            val deleteParameterListFix = DeleteAttributeParameterListFix()
 
             override fun visitElement(element: PsiElement) {
                 if (element !is FsdAttribute || element.attributename.text != "validate") return
@@ -33,8 +33,10 @@ class ValidateAttributeInspection : LocalInspectionTool() {
                 when (decoratedElement) {
                     is FsdDecoratedServiceItem -> {
                         // The only service item that supports [validate] are enums
-                        if (decoratedElement.enumSpec != null) {
-                            checkEnumValidate(element)
+                        val enumSpec = decoratedElement.enumSpec
+                        if (enumSpec != null) {
+                            val typeName = enumSpec.identifierDeclaration?.identifier?.text ?: return
+                            checkEnumValidate(typeName, element)
                         } else {
                             reportUnexpectedAttribute(element)
                         }
@@ -46,51 +48,50 @@ class ValidateAttributeInspection : LocalInspectionTool() {
                         }
 
                         if (field.type.text == "string") {
-                            checkStringValidate(element)
+                            checkStringValidate(field, element)
                         } else if (field.type.isCollection) {
-                            checkCollectionValidate(element)
+                            checkCollectionValidate(field, element)
                         } else if (field.type.isNumber) {
-                            checkNumberValidate(element)
+                            checkNumberValidate(field, element)
                         } else if (field.type.isEnum) {
-                            checkEnumValidate(element)
+                            checkEnumValidate(field.type.text, element)
                         }
                     }
-                    is FsdEnumSpec -> {
-                        checkEnumValidate(element)
+                    is FsdDecoratedEnumValue -> {
+                        reportUnexpectedAttribute(element)
                     }
-                    is FsdErrorSpec -> {
+                    is FsdDecoratedErrorSpec -> {
                         reportUnexpectedAttribute(element)
                     }
                 }
             }
 
-            private fun checkStringValidate(attribute: FsdAttribute) {
-                checkAttributeParameters(attribute, setOf("regex", "length"))
+            private fun checkStringValidate(field: FsdField, attribute: FsdAttribute) {
+                checkAttributeParameters(field, attribute, setOf("regex", "length"))
             }
 
-            private fun checkCollectionValidate(attribute: FsdAttribute) {
-                checkAttributeParameters(attribute, setOf("count"))
+            private fun checkCollectionValidate(field: FsdField, attribute: FsdAttribute) {
+                checkAttributeParameters(field, attribute, setOf("count"))
             }
 
-            private fun checkNumberValidate(attribute: FsdAttribute) {
-                checkAttributeParameters(attribute, setOf("value"))
+            private fun checkNumberValidate(field: FsdField, attribute: FsdAttribute) {
+                checkAttributeParameters(field, attribute, setOf("value"))
             }
 
-            private fun checkEnumValidate(attribute: FsdAttribute) {
-                if (attribute.attributeParameterList.isNotEmpty()) {
-                    holder.registerProblem(
-                        attribute, // todo: make the parameter list a PSI node to highlight just the list
-                        FsdBundle.getMessage("inspections.bugs.attribute.parameters.unexpected"),
-                        ProblemHighlightType.GENERIC_ERROR,
-                        deleteParameterListFix
-                    )
+            private fun checkEnumValidate(typeName: String, attribute: FsdAttribute) {
+                for (parameter in attribute.attributeParameters?.attributeParameterList ?: emptyList()) {
+                    reportInvalidParameterForType(typeName, attribute, parameter)
                 }
             }
 
-            private fun checkAttributeParameters(attribute: FsdAttribute, parameterNames: Set<String>) {
+            private fun checkAttributeParameters(
+                field: FsdField,
+                attribute: FsdAttribute,
+                parameterNames: Set<String>
+            ) {
                 var foundRequiredParameter = false
 
-                for (parameter in attribute.attributeParameterList) {
+                for (parameter in attribute.attributeParameters?.attributeParameterList ?: emptyList()) {
                     val parameterName = parameter.identifier.text
 
                     if (parameterNames.contains(parameterName)) {
@@ -98,19 +99,7 @@ class ValidateAttributeInspection : LocalInspectionTool() {
 
                         checkParameterValue(attribute, parameter)
                     } else {
-                        val message = FsdBundle.getMessage(
-                            "inspections.bugs.attribute.parameter.unexpected",
-                            attribute.attributename.text,
-                            parameterName
-                        )
-
-                        holder.registerProblem(
-                            parameter,
-                            message,
-                            ProblemHighlightType.ERROR,
-                            deleteParameterFix
-                        )
-
+                        reportInvalidParameterForType(field.type.text, attribute, parameter)
                         continue
                     }
                 }
@@ -191,6 +180,26 @@ class ValidateAttributeInspection : LocalInspectionTool() {
                     parameter,
                     message,
                     ProblemHighlightType.ERROR,
+                    deleteParameterFix
+                )
+            }
+
+            private fun reportInvalidParameterForType(
+                typeName: String,
+                attribute: FsdAttribute,
+                parameter: FsdAttributeParameter
+            ) {
+                val message = FsdBundle.getMessage(
+                    "inspections.bugs.attribute.parameter.invalid.type",
+                    attribute.attributename.text,
+                    parameter.identifier.text,
+                    typeName
+                )
+
+                holder.registerProblem(
+                    parameter,
+                    message,
+                    ProblemHighlightType.GENERIC_ERROR,
                     deleteParameterFix
                 )
             }

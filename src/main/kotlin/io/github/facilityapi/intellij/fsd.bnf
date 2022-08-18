@@ -74,7 +74,8 @@ identifier_declaration ::= identifier
 }
 
 attribute_list ::= '[' attribute (',' attribute)* ']'
-attribute ::= attributename [ '(' attribute_parameter (',' attribute_parameter)* ')' ]
+attribute ::= attributename [ attribute_parameters ]
+attribute_parameters ::= '(' attribute_parameter (',' attribute_parameter)* ')'
 attribute_parameter ::= identifier ':' attribute_parameter_value
 private attribute_parameter_value ::= attributeparametervalue { name="attribute parameter value" }
 

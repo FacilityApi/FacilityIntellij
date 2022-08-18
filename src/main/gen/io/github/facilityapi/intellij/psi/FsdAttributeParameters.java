@@ -5,12 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface FsdDecoratedEnumValue extends FsdDecoratedElement {
+public interface FsdAttributeParameters extends PsiElement {
 
   @NotNull
-  List<FsdAttributeList> getAttributeListList();
-
-  @Nullable
-  FsdEnumValue getEnumValue();
+  List<FsdAttributeParameter> getAttributeParameterList();
 
 }

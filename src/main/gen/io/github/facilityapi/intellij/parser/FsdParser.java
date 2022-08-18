@@ -36,7 +36,7 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // attributename [ '(' attribute_parameter (',' attribute_parameter)* ')' ]
+  // attributename [ attribute_parameters ]
   public static boolean attribute(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "attribute")) return false;
     if (!nextTokenIs(b, ATTRIBUTENAME)) return false;
@@ -48,46 +48,11 @@ public class FsdParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // [ '(' attribute_parameter (',' attribute_parameter)* ')' ]
+  // [ attribute_parameters ]
   private static boolean attribute_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "attribute_1")) return false;
-    attribute_1_0(b, l + 1);
+    attribute_parameters(b, l + 1);
     return true;
-  }
-
-  // '(' attribute_parameter (',' attribute_parameter)* ')'
-  private static boolean attribute_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "attribute_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, LEFT_PAREN);
-    r = r && attribute_parameter(b, l + 1);
-    r = r && attribute_1_0_2(b, l + 1);
-    r = r && consumeToken(b, RIGHT_PAREN);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (',' attribute_parameter)*
-  private static boolean attribute_1_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "attribute_1_0_2")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!attribute_1_0_2_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "attribute_1_0_2", c)) break;
-    }
-    return true;
-  }
-
-  // ',' attribute_parameter
-  private static boolean attribute_1_0_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "attribute_1_0_2_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
-    r = r && attribute_parameter(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */
@@ -149,6 +114,43 @@ public class FsdParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, null, "<attribute parameter value>");
     r = consumeToken(b, ATTRIBUTEPARAMETERVALUE);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // '(' attribute_parameter (',' attribute_parameter)* ')'
+  public static boolean attribute_parameters(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "attribute_parameters")) return false;
+    if (!nextTokenIs(b, LEFT_PAREN)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LEFT_PAREN);
+    r = r && attribute_parameter(b, l + 1);
+    r = r && attribute_parameters_2(b, l + 1);
+    r = r && consumeToken(b, RIGHT_PAREN);
+    exit_section_(b, m, ATTRIBUTE_PARAMETERS, r);
+    return r;
+  }
+
+  // (',' attribute_parameter)*
+  private static boolean attribute_parameters_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "attribute_parameters_2")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!attribute_parameters_2_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "attribute_parameters_2", c)) break;
+    }
+    return true;
+  }
+
+  // ',' attribute_parameter
+  private static boolean attribute_parameters_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "attribute_parameters_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && attribute_parameter(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 

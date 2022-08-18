@@ -19,6 +19,10 @@ public class FsdVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitAttributeParameters(@NotNull FsdAttributeParameters o) {
+    visitPsiElement(o);
+  }
+
   public void visitDataSpec(@NotNull FsdDataSpec o) {
     visitPsiElement(o);
   }
@@ -108,7 +112,7 @@ public class FsdVisitor extends PsiElementVisitor {
   }
 
   public void visitDecoratedElement(@NotNull FsdDecoratedElement o) {
-    visitElement(o);
+    visitPsiElement(o);
   }
 
   public void visitNamedElement(@NotNull FsdNamedElement o) {

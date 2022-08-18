@@ -11,14 +11,14 @@ import static io.github.facilityapi.intellij.psi.FsdTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.facilityapi.intellij.psi.*;
 
-public class FsdAttributeImpl extends ASTWrapperPsiElement implements FsdAttribute {
+public class FsdAttributeParametersImpl extends ASTWrapperPsiElement implements FsdAttributeParameters {
 
-  public FsdAttributeImpl(@NotNull ASTNode node) {
+  public FsdAttributeParametersImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull FsdVisitor visitor) {
-    visitor.visitAttribute(this);
+    visitor.visitAttributeParameters(this);
   }
 
   @Override
@@ -28,15 +28,9 @@ public class FsdAttributeImpl extends ASTWrapperPsiElement implements FsdAttribu
   }
 
   @Override
-  @Nullable
-  public FsdAttributeParameters getAttributeParameters() {
-    return findChildByClass(FsdAttributeParameters.class);
-  }
-
-  @Override
   @NotNull
-  public PsiElement getAttributename() {
-    return findNotNullChildByType(ATTRIBUTENAME);
+  public List<FsdAttributeParameter> getAttributeParameterList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, FsdAttributeParameter.class);
   }
 
 }
