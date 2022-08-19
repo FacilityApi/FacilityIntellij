@@ -24,9 +24,9 @@ import io.github.facilityapi.intellij.supportsValidate
 class ValidateAttributeInspection : LocalInspectionTool() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         return object : PsiElementVisitor() {
-            val deleteAttributeFix = DeleteAttributeFix()
-            val deleteParameterFix = DeleteAttributeParameterFix()
-            val deleteParameterListFix = DeleteAttributeParameterListFix()
+            private val deleteAttributeFix = DeleteAttributeFix()
+            private val deleteParameterFix = DeleteAttributeParameterFix()
+            private val deleteParameterListFix = DeleteAttributeParameterListFix()
 
             override fun visitElement(element: PsiElement) {
                 if (element !is FsdAttribute || element.attributename.text != "validate") return
