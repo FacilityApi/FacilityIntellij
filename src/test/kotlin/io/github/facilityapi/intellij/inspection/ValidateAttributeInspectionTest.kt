@@ -2,12 +2,8 @@ package io.github.facilityapi.intellij.inspection
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.intellij.openapi.roots.FileIndexFacade
-import com.intellij.psi.search.FileTypeIndex
-import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import io.github.facilityapi.intellij.FsdFileType
-import javax.xml.bind.JAXBElement.GlobalScope
 
 class ValidateAttributeInspectionTest : BasePlatformTestCase() {
     fun `test invalid string parameters`() {
@@ -274,7 +270,6 @@ class ValidateAttributeInspectionTest : BasePlatformTestCase() {
 
         checkFix(before, after, DeleteAttributeParameterFix.NAME)
     }
-
 
     private fun checkInspection(code: String, errorDescriptions: List<String>) {
         myFixture.configureByText(FsdFileType, code)
