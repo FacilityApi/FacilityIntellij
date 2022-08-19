@@ -120,7 +120,7 @@
             <bundleName>messages.FsdBundle</bundleName>
 
             <!--suppress PluginXmlCapitalization -->
-            <categoryKey>intentions.validate.category</categoryKey>
+            <categoryKey>intentions.attributes.category</categoryKey>
         </intentionAction>
 
         <!-- Add validation attribute to field or type -->
@@ -129,7 +129,25 @@
             <bundleName>messages.FsdBundle</bundleName>
 
             <!--suppress PluginXmlCapitalization -->
-            <categoryKey>intentions.validate.category</categoryKey>
+            <categoryKey>intentions.attributes.category</categoryKey>
+        </intentionAction>
+
+        <!-- Combine attribute lists -->
+        <intentionAction>
+            <className>io.github.facilityapi.intellij.intention.CombineAttributeListsIntention</className>
+            <bundleName>messages.FsdBundle</bundleName>
+
+            <!--suppress PluginXmlCapitalization -->
+            <categoryKey>intentions.attributes.category</categoryKey>
+        </intentionAction>
+
+        <!-- Split an attribute list -->
+        <intentionAction>
+            <className>io.github.facilityapi.intellij.intention.SplitAttributeListIntention</className>
+            <bundleName>messages.FsdBundle</bundleName>
+
+            <!--suppress PluginXmlCapitalization -->
+            <categoryKey>intentions.attributes.category</categoryKey>
         </intentionAction>
 
     </extensions>
