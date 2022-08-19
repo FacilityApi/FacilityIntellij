@@ -85,6 +85,6 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
 
     companion object {
         val TEXT = FsdBundle.getMessage("intentions.validate.field.text")
-        val FAMILY_NAME = FsdBundle.getMessage("intentions.validate.field.familyname")
+        val FAMILY_NAME = FsdBundle.getMessage("intentions.validate.field.family")
     }
 }

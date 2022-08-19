@@ -1,0 +1,12 @@
+service ExampleApi
+{
+	/// Identifies a widget field.
+	<spot>[validate]</spot>
+    <spot>[obsolete]</spot>
+	enum WidgetField
+	{
+        new,
+        old,
+        refurbished,
+	}
+}

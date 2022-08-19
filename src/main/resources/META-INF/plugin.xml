@@ -141,6 +141,15 @@
             <categoryKey>intentions.attributes.category</categoryKey>
         </intentionAction>
 
+        <!-- Split an attribute list -->
+        <intentionAction>
+            <className>io.github.facilityapi.intellij.intention.SplitAttributeListIntention</className>
+            <bundleName>messages.FsdBundle</bundleName>
+
+            <!--suppress PluginXmlCapitalization -->
+            <categoryKey>intentions.attributes.category</categoryKey>
+        </intentionAction>
+
     </extensions>
 
     <actions>

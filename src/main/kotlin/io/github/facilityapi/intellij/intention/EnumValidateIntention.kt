@@ -33,6 +33,6 @@ class EnumValidateIntention : PsiElementBaseIntentionAction(), IntentionAction {
 
     companion object {
         val TEXT = FsdBundle.getMessage("intentions.validate.enum.text")
-        val FAMILY_NAME = FsdBundle.getMessage("intentions.validate.enum.familyname")
+        val FAMILY_NAME = FsdBundle.getMessage("intentions.validate.enum.family")
     }
 }

@@ -54,6 +54,6 @@ class CombineAttributeListsIntention :  PsiElementBaseIntentionAction() {
 
     companion object {
         val TEXT = FsdBundle.getMessage("intentions.attribute.lists.combine.text")
-        val FAMILY_NAME = FsdBundle.getMessage("intentions.attribute.lists.family")
+        val FAMILY_NAME = FsdBundle.getMessage("intentions.attribute.lists.combine.family")
     }
 }
