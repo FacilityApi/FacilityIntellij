@@ -12,6 +12,7 @@
   - cvalid: `[validate(count: $RANGE$)]`
 - Intention to add the appropriate validate template (or just `[validate]` when enum-typed) fields
 - Inspection for duplicate attributes
+- Inspection for correct `[validate]` usage
 
 ### Fixed
 - Code folding for method, enum, and error bodies

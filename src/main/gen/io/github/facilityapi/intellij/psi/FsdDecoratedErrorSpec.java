@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface FsdDecoratedErrorSpec extends PsiElement {
+public interface FsdDecoratedErrorSpec extends FsdDecoratedElement {
 
   @NotNull
   List<FsdAttributeList> getAttributeListList();

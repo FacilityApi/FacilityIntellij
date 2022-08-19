@@ -104,6 +104,16 @@
             level="ERROR"
             implementationClass="io.github.facilityapi.intellij.inspection.DuplicateAttributeInspection" />
 
+        <!-- Check for invalid [validate] parameters -->
+        <localInspection
+            language="FSD"
+            displayName="ValidateParameters"
+            groupBundle="messages.FsdBundle"
+            groupKey="inspections.bugs.validate.group"
+            enabledByDefault="true"
+            level="ERROR"
+            implementationClass="io.github.facilityapi.intellij.inspection.ValidateAttributeInspection" />
+
         <!-- Add validation attribute to enum -->
         <intentionAction>
             <className>io.github.facilityapi.intellij.intention.EnumValidateIntention</className>

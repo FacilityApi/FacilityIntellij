@@ -7,8 +7,8 @@ import com.intellij.psi.PsiElement;
 
 public interface FsdAttribute extends PsiElement {
 
-  @NotNull
-  List<FsdAttributeParameter> getAttributeParameterList();
+  @Nullable
+  FsdAttributeParameters getAttributeParameters();
 
   @NotNull
   PsiElement getAttributename();

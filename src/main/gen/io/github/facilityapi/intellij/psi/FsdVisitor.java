@@ -19,24 +19,28 @@ public class FsdVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitAttributeParameters(@NotNull FsdAttributeParameters o) {
+    visitPsiElement(o);
+  }
+
   public void visitDataSpec(@NotNull FsdDataSpec o) {
     visitPsiElement(o);
   }
 
   public void visitDecoratedEnumValue(@NotNull FsdDecoratedEnumValue o) {
-    visitPsiElement(o);
+    visitDecoratedElement(o);
   }
 
   public void visitDecoratedErrorSpec(@NotNull FsdDecoratedErrorSpec o) {
-    visitPsiElement(o);
+    visitDecoratedElement(o);
   }
 
   public void visitDecoratedField(@NotNull FsdDecoratedField o) {
-    visitPsiElement(o);
+    visitDecoratedElement(o);
   }
 
   public void visitDecoratedServiceItem(@NotNull FsdDecoratedServiceItem o) {
-    visitPsiElement(o);
+    visitDecoratedElement(o);
   }
 
   public void visitEnumSpec(@NotNull FsdEnumSpec o) {
@@ -104,6 +108,10 @@ public class FsdVisitor extends PsiElementVisitor {
   }
 
   public void visitTypeParameter(@NotNull FsdTypeParameter o) {
+    visitPsiElement(o);
+  }
+
+  public void visitDecoratedElement(@NotNull FsdDecoratedElement o) {
     visitPsiElement(o);
   }
 
