@@ -5,6 +5,7 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
+import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.util.PsiTreeUtil
 import io.github.facilityapi.intellij.FsdBundle
 import io.github.facilityapi.intellij.psi.FsdAttribute
@@ -13,7 +14,7 @@ import io.github.facilityapi.intellij.psi.FsdDecoratedElement
 import io.github.facilityapi.intellij.reference.createAttribute
 import io.github.facilityapi.intellij.reference.createFromText
 
-class SplitAttributeListIntention :  PsiElementBaseIntentionAction() {
+class SplitAttributeListIntention : PsiElementBaseIntentionAction() {
     override fun startInWriteAction(): Boolean = true
 
     override fun getText() = TEXT
@@ -48,7 +49,8 @@ class SplitAttributeListIntention :  PsiElementBaseIntentionAction() {
 
         newAttributeList.delete()
 
-        decoratedElement.replace(newElement)
+        val codeStylist = CodeStyleManager.getInstance(project)
+        decoratedElement.replace(codeStylist.reformat(newElement))
     }
 
     companion object {

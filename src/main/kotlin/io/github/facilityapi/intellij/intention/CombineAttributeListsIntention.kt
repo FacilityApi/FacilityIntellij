@@ -12,7 +12,7 @@ import io.github.facilityapi.intellij.psi.FsdDecoratedElement
 import io.github.facilityapi.intellij.psi.FsdTypes
 import io.github.facilityapi.intellij.reference.createFromText
 
-class CombineAttributeListsIntention :  PsiElementBaseIntentionAction() {
+class CombineAttributeListsIntention : PsiElementBaseIntentionAction() {
     override fun startInWriteAction(): Boolean = true
 
     override fun getText() = TEXT
