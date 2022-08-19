@@ -1,6 +1,7 @@
 package io.github.facilityapi.intellij.inspection
 
 import com.intellij.codeInspection.LocalInspectionTool
+import com.intellij.codeInspection.LocalQuickFix
 import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.psi.PsiElement
@@ -25,6 +26,7 @@ class ValidateAttributeInspection : LocalInspectionTool() {
         return object : PsiElementVisitor() {
             val deleteAttributeFix = DeleteAttributeFix()
             val deleteParameterFix = DeleteAttributeParameterFix()
+            val deleteParameterListFix = DeleteAttributeParameterListFix()
 
             override fun visitElement(element: PsiElement) {
                 if (element !is FsdAttribute || element.attributename.text != "validate") return
@@ -80,7 +82,7 @@ class ValidateAttributeInspection : LocalInspectionTool() {
 
             private fun checkEnumValidate(typeName: String, attribute: FsdAttribute) {
                 for (parameter in attribute.attributeParameters?.attributeParameterList ?: emptyList()) {
-                    reportInvalidParameterForType(typeName, attribute, parameter)
+                    reportInvalidParameterForType(typeName, attribute, parameter, deleteParameterListFix)
                 }
             }
 
@@ -187,7 +189,8 @@ class ValidateAttributeInspection : LocalInspectionTool() {
             private fun reportInvalidParameterForType(
                 typeName: String,
                 attribute: FsdAttribute,
-                parameter: FsdAttributeParameter
+                parameter: FsdAttributeParameter,
+                quickFix: LocalQuickFix = deleteParameterFix
             ) {
                 val message = FsdBundle.getMessage(
                     "inspections.bugs.attribute.parameter.invalid.type",
@@ -200,7 +203,7 @@ class ValidateAttributeInspection : LocalInspectionTool() {
                     parameter,
                     message,
                     ProblemHighlightType.GENERIC_ERROR,
-                    deleteParameterFix
+                    quickFix
                 )
             }
         }
