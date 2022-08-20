@@ -114,6 +114,16 @@
             level="ERROR"
             implementationClass="io.github.facilityapi.intellij.inspection.ValidateAttributeInspection" />
 
+        <!-- Check for unused types -->
+        <localInspection
+            language="FSD"
+            displayName="UnusedType"
+            groupBundle="messages.FsdBundle"
+            groupKey="inspections.hints.unused.type.group"
+            enabledByDefault="true"
+            level="unused"
+            implementationClass="io.github.facilityapi.intellij.inspection.UnusedTypeInspection" />
+
         <!-- Add validation attribute to enum -->
         <intentionAction>
             <className>io.github.facilityapi.intellij.intention.EnumValidateIntention</className>
