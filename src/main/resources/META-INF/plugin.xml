@@ -121,7 +121,7 @@
             groupBundle="messages.FsdBundle"
             groupKey="inspections.hints.unused.type.group"
             enabledByDefault="true"
-            level="unused"
+            level="INFO"
             implementationClass="io.github.facilityapi.intellij.inspection.UnusedTypeInspection" />
 
         <!-- Add validation attribute to enum -->
