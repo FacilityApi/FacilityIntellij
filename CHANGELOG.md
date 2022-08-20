@@ -15,6 +15,7 @@
 - Inspection for `[validate]` uses
 - Intention to split a single attribute list into multiple attribute lists.
 - Intention to combine multiple attribute lists into a single attribute list.
+- File template for service definitions
 
 ### Fixed
 - Code folding for method, enum, and error bodies
