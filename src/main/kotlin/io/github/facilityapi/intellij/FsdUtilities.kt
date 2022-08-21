@@ -1,10 +1,10 @@
 package io.github.facilityapi.intellij
 
 import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiManager
 import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.util.PsiTreeUtil
 import io.github.facilityapi.intellij.psi.FsdNamedElement
 
 fun findTypeDefinitions(project: Project, name: String): Sequence<FsdNamedElement> {
@@ -21,5 +21,25 @@ fun findTypeDefinitions(project: Project): Sequence<FsdNamedElement> {
     return FileTypeIndex.getFiles(FsdFileType, GlobalSearchScope.allScope(project)).asSequence()
         .map { PsiManager.getInstance(project).findFile(it) }
         .filterIsInstance<FsdFile>()
-        .flatMap { PsiTreeUtil.findChildrenOfType(it, FsdNamedElement::class.java) }
+        .flatMap { it.descendants.filterIsInstance<FsdNamedElement>() }
+}
+
+// These are copied because of a source breaking change in the framework
+// JetBrains Platform Slack: https://app.slack.com/client/T5P9YATH9/threads
+// Eventually, they should be replaced with PsiElement.descendents() in psiTreeUtil.kt
+val PsiElement.descendants: Sequence<PsiElement>
+    get() = sequence {
+        val root = this@descendants
+        visitChildrenAndYield(root)
+    }
+
+private suspend fun SequenceScope<PsiElement>.visitChildrenAndYield(element: PsiElement) {
+    var child = element.firstChild
+
+    while (child != null) {
+        visitChildrenAndYield(child)
+        child = child.nextSibling
+    }
+
+    yield(element)
 }
