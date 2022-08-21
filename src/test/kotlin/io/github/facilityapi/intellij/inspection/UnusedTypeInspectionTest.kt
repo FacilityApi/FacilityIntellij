@@ -4,7 +4,6 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import io.github.facilityapi.intellij.FsdFileType
-import junit.framework.TestCase
 
 class UnusedTypeInspectionTest : BasePlatformTestCase() {
     fun `test unused data is detected`() {
