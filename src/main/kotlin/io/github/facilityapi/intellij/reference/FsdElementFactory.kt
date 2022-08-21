@@ -7,6 +7,7 @@ import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.codeStyle.CodeStyleManager
 import io.github.facilityapi.intellij.FsdFile
 import io.github.facilityapi.intellij.FsdFileType
+import io.github.facilityapi.intellij.descendants
 import io.github.facilityapi.intellij.psi.FsdAttributeList
 import io.github.facilityapi.intellij.psi.FsdNamedElement
 import io.github.facilityapi.intellij.psi.FsdReferenceType
@@ -73,23 +74,4 @@ fun addAttribute(field: PsiElement, attributeName: String) {
     newEnumSpec.addBefore(createAttribute(field.project, attributeName), newEnumSpec.firstChild)
 
     field.replace(codeStylist.reformat(newEnumSpec))
-}
-
-// These are copied because of a source breaking change in the framework
-// JetBrains Platform Slack: https://app.slack.com/client/T5P9YATH9/threads
-private val PsiElement.descendants: Sequence<PsiElement>
-    get() = sequence {
-        val root = this@descendants
-        visitChildrenAndYield(root)
-    }
-
-private suspend fun SequenceScope<PsiElement>.visitChildrenAndYield(element: PsiElement) {
-    var child = element.firstChild
-
-    while (child != null) {
-        visitChildrenAndYield(child)
-        child = child.nextSibling
-    }
-
-    yield(element)
 }
