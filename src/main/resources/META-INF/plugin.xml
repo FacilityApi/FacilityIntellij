@@ -79,6 +79,11 @@
             language="FSD"
             implementationClass="io.github.facilityapi.intellij.FsdBraceMatcher" />
 
+        <!-- Enable inspection suppression -->
+        <lang.inspectionSuppressor
+            language="FSD"
+            implementationClass="io.github.facilityapi.intellij.inspection.FsdInspectionSuppressor" />
+
         <defaultLiveTemplates file="/liveTemplates/Facility Service Definition.xml"/>
 
         <liveTemplateContext
