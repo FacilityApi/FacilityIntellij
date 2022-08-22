@@ -2,6 +2,7 @@ package io.github.facilityapi.intellij.inspection
 
 import com.intellij.codeInspection.ProblemDescriptor
 import com.intellij.codeInspection.SuppressQuickFix
+import com.intellij.codeInspection.SuppressionUtil
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiParserFacade
@@ -37,5 +38,5 @@ class FsdSuppressQuickFix(private val toolId: String) : SuppressQuickFix {
         return context.isValid && PsiTreeUtil.getParentOfType(context, FsdDecoratedElement::class.java) != null
     }
 
-    override fun isSuppressAll(): Boolean = false // todo: investigate this
+    override fun isSuppressAll(): Boolean = SuppressionUtil.ALL.equals(toolId, true)
 }
