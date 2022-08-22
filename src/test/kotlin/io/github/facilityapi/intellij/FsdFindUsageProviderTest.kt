@@ -7,7 +7,7 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 class FsdFindUsageProviderTest : BasePlatformTestCase() {
     fun `test find usages works from type definition`() {
         myFixture.configureByText(
-            FsdFileType,
+            FsdLanguage.associatedFileType,
             """
                 service FsdFindUsages
                 {
@@ -30,7 +30,7 @@ class FsdFindUsageProviderTest : BasePlatformTestCase() {
 
     fun `test find usages works from type reference on arrays`() {
         myFixture.configureByText(
-            FsdFileType,
+            FsdLanguage.associatedFileType,
             """
                 service FsdFindUsages
                 {
@@ -53,7 +53,7 @@ class FsdFindUsageProviderTest : BasePlatformTestCase() {
 
     fun `test find usages works from type reference`() {
         myFixture.configureByText(
-            FsdFileType,
+            FsdLanguage.associatedFileType,
             """
                 service FsdFindUsages
                 {

@@ -9,7 +9,7 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 class FsdDocumentationProviderTest : BasePlatformTestCase() {
     fun `test documentation`() {
         myFixture.configureByText(
-            FsdFileType,
+            FsdLanguage.associatedFileType,
             """
                 service FsdFindUsages
                 {
