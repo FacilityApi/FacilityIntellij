@@ -18,7 +18,7 @@ fun findTypeDefinitions(project: Project, name: String): Sequence<FsdNamedElemen
 // unless it becomes prohibitively expensive for
 // the typical case
 fun findTypeDefinitions(project: Project): Sequence<FsdNamedElement> {
-    return FileTypeIndex.getFiles(FsdLanguage.associatedFileType!!, GlobalSearchScope.allScope(project)).asSequence()
+    return FileTypeIndex.getFiles(FsdLanguage.associatedFileType, GlobalSearchScope.allScope(project)).asSequence()
         .map { PsiManager.getInstance(project).findFile(it) }
         .filterIsInstance<FsdFile>()
         .flatMap { it.descendants.filterIsInstance<FsdNamedElement>() }
