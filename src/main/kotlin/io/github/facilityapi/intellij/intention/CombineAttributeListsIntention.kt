@@ -4,6 +4,7 @@ import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiParserFacade
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.elementType
 import io.github.facilityapi.intellij.FsdBundle
@@ -34,9 +35,10 @@ class CombineAttributeListsIntention : PsiElementBaseIntentionAction() {
         val newAttributeList = attributeLists[0].copy() as FsdAttributeList
         val remainingAttributes = attributeLists.drop(1).flatMap { it.attributeList }
 
-        val newElements = createFromText(project, "service Dummy { [first, second] data DummyData { } }")
-        val comma = newElements.first { it.elementType == FsdTypes.COMMA }
-        val space = newElements.first { it.text == " " }
+        val psiFacade = PsiParserFacade.SERVICE.getInstance(project)
+        val space = psiFacade.createWhiteSpaceFromText(" ")
+        val comma = createFromText(project, "[first, second] service Dummy { }")
+            .first { it.elementType == FsdTypes.COMMA }
 
         for (attribute in remainingAttributes) {
             val addedComma = newAttributeList.addAfter(comma, newAttributeList.attributeList.last())

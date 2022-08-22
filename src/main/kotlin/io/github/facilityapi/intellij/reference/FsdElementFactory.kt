@@ -3,7 +3,7 @@ package io.github.facilityapi.intellij.reference
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFileFactory
-import com.intellij.psi.PsiWhiteSpace
+import com.intellij.psi.PsiParserFacade
 import com.intellij.psi.codeStyle.CodeStyleManager
 import io.github.facilityapi.intellij.FsdFile
 import io.github.facilityapi.intellij.FsdFileType
@@ -66,9 +66,8 @@ fun addAttribute(field: PsiElement, attributeName: String) {
     val newEnumSpec = field.copy()
 
     val codeStylist = CodeStyleManager.getInstance(field.project)
-    val newLine = createFromText(field.project, "[dummy]\n")
-        .filterIsInstance<PsiWhiteSpace>()
-        .first()
+    val psiFacade = PsiParserFacade.SERVICE.getInstance(field.project)
+    val newLine = psiFacade.createWhiteSpaceFromText("\n")
 
     newEnumSpec.addBefore(newLine, newEnumSpec.firstChild)
     newEnumSpec.addBefore(createAttribute(field.project, attributeName), newEnumSpec.firstChild)

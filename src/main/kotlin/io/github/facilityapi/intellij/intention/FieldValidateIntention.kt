@@ -75,6 +75,7 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
         editor.caretModel.moveToOffset(offset)
 
         val template = getValidateTemplateForField(field)
+
         if (template != null) {
             PsiDocumentManager.getInstance(project)
                 .doPostponedOperationsAndUnblockDocument(editor.document)

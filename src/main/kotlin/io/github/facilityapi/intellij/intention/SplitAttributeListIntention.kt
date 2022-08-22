@@ -4,7 +4,7 @@ import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiWhiteSpace
+import com.intellij.psi.PsiParserFacade
 import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.util.PsiTreeUtil
 import io.github.facilityapi.intellij.FsdBundle
@@ -12,7 +12,6 @@ import io.github.facilityapi.intellij.psi.FsdAttribute
 import io.github.facilityapi.intellij.psi.FsdAttributeList
 import io.github.facilityapi.intellij.psi.FsdDecoratedElement
 import io.github.facilityapi.intellij.reference.createAttribute
-import io.github.facilityapi.intellij.reference.createFromText
 
 class SplitAttributeListIntention : PsiElementBaseIntentionAction() {
     override fun startInWriteAction(): Boolean = true
@@ -37,9 +36,9 @@ class SplitAttributeListIntention : PsiElementBaseIntentionAction() {
         val attributes = attributeList.attributeList.map { it.copy() as FsdAttribute }
 
         val newAttributeList = newElement.children.first { it.textMatches(attributeList) }
-        val newline = createFromText(project, "[dummy]\nservice Dummy { }")
-            .filterIsInstance<PsiWhiteSpace>()
-            .first()
+
+        val psiFacade = PsiParserFacade.SERVICE.getInstance(project)
+        val newline = psiFacade.createWhiteSpaceFromText("\n")
 
         for (attribute in attributes) {
             val attr = createAttribute(project, attribute.text)
