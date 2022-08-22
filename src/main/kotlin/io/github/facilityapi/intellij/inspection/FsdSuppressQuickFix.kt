@@ -3,13 +3,11 @@ package io.github.facilityapi.intellij.inspection
 import com.intellij.codeInspection.ProblemDescriptor
 import com.intellij.codeInspection.SuppressQuickFix
 import com.intellij.openapi.project.Project
-import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiWhiteSpace
+import com.intellij.psi.PsiParserFacade
 import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.util.PsiTreeUtil
 import io.github.facilityapi.intellij.psi.FsdDecoratedElement
-import io.github.facilityapi.intellij.reference.createFromText
 
 class FsdSuppressQuickFix(private val toolId: String) : SuppressQuickFix {
     override fun getFamilyName(): String {
@@ -23,21 +21,10 @@ class FsdSuppressQuickFix(private val toolId: String) : SuppressQuickFix {
         val newParent = element.parent.copy()
         val newChild = newParent.children[elementIndex]
 
-        val fakeService = createFromText(
-            project,
-            """
-            // suppress $toolId
-            service Dummy {}
-            """.trimIndent()
-        )
+        val psiFacade = PsiParserFacade.SERVICE.getInstance(project)
 
-        val comment = fakeService
-            .filterIsInstance<PsiComment>()
-            .first()
-
-        val newline = fakeService
-            .filterIsInstance<PsiWhiteSpace>()
-            .first { it.text.contains('\n') }
+        val comment = psiFacade.createLineCommentFromText(element.language, " Suppress $toolId")
+        val newline = psiFacade.createWhiteSpaceFromText("\n")
 
         newParent.addBefore(comment, newChild)
         newParent.addBefore(newline, newChild)
@@ -47,7 +34,7 @@ class FsdSuppressQuickFix(private val toolId: String) : SuppressQuickFix {
     }
 
     override fun isAvailable(project: Project, context: PsiElement): Boolean {
-        return true
+        return context.isValid && PsiTreeUtil.getParentOfType(context, FsdDecoratedElement::class.java) != null
     }
 
     override fun isSuppressAll(): Boolean = false // todo: investigate this
