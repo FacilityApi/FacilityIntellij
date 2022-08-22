@@ -4,7 +4,6 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiParserFacade
-import com.intellij.psi.codeStyle.CodeStyleManager
 import io.github.facilityapi.intellij.FsdFile
 import io.github.facilityapi.intellij.FsdFileType
 import io.github.facilityapi.intellij.descendants
@@ -39,9 +38,9 @@ fun createTypeReference(project: Project, name: String): FsdReferenceType {
         .first()
 }
 
-fun createAttribute(project: Project, name: String): FsdAttributeList {
+fun createAttribute(project: Project, attributeText: String): FsdAttributeList {
     val serviceText = """
-        [$name]
+        [$attributeText]
         service dummy {
         }
     """.trimIndent()
@@ -62,15 +61,10 @@ fun createFromText(project: Project, text: String): Sequence<PsiElement> {
     return file.descendants
 }
 
-fun addAttribute(field: PsiElement, attributeName: String) {
-    val newEnumSpec = field.copy()
+fun addAttribute(element: PsiElement, attributeText: String) {
+    val psiFacade = PsiParserFacade.SERVICE.getInstance(element.project)
+    val newline = psiFacade.createWhiteSpaceFromText("\n")
 
-    val codeStylist = CodeStyleManager.getInstance(field.project)
-    val psiFacade = PsiParserFacade.SERVICE.getInstance(field.project)
-    val newLine = psiFacade.createWhiteSpaceFromText("\n")
-
-    newEnumSpec.addBefore(newLine, newEnumSpec.firstChild)
-    newEnumSpec.addBefore(createAttribute(field.project, attributeName), newEnumSpec.firstChild)
-
-    field.replace(codeStylist.reformat(newEnumSpec))
+    val attribute = element.addBefore(createAttribute(element.project, attributeText), element.firstChild)
+    element.addAfter(newline, attribute)
 }

@@ -1,7 +1,7 @@
 service ExampleApi
 {
     /// Identifies a widget field.
-	[valid<caret>ate, obsolete]
+    [valid<caret>ate, obsolete]
     enum WidgetField
     {
         /// The 'id' field.

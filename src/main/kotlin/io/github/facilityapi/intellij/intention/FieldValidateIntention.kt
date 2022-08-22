@@ -51,12 +51,9 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
                 .first() as? PsiWhiteSpace
             )?.let { if (it.textContains('\n')) it else null }
 
-        val newFieldParent = decoratedField.parent.copy()
         var offset = decoratedField.textOffset
 
         if (previousNewline != null) {
-            val newDecoratedField = newFieldParent.children.find { it.textMatches(decoratedField) }
-
             val indent = previousNewline.text.trimStart('\r', '\n')
             val newWhitespace = createFromText(
                 project,
@@ -65,12 +62,10 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
                 """.trimMargin()
             ).filterIsInstance<PsiWhiteSpace>().first()
 
-            newFieldParent.addBefore(newWhitespace, newDecoratedField)
+            decoratedField.parent.addBefore(newWhitespace, decoratedField)
 
             offset -= indent.length
         }
-
-        decoratedField.parent.replace(newFieldParent)
 
         editor.caretModel.moveToOffset(offset)
 

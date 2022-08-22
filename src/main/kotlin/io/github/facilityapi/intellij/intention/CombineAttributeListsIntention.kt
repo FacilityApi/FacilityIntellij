@@ -8,7 +8,6 @@ import com.intellij.psi.PsiParserFacade
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.elementType
 import io.github.facilityapi.intellij.FsdBundle
-import io.github.facilityapi.intellij.psi.FsdAttributeList
 import io.github.facilityapi.intellij.psi.FsdDecoratedElement
 import io.github.facilityapi.intellij.psi.FsdTypes
 import io.github.facilityapi.intellij.reference.createFromText
@@ -29,29 +28,26 @@ class CombineAttributeListsIntention : PsiElementBaseIntentionAction() {
         if (editor == null) return
 
         val decoratedElement = PsiTreeUtil.getParentOfType(element, FsdDecoratedElement::class.java) ?: return
-
-        val newElement = decoratedElement.copy() as FsdDecoratedElement
-        val attributeLists = newElement.attributeListList
-        val newAttributeList = attributeLists[0].copy() as FsdAttributeList
-        val remainingAttributes = attributeLists.drop(1).flatMap { it.attributeList }
+        val attributeLists = decoratedElement.attributeListList
+        val targetAttributeList = attributeLists.first()
+        val attributeListsToDiscard = attributeLists.drop(1)
+        val attributesToFold = attributeListsToDiscard.flatMap { it.attributeList }
 
         val psiFacade = PsiParserFacade.SERVICE.getInstance(project)
         val space = psiFacade.createWhiteSpaceFromText(" ")
+
         val comma = createFromText(project, "[first, second] service Dummy { }")
             .first { it.elementType == FsdTypes.COMMA }
 
-        for (attribute in remainingAttributes) {
-            val addedComma = newAttributeList.addAfter(comma, newAttributeList.attributeList.last())
-            val addedAttribute = newAttributeList.addAfter(attribute, addedComma)
-            newAttributeList.addBefore(space, addedAttribute)
+        for (attribute in attributesToFold) {
+            val addedComma = targetAttributeList.addAfter(comma, targetAttributeList.attributeList.last())
+            val addedAttribute = targetAttributeList.addAfter(attribute, addedComma)
+            targetAttributeList.addBefore(space, addedAttribute)
         }
 
-        for (attributeList in attributeLists) {
+        for (attributeList in attributeListsToDiscard) {
             attributeList.delete()
         }
-
-        newElement.addBefore(newAttributeList, newElement.firstChild)
-        decoratedElement.replace(newElement)
     }
 
     companion object {
