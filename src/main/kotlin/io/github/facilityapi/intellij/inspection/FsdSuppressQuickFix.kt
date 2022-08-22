@@ -12,26 +12,18 @@ import io.github.facilityapi.intellij.psi.FsdDecoratedElement
 
 class FsdSuppressQuickFix(private val toolId: String) : SuppressQuickFix {
     override fun getFamilyName(): String {
-        return "Suppress \"$toolId\""
+        return "Suppress \"$toolId\"" // todo: i10n
     }
 
     override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
         val element = PsiTreeUtil.getParentOfType(descriptor.psiElement, FsdDecoratedElement::class.java) ?: return
-        val elementIndex = element.parent.children.indexOf(element)
-
-        val newParent = element.parent.copy()
-        val newChild = newParent.children[elementIndex]
 
         val psiFacade = PsiParserFacade.SERVICE.getInstance(project)
 
-        val comment = psiFacade.createLineCommentFromText(element.language, " Suppress $toolId")
+        SuppressionUtil.createSuppression(project, element, toolId, element.language)
+
         val newline = psiFacade.createWhiteSpaceFromText("\n")
-
-        newParent.addBefore(comment, newChild)
-        newParent.addBefore(newline, newChild)
-
-        val codeStylist = CodeStyleManager.getInstance(project)
-        element.parent.replace(codeStylist.reformat(newParent))
+        element.parent.addBefore(newline, element)
     }
 
     override fun isAvailable(project: Project, context: PsiElement): Boolean {
