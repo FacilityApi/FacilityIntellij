@@ -5,7 +5,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiParserFacade
 import io.github.facilityapi.intellij.FsdFile
-import io.github.facilityapi.intellij.FsdFileType
+import io.github.facilityapi.intellij.FsdLanguage
 import io.github.facilityapi.intellij.descendants
 import io.github.facilityapi.intellij.psi.FsdAttributeList
 import io.github.facilityapi.intellij.psi.FsdNamedElement
@@ -56,7 +56,7 @@ fun createFromText(project: Project, text: String): Sequence<PsiElement> {
     // For internal parser consistency, psi elements must be created this way
     // https://plugins.jetbrains.com/docs/intellij/rename-refactoring.html
     val file = PsiFileFactory.getInstance(project)
-        .createFileFromText(fileName, FsdFileType, text) as FsdFile
+        .createFileFromText(fileName, FsdLanguage, text) as FsdFile
 
     return file.descendants
 }

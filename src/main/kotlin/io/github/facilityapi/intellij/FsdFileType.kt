@@ -5,7 +5,7 @@ import com.intellij.openapi.util.IconLoader
 import com.intellij.openapi.vfs.VirtualFile
 import javax.swing.Icon
 
-object FsdFileType : LanguageFileType(FsdLanguage) {
+class FsdFileType : LanguageFileType(FsdLanguage) {
     override fun getIcon(): Icon = IconLoader.getIcon("/icons/fsd.svg", FsdFileType::class.java)
     override fun getName(): String = FsdLanguage.displayName
     override fun getDefaultExtension(): String = "fsd"

@@ -6,7 +6,7 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 class FsdCommenterTest : BasePlatformTestCase() {
     fun `test comment out line`() {
         myFixture.configureByText(
-            FsdFileType,
+            FsdLanguage.associatedFileType,
             """
                 service FsdFindUsages
                 {
@@ -46,7 +46,7 @@ class FsdCommenterTest : BasePlatformTestCase() {
 
     fun `test uncomment line`() {
         myFixture.configureByText(
-            FsdFileType,
+            FsdLanguage.associatedFileType,
             """
                 service FsdFindUsages
                 {

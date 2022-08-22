@@ -5,7 +5,7 @@ import assertk.assertThat
 import assertk.assertions.containsOnly
 import assertk.assertions.hasSize
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import io.github.facilityapi.intellij.FsdFileType
+import io.github.facilityapi.intellij.FsdLanguage
 
 class DuplicateMemberInspectionTest : BasePlatformTestCase() {
 
@@ -354,8 +354,9 @@ class DuplicateMemberInspectionTest : BasePlatformTestCase() {
     }
 
     private fun checkInspection(code: String, errorDescription: String) {
-        myFixture.configureByText(FsdFileType, code)
+        myFixture.configureByText(FsdLanguage.associatedFileType, code)
         myFixture.enableInspections(DuplicateMemberInspection())
+
         val highlights = myFixture.doHighlighting()
 
         assertThat(highlights.map { it.description }, "inspection failures").all {
@@ -365,7 +366,7 @@ class DuplicateMemberInspectionTest : BasePlatformTestCase() {
     }
 
     private fun checkFix(before: String, after: String) {
-        myFixture.configureByText(FsdFileType, before)
+        myFixture.configureByText(FsdLanguage.associatedFileType, before)
         myFixture.enableInspections(DuplicateMemberInspection())
         myFixture.doHighlighting()
 

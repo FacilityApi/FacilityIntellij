@@ -3,7 +3,7 @@ package io.github.facilityapi.intellij.inspection
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import io.github.facilityapi.intellij.FsdFileType
+import io.github.facilityapi.intellij.FsdLanguage
 
 class UnusedTypeInspectionTest : BasePlatformTestCase() {
     fun `test unused data is detected`() {
@@ -111,7 +111,7 @@ class UnusedTypeInspectionTest : BasePlatformTestCase() {
     }
 
     private fun checkInspection(code: String, errorDescriptions: List<String>) {
-        myFixture.configureByText(FsdFileType, code)
+        myFixture.configureByText(FsdLanguage.associatedFileType, code)
         myFixture.enableInspections(UnusedTypeInspection())
         val highlights = myFixture.doHighlighting()
 
@@ -120,7 +120,7 @@ class UnusedTypeInspectionTest : BasePlatformTestCase() {
     }
 
     private fun checkFix(before: String, after: String) {
-        myFixture.configureByText(FsdFileType, before)
+        myFixture.configureByText(FsdLanguage.associatedFileType, before)
         myFixture.enableInspections(UnusedTypeInspection())
         myFixture.doHighlighting()
 

@@ -8,7 +8,7 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 class FsdCompletionTest : BasePlatformTestCase() {
     fun `test completion`() {
         myFixture.configureByText(
-            FsdFileType,
+            FsdLanguage.associatedFileType,
             """
                 service FsdFindUsages
                 {
@@ -37,7 +37,7 @@ class FsdCompletionTest : BasePlatformTestCase() {
 
     fun `test built-in type completion`() {
         myFixture.configureByText(
-            FsdFileType,
+            FsdLanguage.associatedFileType,
             """
                 service FsdFindUsages
                 {

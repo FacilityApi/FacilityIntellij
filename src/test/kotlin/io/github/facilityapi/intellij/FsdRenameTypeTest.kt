@@ -11,7 +11,7 @@ class FsdRenameTypeTest : BasePlatformTestCase() {
     @Ignore
     fun `test rename type from reference`() {
         myFixture.configureByText(
-            FsdFileType,
+            FsdLanguage.associatedFileType,
             """
                 service FsdFindUsages
                 {
