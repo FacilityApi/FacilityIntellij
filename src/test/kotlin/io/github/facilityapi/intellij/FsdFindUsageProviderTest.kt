@@ -5,72 +5,20 @@ import assertk.assertions.hasSize
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 class FsdFindUsageProviderTest : BasePlatformTestCase() {
-    fun `test find usages works from type definition`() {
-        myFixture.configureByText(
-            FsdLanguage.associatedFileType,
-            """
-                service FsdFindUsages
-                {
-                    data Car
-                    {
-                        wheel: Wheel[];
-                        spare: Wheel;
-                    }
+    override fun getTestDataPath(): String = "src/test/testData/findUsages"
 
-                    data Whe<caret>el
-                    {
-                        id: int64;
-                    }
-                }
-            """.trimIndent()
-        )
-        val usages = myFixture.findUsages(myFixture.elementAtCaret)
+    fun `test find usages works from type definition`() {
+        val usages = myFixture.testFindUsagesUsingAction("typeDefinition.fsd")
         assertThat(usages, "usages").hasSize(2)
     }
 
     fun `test find usages works from type reference on arrays`() {
-        myFixture.configureByText(
-            FsdLanguage.associatedFileType,
-            """
-                service FsdFindUsages
-                {
-                    data Car
-                    {
-                        wheel: Wh<caret>eel[];
-                        spare: Wheel;
-                    }
-
-                    data Wheel
-                    {
-                        id: int64;
-                    }
-                }
-            """.trimIndent()
-        )
-        val usages = myFixture.findUsages(myFixture.elementAtCaret)
+        val usages = myFixture.testFindUsagesUsingAction("arrays.fsd")
         assertThat(usages, "usages").hasSize(2)
     }
 
     fun `test find usages works from type reference`() {
-        myFixture.configureByText(
-            FsdLanguage.associatedFileType,
-            """
-                service FsdFindUsages
-                {
-                    data Car
-                    {
-                        wheel: Wheel[];
-                        spare: Wh<caret>eel;
-                    }
-
-                    data Wheel
-                    {
-                        id: int64;
-                    }
-                }
-            """.trimIndent()
-        )
-        val usages = myFixture.findUsages(myFixture.elementAtCaret)
+        val usages = myFixture.testFindUsagesUsingAction("typeReference.fsd")
         assertThat(usages, "usages").hasSize(2)
     }
 }
