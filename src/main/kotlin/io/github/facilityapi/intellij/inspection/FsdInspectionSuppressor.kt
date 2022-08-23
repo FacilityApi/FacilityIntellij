@@ -17,7 +17,7 @@ class FsdInspectionSuppressor : InspectionSuppressor {
         return serviceItem.siblings(forward = false, withSelf = false)
             .dropWhile { it is PsiWhiteSpace && it.text.count { c -> c == '\n' } <= 1 }
             .takeWhile { it is PsiComment }
-            .any { SuppressionUtil.isSuppressionComment(it) && it.text.matches(Regex("$toolId|all)", RegexOption.IGNORE_CASE)) }
+            .any { SuppressionUtil.isSuppressionComment(it) && it.text.contains(Regex("$toolId|all", RegexOption.IGNORE_CASE)) }
     }
 
     override fun getSuppressActions(element: PsiElement?, toolId: String): Array<SuppressQuickFix> {

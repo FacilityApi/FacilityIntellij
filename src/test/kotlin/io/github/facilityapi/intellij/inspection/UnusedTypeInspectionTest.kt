@@ -65,6 +65,19 @@ class UnusedTypeInspectionTest : BasePlatformTestCase() {
         checkInspection(code, listOf())
     }
 
+    fun `test suppressed inspection is not reported`() {
+        val code = """
+        service MessageService {
+            //noinspection UnusedTypes
+            data Message {
+                id: string;
+            }
+        }
+        """
+
+        checkInspection(code, listOf())
+    }
+
     fun `test unused data fix`() {
         val before = """
         service MessageService {
