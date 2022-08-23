@@ -1,0 +1,13 @@
+service FsdFindUsages
+{
+	data Car
+	{
+		wheel: W<caret>heel[];
+		spare: Wheel;
+	}
+
+	data Wheel
+	{
+		id: int64;
+	}
+}
