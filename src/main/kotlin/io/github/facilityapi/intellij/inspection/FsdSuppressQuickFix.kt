@@ -1,34 +1,31 @@
 package io.github.facilityapi.intellij.inspection
 
-import com.intellij.codeInspection.ProblemDescriptor
-import com.intellij.codeInspection.SuppressQuickFix
-import com.intellij.codeInspection.SuppressionUtil
+import com.intellij.codeInsight.daemon.impl.actions.AbstractBatchSuppressByNoInspectionCommentFix
+import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiParserFacade
-import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.util.PsiTreeUtil
 import io.github.facilityapi.intellij.psi.FsdDecoratedElement
+import org.jetbrains.annotations.Nls
 
-class FsdSuppressQuickFix(private val toolId: String) : SuppressQuickFix {
-    override fun getFamilyName(): String {
-        return "Suppress \"$toolId\"" // todo: i10n
+class FsdSuppressQuickFix(id: String, @Nls text: String) :
+    AbstractBatchSuppressByNoInspectionCommentFix(id, false) {
+
+    init {
+        setText(text)
     }
 
-    override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
-        val element = PsiTreeUtil.getParentOfType(descriptor.psiElement, FsdDecoratedElement::class.java) ?: return
-
-        val psiFacade = PsiParserFacade.SERVICE.getInstance(project)
-
-        SuppressionUtil.createSuppression(project, element, toolId, element.language)
-
-        val newline = psiFacade.createWhiteSpaceFromText("\n")
-        element.parent.addBefore(newline, element)
+    override fun getContainer(context: PsiElement?) = runReadAction {
+        PsiTreeUtil.getParentOfType(context, FsdDecoratedElement::class.java)
     }
 
-    override fun isAvailable(project: Project, context: PsiElement): Boolean {
-        return context.isValid && PsiTreeUtil.getParentOfType(context, FsdDecoratedElement::class.java) != null
-    }
+    override fun createSuppression(project: Project, element: PsiElement, container: PsiElement) {
+        val psi = PsiParserFacade.SERVICE.getInstance(project)
+        val newline = psi.createWhiteSpaceFromText("\n")
 
-    override fun isSuppressAll(): Boolean = SuppressionUtil.ALL.equals(toolId, true)
+        super.createSuppression(project, element, container)
+
+        container.parent.addBefore(newline, container)
+    }
 }
