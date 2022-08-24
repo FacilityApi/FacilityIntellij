@@ -17,6 +17,7 @@
 - Intention to combine multiple attribute lists into a single attribute list
 - File template for service definitions
 - Inspection for unused data and enum definitions
+- Suppress inspections with quickfix or `//noinspection <inspectionid>`
 
 ### Fixed
 - Code folding for method, enum, and error bodies
