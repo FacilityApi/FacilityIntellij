@@ -92,8 +92,7 @@
         <!-- Check for duplicate names in service definitions -->
         <localInspection
             language="FSD"
-            displayName="DuplicateMember"
-            groupBundle="messages.FsdBundle"
+            key="inspections.bugs.duplicate.member.display"
             groupKey="inspections.bugs.duplicate.member.group"
             enabledByDefault="true"
             level="ERROR"
@@ -102,8 +101,7 @@
         <!-- Check for duplicate attributes on service definitions -->
         <localInspection
             language="FSD"
-            displayName="DuplicateAttribute"
-            groupBundle="messages.FsdBundle"
+            key="inspections.bugs.duplicate.attribute.display"
             groupKey="inspections.bugs.duplicate.attribute.group"
             enabledByDefault="true"
             level="ERROR"
@@ -112,8 +110,7 @@
         <!-- Check for invalid [validate] parameters -->
         <localInspection
             language="FSD"
-            displayName="ValidateParameters"
-            groupBundle="messages.FsdBundle"
+            key="inspections.bugs.validate.display"
             groupKey="inspections.bugs.validate.group"
             enabledByDefault="true"
             level="ERROR"
@@ -122,8 +119,7 @@
         <!-- Check for unused types -->
         <localInspection
             language="FSD"
-            displayName="UnusedType"
-            groupBundle="messages.FsdBundle"
+            key="inspections.hints.unused.type.display"
             groupKey="inspections.hints.unused.type.group"
             enabledByDefault="true"
             level="INFO"
