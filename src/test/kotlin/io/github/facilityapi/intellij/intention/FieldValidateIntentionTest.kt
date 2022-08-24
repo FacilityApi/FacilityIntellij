@@ -20,9 +20,6 @@ class FieldValidateIntentionTest : BasePlatformTestCase() {
         checkBeforeAfter("collectionBefore.fsd", "collectionAfter.fsd")
     }
 
-    // This test is ignored because of issues with the test framework's
-    // file index exhibiting surprising behavior
-    // https://app.slack.com/client/T5P9YATH9/C5U8BM1MK/thread/C5U8BM1MK-1660614540.117659
     fun `test enum valued validation attribute is inserted correctly`() {
         checkBeforeAfter("enumValuedBefore.fsd", "enumValuedAfter.fsd")
     }
