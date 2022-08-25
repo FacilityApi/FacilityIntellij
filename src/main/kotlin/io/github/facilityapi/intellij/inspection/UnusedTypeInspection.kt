@@ -5,7 +5,6 @@ import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementVisitor
-import com.intellij.psi.util.descendants
 import io.github.facilityapi.intellij.FsdBundle
 import io.github.facilityapi.intellij.descendants
 import io.github.facilityapi.intellij.psi.FsdDataSpec
@@ -22,7 +21,8 @@ class UnusedTypeInspection : LocalInspectionTool() {
 
                 val isUsed = element.containingFile.descendants
                     .filterIsInstance<FsdReferenceType>()
-                    .any { it.reference.isReferenceTo(namedElement) }
+                    .filter { it.typename.textMatches(namedElement.nameIdentifier!!.text) } // fast but imprecise
+                    .any { it.reference.isReferenceTo(namedElement) } // precise but slower
 
                 val isDataDefinition = namedElement.parent is FsdDataSpec
                 val isEnumDefinition = namedElement.parent is FsdEnumSpec

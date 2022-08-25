@@ -65,6 +65,25 @@ class UnusedTypeInspectionTest : BasePlatformTestCase() {
         checkInspection(code, listOf())
     }
 
+    fun `test used type used in map is not reported`() {
+        val code = """
+        service MessageService {
+            method getMessages
+            {
+            }:
+            {
+                messages: map<Message>;
+            }
+
+            data Message {
+                id: string;
+            }
+        }
+        """
+
+        checkInspection(code, listOf())
+    }
+
     fun `test unused data fix`() {
         val before = """
         service MessageService {
