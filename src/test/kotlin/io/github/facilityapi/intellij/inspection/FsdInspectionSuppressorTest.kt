@@ -34,6 +34,36 @@ class FsdInspectionSuppressorTest : BasePlatformTestCase() {
         checkInspection(code, listOf())
     }
 
+    fun `test suppression above other adjacent comments`() {
+        val code = """
+        service MessageService {
+            //noinspection all
+            /// This is a message
+            [validate]
+            data Message {
+                id: string;
+            }
+        }
+        """
+
+        checkInspection(code, listOf())
+    }
+
+    fun `test non-adjacent suppression is ignored`() {
+        val code = """
+        service MessageService {
+            //noinspection all
+
+            /// This is a message
+            data Message {
+                id: string;
+            }
+        }
+        """
+
+        checkInspection(code, listOf("Data \"Message\" is unused"))
+    }
+
     private fun checkInspection(code: String, errorDescriptions: List<String>) {
         myFixture.configureByText(FsdLanguage.associatedFileType, code)
         myFixture.enableInspections(UnusedTypeInspection(), ValidateAttributeInspection())

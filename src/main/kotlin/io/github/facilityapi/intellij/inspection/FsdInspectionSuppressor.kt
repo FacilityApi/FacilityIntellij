@@ -16,8 +16,8 @@ class FsdInspectionSuppressor : InspectionSuppressor {
         val serviceItem = PsiTreeUtil.getParentOfType(element, FsdDecoratedElement::class.java) ?: return false
 
         return serviceItem.siblings(forward = false, withSelf = false)
-            .dropWhile { it is PsiWhiteSpace && it.text.count { c -> c == '\n' } <= 1 }
-            .takeWhile { it is PsiComment }
+            .takeWhile { it is PsiComment || (it is PsiWhiteSpace && it.text.count { c -> c == '\n' } <= 1) }
+            .filterIsInstance<PsiComment>()
             .filter { SuppressionUtil.isSuppressionComment(it) }
             .any { SuppressionUtil.isInspectionToolIdMentioned(it.text, toolId) }
     }

@@ -6,6 +6,7 @@ import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.presentation.java.SymbolPresentationUtil
+import com.intellij.psi.util.siblings
 import io.github.facilityapi.intellij.psi.FsdIdentifierDeclaration
 
 class FsdDocumentationProvider : AbstractDocumentationProvider() {
@@ -42,17 +43,13 @@ class FsdDocumentationProvider : AbstractDocumentationProvider() {
 
     companion object {
         fun findDocumentationComment(type: FsdIdentifierDeclaration): String {
-            val result = mutableListOf<String>()
-            var element = type.parent.parent.prevSibling
-            while (element is PsiComment || element is PsiWhiteSpace) {
-                if (element is PsiComment && element.text.startsWith("///")) {
-                    val commentText = element.text.trimStart('/')
-                    result.add(commentText)
-                }
-                element = element.prevSibling
-            }
-
-            return result.asReversed().joinToString()
+            return type.parent.parent.siblings(forward = false, withSelf = false)
+                .takeWhile { it is PsiComment || (it is PsiWhiteSpace && it.text.count { c -> c == '\n' } <= 1) }
+                .filterIsInstance<PsiComment>()
+                .filter { it.text.startsWith("///") }
+                .toList()
+                .reversed()
+                .joinToString(separator = " ") { it.text.trimStart('/', ' ', '\t') }
         }
     }
 }
