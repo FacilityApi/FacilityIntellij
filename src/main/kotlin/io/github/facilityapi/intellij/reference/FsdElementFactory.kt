@@ -11,10 +11,10 @@ import io.github.facilityapi.intellij.psi.FsdAttributeList
 import io.github.facilityapi.intellij.psi.FsdNamedElement
 import io.github.facilityapi.intellij.psi.FsdReferenceType
 
-fun createTypeDefinition(project: Project, name: String, declType: String): FsdNamedElement {
+fun createTypeDefinition(project: Project, name: String): FsdNamedElement {
     val serviceText = """
         service dummy {
-            $declType $name {
+            data $name {
             }
         }
     """.trimIndent()
