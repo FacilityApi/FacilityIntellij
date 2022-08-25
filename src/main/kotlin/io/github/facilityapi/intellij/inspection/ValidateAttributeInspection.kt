@@ -49,7 +49,7 @@ class ValidateAttributeInspection : LocalInspectionTool() {
                             reportUnexpectedAttribute(element)
                         }
 
-                        if (field.type.text == "string") {
+                        if (field.type.textMatches("string")) {
                             checkStringValidate(field, element)
                         } else if (field.type.isCollection) {
                             checkCollectionValidate(field, element)

@@ -23,7 +23,7 @@ class EnumValidateIntention : PsiElementBaseIntentionAction(), IntentionAction {
         val attributes = serviceItem.attributeListList.flatMap(FsdAttributeList::getAttributeList)
         val isEnumSpec = serviceItem.enumSpec != null
 
-        return isEnumSpec && attributes.none { it.attributename.text == "validate" }
+        return isEnumSpec && attributes.none { it.attributename.textMatches("validate") }
     }
 
     override fun invoke(project: Project, editor: Editor?, element: PsiElement) {

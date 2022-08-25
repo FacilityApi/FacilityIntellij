@@ -31,7 +31,7 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
         val field = decoratedField.field
         val attributes = decoratedField.attributeListList.flatMap(FsdAttributeList::getAttributeList)
 
-        return supportsValidate(field) && attributes.none { it.attributename.text == "validate" }
+        return supportsValidate(field) && attributes.none { it.attributename.textMatches("validate") }
     }
 
     override fun invoke(project: Project, editor: Editor?, element: PsiElement) {

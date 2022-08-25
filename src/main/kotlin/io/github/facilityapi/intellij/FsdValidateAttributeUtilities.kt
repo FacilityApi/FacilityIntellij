@@ -7,14 +7,14 @@ import io.github.facilityapi.intellij.psi.FsdField
 import io.github.facilityapi.intellij.psi.FsdType
 
 fun supportsValidate(field: FsdField): Boolean {
-    return field.type.isEnum || getValidateTemplateForField(field) != null
+    return getValidateTemplateForField(field) != null || field.type.isEnum
 }
 
 fun getValidateTemplateForField(field: FsdField): Template? {
     val type = field.type
 
     val templateKey = when {
-        type.text == "string" -> "svalid"
+        type.textMatches("string") -> "svalid"
         type.isCollection -> "cvalid"
         type.isNumber -> "nvalid"
         else -> return null
@@ -24,10 +24,16 @@ fun getValidateTemplateForField(field: FsdField): Template? {
 }
 
 val FsdType.isCollection: Boolean
-    get() = text == "bytes" || text.startsWith("map<") || text.endsWith("[]")
+    get() = textMatches("bytes") || text.startsWith("map<") || text.endsWith("[]")
 
 val FsdType.isNumber: Boolean
-    get() = text in setOf("int32", "int64", "float", "double", "decimal")
+    get() {
+        return textMatches("int32") ||
+            textMatches("int64") ||
+            textMatches("float") ||
+            textMatches("double") ||
+            textMatches("decimal")
+    }
 
 val FsdType.isEnum: Boolean
     get() = referenceType?.reference?.resolve()?.parent is FsdEnumSpec
