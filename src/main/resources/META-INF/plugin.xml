@@ -93,7 +93,7 @@
         <localInspection
             language="FSD"
             key="inspections.bugs.duplicate.member.display"
-            groupKey="inspections.bugs.duplicate.member.group"
+            groupKey="inspections.group"
             enabledByDefault="true"
             level="ERROR"
             implementationClass="io.github.facilityapi.intellij.inspection.DuplicateMemberInspection" />
@@ -102,7 +102,7 @@
         <localInspection
             language="FSD"
             key="inspections.bugs.duplicate.attribute.display"
-            groupKey="inspections.bugs.duplicate.attribute.group"
+            groupKey="inspections.group"
             enabledByDefault="true"
             level="ERROR"
             implementationClass="io.github.facilityapi.intellij.inspection.DuplicateAttributeInspection" />
@@ -111,7 +111,7 @@
         <localInspection
             language="FSD"
             key="inspections.bugs.validate.display"
-            groupKey="inspections.bugs.validate.group"
+            groupKey="inspections.group"
             enabledByDefault="true"
             level="ERROR"
             implementationClass="io.github.facilityapi.intellij.inspection.ValidateAttributeInspection" />
@@ -120,7 +120,7 @@
         <localInspection
             language="FSD"
             key="inspections.hints.unused.type.display"
-            groupKey="inspections.hints.unused.type.group"
+            groupKey="inspections.group"
             enabledByDefault="true"
             level="INFO"
             implementationClass="io.github.facilityapi.intellij.inspection.UnusedTypeInspection" />
