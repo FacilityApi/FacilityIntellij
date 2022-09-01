@@ -1,9 +1,8 @@
 package io.github.facilityapi.intellij.inspection
 
-import assertk.all
 import assertk.assertThat
-import assertk.assertions.containsOnly
-import assertk.assertions.hasSize
+import assertk.assertions.isEqualTo
+import com.intellij.codeInsight.daemon.impl.HighlightInfo
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import io.github.facilityapi.intellij.FsdLanguage
 
@@ -21,7 +20,7 @@ class DuplicateAttributeInspectionTest : BasePlatformTestCase() {
         }
         """
 
-        checkInspection(code, "Duplicate attribute: obsolete")
+        checkInspection(code, listOf("Duplicate attribute: obsolete", "Duplicate attribute: obsolete"))
     }
 
     fun `test duplicate detected on service item list fix`() {
@@ -94,7 +93,7 @@ class DuplicateAttributeInspectionTest : BasePlatformTestCase() {
         }
         """
 
-        checkInspection(code, "Duplicate attribute: validate")
+        checkInspection(code, listOf("Duplicate attribute: validate", "Duplicate attribute: validate"))
     }
 
     fun `test fix on duplicate attributes with parameters`() {
@@ -138,7 +137,7 @@ class DuplicateAttributeInspectionTest : BasePlatformTestCase() {
         }
         """
 
-        checkInspection(code, "Duplicate attribute: validate")
+        checkInspection(code, listOf("Duplicate attribute: validate", "Duplicate attribute: validate"))
     }
 
     fun `test duplicate detected on data field`() {
@@ -152,7 +151,7 @@ class DuplicateAttributeInspectionTest : BasePlatformTestCase() {
         }
         """
 
-        checkInspection(code, "Duplicate attribute: required")
+        checkInspection(code, listOf("Duplicate attribute: required", "Duplicate attribute: required"))
     }
 
     fun `test duplicate detected on enum case`() {
@@ -168,7 +167,7 @@ class DuplicateAttributeInspectionTest : BasePlatformTestCase() {
         }
         """
 
-        checkInspection(code, "Duplicate attribute: obsolete")
+        checkInspection(code, listOf("Duplicate attribute: obsolete", "Duplicate attribute: obsolete"))
     }
 
     fun `test duplicate detected on error`() {
@@ -182,18 +181,44 @@ class DuplicateAttributeInspectionTest : BasePlatformTestCase() {
         }
         """
 
-        checkInspection(code, "Duplicate attribute: retired")
+        checkInspection(code, listOf("Duplicate attribute: retired", "Duplicate attribute: retired"))
     }
 
-    private fun checkInspection(code: String, errorDescription: String) {
+    fun `test duplicate required attribute detected with shorthand`() {
+        val code = """
+        service MessageService {
+            data Message
+            {
+                [required]
+                id: string!;
+            }
+        }
+        """
+
+        checkInspection(code, listOf("Duplicate attribute: required"))
+    }
+
+    fun `test duplicate required attribute detected with shorthand and whitespace`() {
+        val code = """
+        service MessageService {
+            data Message
+            {
+                [required]
+                id: string !;
+            }
+        }
+        """
+
+        checkInspection(code, listOf("Duplicate attribute: required"))
+    }
+
+    private fun checkInspection(code: String, errorDescriptions: List<String>) {
         myFixture.configureByText(FsdLanguage.associatedFileType, code)
         myFixture.enableInspections(DuplicateAttributeInspection())
         val highlights = myFixture.doHighlighting()
 
-        assertThat(highlights.map { it.description }, "inspection failures").all {
-            hasSize(2)
-            containsOnly(errorDescription)
-        }
+        assertThat(highlights.map(HighlightInfo::getDescription), "inspection failures")
+            .isEqualTo(errorDescriptions)
     }
 
     private fun checkFix(before: String, after: String) {

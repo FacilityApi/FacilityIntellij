@@ -5,13 +5,10 @@ import com.intellij.codeInspection.LocalInspectionToolSession
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementVisitor
+import com.intellij.psi.util.PsiTreeUtil
 import io.github.facilityapi.intellij.FsdBundle
-import io.github.facilityapi.intellij.psi.FsdAttributeList
-import io.github.facilityapi.intellij.psi.FsdDataSpec
-import io.github.facilityapi.intellij.psi.FsdEnumSpec
-import io.github.facilityapi.intellij.psi.FsdErrorList
-import io.github.facilityapi.intellij.psi.FsdMethodSpec
-import io.github.facilityapi.intellij.psi.FsdServiceItems
+import io.github.facilityapi.intellij.psi.FsdDecoratedElement
+import io.github.facilityapi.intellij.psi.FsdDecoratedField
 
 class DuplicateAttributeInspection : LocalInspectionTool() {
     override fun buildVisitor(
@@ -22,52 +19,25 @@ class DuplicateAttributeInspection : LocalInspectionTool() {
         private val deleteAttributeFix = DeleteAttributeFix()
 
         override fun visitElement(element: PsiElement) {
-            if (element is FsdServiceItems) {
-                for (serviceItem in element.decoratedServiceItemList) {
-                    checkForAttributeDuplicates(serviceItem.attributeListList)
+            if (element is FsdDecoratedElement) {
+                val attributesByName = element.attributeListList
+                    .flatMap { it.attributeList }
+                    .groupBy { it.attributename.text }
+
+                for ((attributeName, attributes) in attributesByName.filter { it.value.size > 1 }) {
+                    val message = FsdBundle.getMessage("inspections.bugs.duplicate.attribute", attributeName)
+                    for (memberId in attributes) {
+                        holder.registerProblem(memberId, message, deleteAttributeFix)
+                    }
                 }
-            }
 
-            if (element is FsdMethodSpec) {
-                val requestFields = element.requestFields?.decoratedFieldList ?: emptyList()
-                for (field in requestFields) {
-                    checkForAttributeDuplicates(field.attributeListList)
-                }
-
-                val responseFields = element.responseFields?.decoratedFieldList ?: emptyList()
-                for (field in responseFields) {
-                    checkForAttributeDuplicates(field.attributeListList)
-                }
-            }
-
-            if (element is FsdDataSpec) {
-                for (field in element.decoratedFieldList) {
-                    checkForAttributeDuplicates(field.attributeListList)
-                }
-            }
-
-            if (element is FsdEnumSpec) {
-                for (enumSpec in element.enumValueList?.decoratedEnumValueList ?: emptyList()) {
-                    checkForAttributeDuplicates(enumSpec.attributeListList)
-                }
-            }
-
-            if (element is FsdErrorList) {
-                for (errorSpec in element.decoratedErrorSpecList) {
-                    checkForAttributeDuplicates(errorSpec.attributeListList)
-                }
-            }
-        }
-
-        private fun checkForAttributeDuplicates(attributeListList: List<FsdAttributeList>) {
-            val duplicates = attributeListList.flatMap { it.attributeList }
-                .groupBy { it.attributename.text }
-                .filter { it.value.size > 1 }
-
-            for ((memberName, memberIds) in duplicates) {
-                val message = FsdBundle.getMessage("inspections.bugs.duplicate.attribute", memberName)
-                for (memberId in memberIds) {
-                    holder.registerProblem(memberId, message, deleteAttributeFix)
+                val requiredAttributes = attributesByName["required"]
+                if (element is FsdDecoratedField &&
+                    PsiTreeUtil.skipWhitespacesForward(element.field.type)?.textMatches("!") == true &&
+                    !requiredAttributes.isNullOrEmpty()
+                ) {
+                    val message = FsdBundle.getMessage("inspections.bugs.duplicate.attribute", "required")
+                    holder.registerProblem(requiredAttributes.first(), message, deleteAttributeFix)
                 }
             }
         }
