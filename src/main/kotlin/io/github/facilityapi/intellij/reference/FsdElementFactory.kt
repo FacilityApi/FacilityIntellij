@@ -5,9 +5,9 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiParserFacade
 import com.intellij.psi.util.descendants
-import io.github.facilityapi.intellij.FsdFile
 import io.github.facilityapi.intellij.FsdLanguage
 import io.github.facilityapi.intellij.psi.FsdAttributeList
+import io.github.facilityapi.intellij.psi.FsdFile
 import io.github.facilityapi.intellij.psi.FsdNamedElement
 import io.github.facilityapi.intellij.psi.FsdReferenceType
 

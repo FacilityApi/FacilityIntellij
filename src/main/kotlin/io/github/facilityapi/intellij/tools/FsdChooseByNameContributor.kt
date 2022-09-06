@@ -1,8 +1,9 @@
-package io.github.facilityapi.intellij
+package io.github.facilityapi.intellij.tools
 
 import com.intellij.navigation.ChooseByNameContributor
 import com.intellij.navigation.NavigationItem
 import com.intellij.openapi.project.Project
+import io.github.facilityapi.intellij.findTypeDefinitions
 import io.github.facilityapi.intellij.psi.FsdNamedElement
 
 class FsdChooseByNameContributor : ChooseByNameContributor {

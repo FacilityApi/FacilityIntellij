@@ -25,10 +25,10 @@
         <!-- Syntax Highlighter -->
         <lang.syntaxHighlighterFactory
                 language="FSD"
-                implementationClass="io.github.facilityapi.intellij.FsdSyntaxHighlighter$Factory" />
+                implementationClass="io.github.facilityapi.intellij.editor.FsdSyntaxHighlighter$Factory" />
 
         <!-- Syntax Highlighting User Options -->
-        <colorSettingsPage implementation="io.github.facilityapi.intellij.FsdColorSettingsPage" />
+        <colorSettingsPage implementation="io.github.facilityapi.intellij.editor.FsdColorSettingsPage" />
 
         <!-- Inline Refactoring Support -->
         <lang.refactoringSupport
@@ -38,26 +38,26 @@
         <!-- Editor comment / uncomment -->
         <lang.commenter
             language="FSD"
-            implementationClass="io.github.facilityapi.intellij.FsdCommenter" />
+            implementationClass="io.github.facilityapi.intellij.editor.FsdCommenter" />
 
         <!-- Adds built-in types to autocomplete suggestions -->
         <completion.contributor
             language="FSD"
-            implementationClass="io.github.facilityapi.intellij.FsdCompletionContributor" />
+            implementationClass="io.github.facilityapi.intellij.editor.FsdCompletionContributor" />
 
         <!-- Enables "Find Usages" -->
         <lang.findUsagesProvider language="FSD"
-                                 implementationClass="io.github.facilityapi.intellij.FsdFindUsagesProvider" />
+                                 implementationClass="io.github.facilityapi.intellij.tools.FsdFindUsagesProvider" />
 
-        <usageTypeProvider implementation="io.github.facilityapi.intellij.FsdUsageTypeProvider" />
+        <usageTypeProvider implementation="io.github.facilityapi.intellij.editor.FsdUsageTypeProvider" />
 
         <!-- Enables structure view -->
         <lang.psiStructureViewFactory
             language="FSD"
-            implementationClass="io.github.facilityapi.intellij.FsdStructureViewFactory" />
+            implementationClass="io.github.facilityapi.intellij.tools.FsdStructureViewFactory" />
 
         <!-- Enables go to symbol -->
-        <gotoSymbolContributor implementation="io.github.facilityapi.intellij.FsdChooseByNameContributor" />
+        <gotoSymbolContributor implementation="io.github.facilityapi.intellij.tools.FsdChooseByNameContributor" />
 
         <!-- Enables formatting -->
         <lang.formatter
@@ -67,17 +67,17 @@
         <!-- Enables code folding -->
         <lang.foldingBuilder
             language="FSD"
-            implementationClass="io.github.facilityapi.intellij.FsdFoldingBuilder" />
+            implementationClass="io.github.facilityapi.intellij.tools.FsdFoldingBuilder" />
 
         <!-- Enables Quick Documentation -->
         <lang.documentationProvider
                 language="FSD"
-                implementationClass="io.github.facilityapi.intellij.FsdDocumentationProvider" />
+                implementationClass="io.github.facilityapi.intellij.tools.FsdDocumentationProvider" />
 
         <!-- Enable Brace Matching -->
         <lang.braceMatcher
             language="FSD"
-            implementationClass="io.github.facilityapi.intellij.FsdBraceMatcher" />
+            implementationClass="io.github.facilityapi.intellij.editor.FsdBraceMatcher" />
 
         <!-- Enable inspection suppression -->
         <lang.inspectionSuppressor
@@ -87,7 +87,7 @@
         <defaultLiveTemplates file="/liveTemplates/Facility Service Definition.xml"/>
 
         <liveTemplateContext
-            implementation="io.github.facilityapi.intellij.FsdLiveTemplateContext"/>
+            implementation="io.github.facilityapi.intellij.tools.FsdLiveTemplateContext"/>
 
         <!-- Check for duplicate names in service definitions -->
         <localInspection

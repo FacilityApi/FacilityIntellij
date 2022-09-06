@@ -1,4 +1,4 @@
-package io.github.facilityapi.intellij
+package io.github.facilityapi.intellij.editor
 
 import com.intellij.psi.PsiElement
 import com.intellij.usages.impl.rules.UsageType

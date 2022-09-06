@@ -1,4 +1,4 @@
-package io.github.facilityapi.intellij
+package io.github.facilityapi.intellij.tools
 
 import com.intellij.ide.structureView.StructureViewModel
 import com.intellij.ide.structureView.StructureViewModelBase

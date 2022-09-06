@@ -1,4 +1,4 @@
-package io.github.facilityapi.intellij
+package io.github.facilityapi.intellij.editor
 
 import com.intellij.lang.BracePair
 import com.intellij.lang.PairedBraceMatcher

@@ -7,6 +7,7 @@ import assertk.assertions.isNotEmpty
 import assertk.assertions.prop
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.util.PsiErrorElementUtil
+import io.github.facilityapi.intellij.psi.FsdFile
 
 class FsdParseTest : BasePlatformTestCase() {
     override fun getTestDataPath() = "src/test/testData"

@@ -10,9 +10,9 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.TokenSet
-import io.github.facilityapi.intellij.FsdFile
 import io.github.facilityapi.intellij.FsdLanguage
 import io.github.facilityapi.intellij.lexer.FsdLexerAdapter
+import io.github.facilityapi.intellij.psi.FsdFile
 import io.github.facilityapi.intellij.psi.FsdTypes
 
 class FsdParserDefinition : ParserDefinition {

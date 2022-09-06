@@ -5,6 +5,7 @@ import com.intellij.psi.PsiManager
 import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.descendants
+import io.github.facilityapi.intellij.psi.FsdFile
 import io.github.facilityapi.intellij.psi.FsdNamedElement
 
 fun findTypeDefinitions(project: Project, name: String): Sequence<FsdNamedElement> {
