@@ -19,7 +19,7 @@ object FsdPsiImplUtil {
     }
 
     @JvmStatic
-    fun getNameIdentifier(identifierDeclaration: FsdIdentifierDeclaration) = identifierDeclaration.identifier
+    fun getNameIdentifier(identifierDeclaration: FsdIdentifierDeclaration): PsiElement = identifierDeclaration.identifier
 
     @JvmStatic
     fun getReference(reference: FsdReferenceType): PsiReference = FsdReference(reference, reference.textRangeInParent)
