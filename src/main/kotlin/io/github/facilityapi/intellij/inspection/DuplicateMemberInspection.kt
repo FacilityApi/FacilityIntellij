@@ -8,14 +8,19 @@ import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementVisitor
+import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.elementType
 import io.github.facilityapi.intellij.FsdBundle
 import io.github.facilityapi.intellij.psi.FsdDataSpec
+import io.github.facilityapi.intellij.psi.FsdDecoratedElement
+import io.github.facilityapi.intellij.psi.FsdDecoratedEnumValue
+import io.github.facilityapi.intellij.psi.FsdDecoratedErrorSpec
 import io.github.facilityapi.intellij.psi.FsdDecoratedField
 import io.github.facilityapi.intellij.psi.FsdEnumSpec
 import io.github.facilityapi.intellij.psi.FsdErrorList
-import io.github.facilityapi.intellij.psi.FsdErrorSetSpec
 import io.github.facilityapi.intellij.psi.FsdMethodSpec
 import io.github.facilityapi.intellij.psi.FsdServiceItems
+import io.github.facilityapi.intellij.psi.FsdTypes
 
 class DuplicateMemberInspection : LocalInspectionTool() {
     override fun buildVisitor(
@@ -23,8 +28,7 @@ class DuplicateMemberInspection : LocalInspectionTool() {
         isOnTheFly: Boolean,
         session: LocalInspectionToolSession
     ): PsiElementVisitor = object : PsiElementVisitor() {
-        private val serviceMemberFix = ServiceFix()
-        private val fieldFix = FieldFix()
+        private val fix = Fix()
 
         override fun visitElement(element: PsiElement) {
             if (element is FsdServiceItems) {
@@ -41,7 +45,7 @@ class DuplicateMemberInspection : LocalInspectionTool() {
                 for ((memberName, memberIds) in duplicateMembers) {
                     val message = FsdBundle.getMessage("inspections.bugs.duplicate.member.service", memberName)
                     for (memberId in memberIds) {
-                        holder.registerProblem(memberId, message, serviceMemberFix)
+                        holder.registerProblem(memberId, message, fix)
                     }
                 }
             }
@@ -66,7 +70,7 @@ class DuplicateMemberInspection : LocalInspectionTool() {
                 for ((caseName, cases) in duplicateNames) {
                     val message = FsdBundle.getMessage("inspections.bugs.duplicate.member.enumerated", caseName)
                     for (case in cases) {
-                        holder.registerProblem(case, message, fieldFix)
+                        holder.registerProblem(case.enumValue!!.identifier, message, fix)
                     }
                 }
             }
@@ -79,7 +83,7 @@ class DuplicateMemberInspection : LocalInspectionTool() {
                 for ((errorName, errors) in duplicateErrors) {
                     val message = FsdBundle.getMessage("inspections.bugs.duplicate.member.error", errorName)
                     for (error in errors) {
-                        holder.registerProblem(error, message, fieldFix)
+                        holder.registerProblem(error.errorSpec!!.identifier, message, fix)
                     }
                 }
             }
@@ -93,34 +97,25 @@ class DuplicateMemberInspection : LocalInspectionTool() {
             for ((fieldName, elements) in duplicateField) {
                 val message = FsdBundle.getMessage(bundleKey, fieldName)
                 for (element in elements) {
-                    holder.registerProblem(element, message, fieldFix)
+                    holder.registerProblem(element.field.identifier, message, fix)
                 }
             }
         }
     }
 
-    class FieldFix : LocalQuickFix {
+    class Fix : LocalQuickFix {
         override fun getFamilyName() = NAME
 
         override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
-            descriptor.psiElement.delete()
-        }
+            val decoratedElement = PsiTreeUtil.getParentOfType(descriptor.psiElement, FsdDecoratedElement::class.java)!!
+            val nextSibling = PsiTreeUtil.skipWhitespacesForward(decoratedElement)
 
-        companion object {
-            val NAME = FsdBundle.getMessage("inspections.bugs.duplicate.member.quickfix")
-        }
-    }
+            decoratedElement.delete()
 
-    class ServiceFix : LocalQuickFix {
-        private val PsiElement.isServiceItem: Boolean
-            get() = this is FsdMethodSpec || this is FsdDataSpec || this is FsdEnumSpec || this is FsdErrorSetSpec
-
-        override fun getFamilyName() = NAME
-
-        override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
-            var element: PsiElement? = descriptor.psiElement
-            while (element != null && !element.isServiceItem) { element = element.parent }
-            element?.delete()
+            val isListItem = decoratedElement is FsdDecoratedEnumValue || decoratedElement is FsdDecoratedErrorSpec
+            if (isListItem && nextSibling != null && nextSibling.elementType == FsdTypes.COMMA) {
+                nextSibling.delete()
+            }
         }
 
         companion object {

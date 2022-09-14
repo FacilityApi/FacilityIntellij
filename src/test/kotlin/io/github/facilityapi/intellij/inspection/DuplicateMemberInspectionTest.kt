@@ -166,7 +166,7 @@ class DuplicateMemberInspectionTest : BasePlatformTestCase() {
                 text
             }
 
-            }
+        }
         """.trimIndent()
 
         checkFix(before, after)
@@ -330,6 +330,31 @@ class DuplicateMemberInspectionTest : BasePlatformTestCase() {
         checkFix(before, after)
     }
 
+    fun testDuplicateEnumFieldFixRemovesComma() {
+        val before = """
+        service MessageService {
+            enum ConversationKind
+            {
+                person,
+                <caret>group,
+                group
+            }
+        }
+        """
+
+        val after = """
+        service MessageService {
+            enum ConversationKind
+            {
+                person,
+                group
+            }
+        }
+        """
+
+        checkFix(before, after)
+    }
+
     fun testDuplicatedErrorValueFix() {
         val before = """
         service MessageService {
@@ -346,6 +371,29 @@ class DuplicateMemberInspectionTest : BasePlatformTestCase() {
             errors MessageError
             {
                 accountBanned,
+            }
+        }
+        """
+
+        checkFix(before, after)
+    }
+
+    fun testDuplicatedErrorValueFixRemovesComma() {
+        val before = """
+        service MessageService {
+            errors MessageError
+            {
+                <caret>accountBanned,
+                accountBanned
+            }
+        }
+        """
+
+        val after = """
+        service MessageService {
+            errors MessageError
+            {
+                accountBanned
             }
         }
         """
@@ -370,7 +418,7 @@ class DuplicateMemberInspectionTest : BasePlatformTestCase() {
         myFixture.enableInspections(DuplicateMemberInspection())
         myFixture.doHighlighting()
 
-        val intention = myFixture.findSingleIntention(DuplicateMemberInspection.FieldFix.NAME)
+        val intention = myFixture.findSingleIntention(DuplicateMemberInspection.Fix.NAME)
         myFixture.launchAction(intention)
 
         myFixture.checkResult(after)
