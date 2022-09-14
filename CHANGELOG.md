@@ -3,6 +3,8 @@
 # FacilityIntellij Changelog
 
 ## [Unreleased]
+
+## [1.0.0]
 ### Added
 - Inspection for duplicate service member names, field names, enum, and error values
 - Intention to add `[validate]` to enum declarations
