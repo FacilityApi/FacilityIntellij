@@ -35,6 +35,7 @@ class FsdSyntaxHighlighter : SyntaxHighlighterBase() {
             FsdTypes.OBJECT,
             FsdTypes.MAP,
             FsdTypes.RESULT,
+            FsdTypes.NULLABLE,
             FsdTypes.ERROR -> PRIMITIVE_TYPE_KEYS
 
             FsdTypes.TYPENAME -> TYPE_REFERENCE_KEYS

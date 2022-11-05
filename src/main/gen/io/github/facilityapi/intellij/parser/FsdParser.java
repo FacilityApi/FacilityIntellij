@@ -811,7 +811,7 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (string | boolean | int32 | int64 | double | decimal | bytes | object | map | result | error | reference_type) [ type_parameter ] [ ('['']')* ]
+  // (string | boolean | int32 | int64 | double | decimal | bytes | object | map | result | error | nullable | reference_type) [ type_parameter ] [ ('['']')* ]
   public static boolean type(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "type")) return false;
     boolean r;
@@ -823,7 +823,7 @@ public class FsdParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // string | boolean | int32 | int64 | double | decimal | bytes | object | map | result | error | reference_type
+  // string | boolean | int32 | int64 | double | decimal | bytes | object | map | result | error | nullable | reference_type
   private static boolean type_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "type_0")) return false;
     boolean r;
@@ -838,6 +838,7 @@ public class FsdParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, MAP);
     if (!r) r = consumeToken(b, RESULT);
     if (!r) r = consumeToken(b, ERROR);
+    if (!r) r = consumeToken(b, NULLABLE);
     if (!r) r = reference_type(b, l + 1);
     return r;
   }

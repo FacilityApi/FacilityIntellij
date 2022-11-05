@@ -116,6 +116,15 @@
             level="ERROR"
             implementationClass="io.github.facilityapi.intellij.inspection.ValidateAttributeInspection" />
 
+        <!-- Check for nested nullable types like nullable<nullable<string>> -->
+        <localInspection
+            language="FSD"
+            key="inspection.bugs.nested.nullable.display"
+            groupKey="inspections.group"
+            enabledByDefault="true"
+            level="ERROR"
+            implementationClass="io.github.facilityapi.intellij.inspection.InvalidNullableTypeInspection" />
+
         <!-- Check for unused types -->
         <localInspection
             language="FSD"
