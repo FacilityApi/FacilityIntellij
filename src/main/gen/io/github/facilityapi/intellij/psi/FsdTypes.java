@@ -60,6 +60,7 @@ public interface FsdTypes {
   IElementType MARKDOWNHEADING = new FsdElementType("markdownheading");
   IElementType MARKDOWNTEXT = new FsdElementType("markdowntext");
   IElementType METHOD = new FsdElementType("method");
+  IElementType NULLABLE = new FsdElementType("nullable");
   IElementType NUMBER = new FsdElementType("number");
   IElementType OBJECT = new FsdElementType("object");
   IElementType RESULT = new FsdElementType("result");

@@ -173,6 +173,7 @@ MARKDOWN_TEXT=.+
   "object"                       { yybegin(METHOD_BODY_TYPE_END); return OBJECT; }
   "map"                          { yybegin(METHOD_BODY_TYPE_END); return MAP; }
   "result"                       { yybegin(METHOD_BODY_TYPE_END); return RESULT; }
+  "nullable"                     { yybegin(METHOD_BODY_TYPE_END); return NULLABLE; }
   "error"                        { yybegin(METHOD_BODY_TYPE_END); return ERROR; }
 
   {IDENTIFIER}                   { yybegin(METHOD_BODY_TYPE_END); return TYPENAME; }
@@ -262,6 +263,7 @@ MARKDOWN_TEXT=.+
   "object"                       { yybegin(RESPONSE_BODY_TYPE_END); return OBJECT; }
   "map"                          { yybegin(RESPONSE_BODY_TYPE_END); return MAP; }
   "result"                       { yybegin(RESPONSE_BODY_TYPE_END); return RESULT; }
+  "nullable"                     { yybegin(RESPONSE_BODY_TYPE_END); return NULLABLE; }
   "error"                        { yybegin(RESPONSE_BODY_TYPE_END); return ERROR; }
 
   {IDENTIFIER}                   { yybegin(RESPONSE_BODY_TYPE_END); return TYPENAME; }
@@ -338,6 +340,7 @@ MARKDOWN_TEXT=.+
   "object"                       { yybegin(DATA_BODY_TYPE_END); return OBJECT; }
   "map"                          { yybegin(DATA_BODY_TYPE_END); return MAP; }
   "result"                       { yybegin(DATA_BODY_TYPE_END); return RESULT; }
+  "nullable"                     { yybegin(DATA_BODY_TYPE_END); return NULLABLE; }
   "error"                        { yybegin(DATA_BODY_TYPE_END); return ERROR; }
 
   {IDENTIFIER}                   { yybegin(DATA_BODY_TYPE_END); return TYPENAME; }

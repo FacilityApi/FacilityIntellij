@@ -81,7 +81,7 @@ private attribute_parameter_value ::= attributeparametervalue { name="attribute 
 
 decorated_field ::= attribute_list* field { pin=2 }
 field ::= identifier ':' type [ '!' ] ';' { pin=3 }
-type ::= (string | boolean | int32 | int64 | double | decimal | bytes | object | map | result | error | reference_type) [ type_parameter ] [ ('['']')* ]
+type ::= (string | boolean | int32 | int64 | double | decimal | bytes | object | map | result | error | nullable | reference_type) [ type_parameter ] [ ('['']')* ]
 type_parameter ::= '<' type '>' { pin=2 }
 reference_type ::= typename
 {

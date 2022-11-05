@@ -32,6 +32,7 @@ class FsdCompletionContributor : CompletionContributor() {
                     resultSet.addElement(LookupElementBuilder.create("object"))
                     resultSet.addElement(LookupElementBuilder.create("map"))
                     resultSet.addElement(LookupElementBuilder.create("result"))
+                    resultSet.addElement(LookupElementBuilder.create("nullable"))
                     resultSet.addElement(LookupElementBuilder.create("error"))
                 }
             }
