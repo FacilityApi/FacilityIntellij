@@ -3,6 +3,8 @@
 # FacilityIntellij Changelog
 
 ## [Unreleased]
+
+## [1.1.0]
 ### Added
 - Support for `nullable<T>`
 
