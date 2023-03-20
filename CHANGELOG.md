@@ -4,6 +4,9 @@
 
 ## [Unreleased]
 
+## [1.1.2]
+- Added support for the 2023.1 Intellij platform
+
 ## [1.1.1]
 - Added support for the 2022.3 Intellij platform
 
