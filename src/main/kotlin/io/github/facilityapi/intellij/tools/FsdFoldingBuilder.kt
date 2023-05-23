@@ -35,12 +35,13 @@ class FsdFoldingBuilder : FoldingBuilderEx(), DumbAware {
                             child.node,
                             startOffset,
                             endOffset,
-                            "Fsd Service Folding Group ${child.identifier}"
+                            "Fsd Service Folding Group ${child.identifier}",
                         )
                     }
 
                     is FsdResponseFields,
-                    is FsdRequestFields -> {
+                    is FsdRequestFields,
+                    -> {
                         val startOffset = child.textOffset + 1
                         val endOffset = child.endOffset - 1
                         createFoldingDescriptor(child.node, startOffset, endOffset, "Fsd Method Parameter Body Group")
@@ -81,7 +82,7 @@ class FsdFoldingBuilder : FoldingBuilderEx(), DumbAware {
         node: ASTNode?,
         startOffset: Int,
         endOffset: Int,
-        debugMessage: String
+        debugMessage: String,
     ): FoldingDescriptor? {
         if (endOffset <= startOffset || node == null) return null
 

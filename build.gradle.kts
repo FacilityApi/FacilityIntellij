@@ -8,9 +8,9 @@ plugins {
     // Java support
     id("java")
     // Kotlin support
-    id("org.jetbrains.kotlin.jvm") version "1.7.10"
+    id("org.jetbrains.kotlin.jvm") version "1.8.21"
     // Gradle IntelliJ Plugin
-    id("org.jetbrains.intellij") version "1.9.0"
+    id("org.jetbrains.intellij") version "1.13.3"
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "1.3.1"
     // Gradle Qodana Plugin
@@ -18,7 +18,7 @@ plugins {
     // Gradle GrammarKit Plugin
     id("org.jetbrains.grammarkit") version "2021.2.2"
     // ktlint Plugin
-    id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
+    id("org.jlleitschuh.gradle.ktlint") version "11.3.2"
 }
 
 group = properties("pluginGroup")
@@ -100,7 +100,7 @@ tasks {
                     throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
                 }
                 subList(indexOf(start) + 1, indexOf(end))
-            }.joinToString("\n").run { markdownToHTML(this) }
+            }.joinToString("\n").run { markdownToHTML(this) },
         )
 
         // Get the latest available change notes from the changelog file
@@ -109,7 +109,7 @@ tasks {
                 changelog.run {
                     getOrNull(properties("pluginVersion")) ?: getLatest()
                 }.toHTML()
-            }
+            },
         )
     }
 
@@ -143,5 +143,5 @@ tasks {
 }
 
 ktlint {
-    version.set("0.45.2")
+    version.set("0.48.1")
 }

@@ -20,7 +20,7 @@ class FsdFindUsagesProvider : FindUsagesProvider {
         FsdLexerAdapter(),
         TokenSet.create(FsdTypes.IDENTIFIER_DECLARATION),
         TokenSet.create(FsdTypes.COMMENT),
-        TokenSet.EMPTY
+        TokenSet.EMPTY,
     )
 
     override fun canFindUsagesFor(psiElement: PsiElement) = psiElement is PsiNamedElement

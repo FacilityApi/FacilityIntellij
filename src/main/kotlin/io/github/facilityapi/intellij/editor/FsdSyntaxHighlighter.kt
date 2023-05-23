@@ -36,7 +36,8 @@ class FsdSyntaxHighlighter : SyntaxHighlighterBase() {
             FsdTypes.MAP,
             FsdTypes.RESULT,
             FsdTypes.NULLABLE,
-            FsdTypes.ERROR -> PRIMITIVE_TYPE_KEYS
+            FsdTypes.ERROR,
+            -> PRIMITIVE_TYPE_KEYS
 
             FsdTypes.TYPENAME -> TYPE_REFERENCE_KEYS
 
@@ -44,7 +45,8 @@ class FsdSyntaxHighlighter : SyntaxHighlighterBase() {
             FsdTypes.DATA,
             FsdTypes.METHOD,
             FsdTypes.ENUM,
-            FsdTypes.ERRORS -> KEYWORD_KEYS
+            FsdTypes.ERRORS,
+            -> KEYWORD_KEYS
 
             else -> emptyArray()
         }

@@ -14,7 +14,7 @@ class InvalidNullableTypeInspection : LocalInspectionTool() {
     override fun buildVisitor(
         holder: ProblemsHolder,
         isOnTheFly: Boolean,
-        session: LocalInspectionToolSession
+        session: LocalInspectionToolSession,
     ): PsiElementVisitor = object : PsiElementVisitor() {
         override fun visitElement(element: PsiElement) {
             val typeParameter = element as? FsdTypeParameter ?: return

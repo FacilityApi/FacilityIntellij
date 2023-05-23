@@ -27,7 +27,7 @@ class FsdCompletionTest : BasePlatformTestCase() {
                         widgets: Wid<caret>
                     }
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
         myFixture.completeBasic()
         assertThat(myFixture.lookupElementStrings, "completion suggestions")
@@ -56,7 +56,7 @@ class FsdCompletionTest : BasePlatformTestCase() {
                         widgets: d<caret>
                     }
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
         myFixture.completeBasic()
         assertThat(myFixture.lookupElementStrings, "completion suggestions")

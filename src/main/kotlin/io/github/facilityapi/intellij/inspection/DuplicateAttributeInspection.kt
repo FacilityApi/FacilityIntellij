@@ -14,7 +14,7 @@ class DuplicateAttributeInspection : LocalInspectionTool() {
     override fun buildVisitor(
         holder: ProblemsHolder,
         isOnTheFly: Boolean,
-        session: LocalInspectionToolSession
+        session: LocalInspectionToolSession,
     ): PsiElementVisitor = object : PsiElementVisitor() {
         private val deleteAttributeFix = DeleteAttributeFix()
 

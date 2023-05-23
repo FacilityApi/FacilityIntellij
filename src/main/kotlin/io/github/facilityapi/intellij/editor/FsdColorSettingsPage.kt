@@ -25,31 +25,31 @@ class FsdColorSettingsPage : ColorSettingsPage {
         private val DESCRIPTORS = arrayOf(
             AttributesDescriptor(
                 FsdBundle.getMessage("settings.color.displayname.markup"),
-                FsdSyntaxHighlighter.MARKUP_HEADING_KEYS[0]
+                FsdSyntaxHighlighter.MARKUP_HEADING_KEYS[0],
             ),
             AttributesDescriptor(
                 FsdBundle.getMessage("settings.color.displayname.comment"),
-                FsdSyntaxHighlighter.COMMENT_KEYS[0]
+                FsdSyntaxHighlighter.COMMENT_KEYS[0],
             ),
             AttributesDescriptor(
                 FsdBundle.getMessage("settings.color.displayname.keyword"),
-                FsdSyntaxHighlighter.KEYWORD_KEYS[0]
+                FsdSyntaxHighlighter.KEYWORD_KEYS[0],
             ),
             AttributesDescriptor(
                 FsdBundle.getMessage("settings.color.displayname.primitive"),
-                FsdSyntaxHighlighter.PRIMITIVE_TYPE_KEYS[0]
+                FsdSyntaxHighlighter.PRIMITIVE_TYPE_KEYS[0],
             ),
             AttributesDescriptor(
                 FsdBundle.getMessage("settings.color.displayname.typeref"),
-                FsdSyntaxHighlighter.TYPE_REFERENCE_KEYS[0]
+                FsdSyntaxHighlighter.TYPE_REFERENCE_KEYS[0],
             ),
             AttributesDescriptor(
                 FsdBundle.getMessage("settings.color.displayname.attribute"),
-                FsdSyntaxHighlighter.ATTRIBUTE_NAME_KEYS[0]
+                FsdSyntaxHighlighter.ATTRIBUTE_NAME_KEYS[0],
             ),
             AttributesDescriptor(
                 FsdBundle.getMessage("settings.color.displayname.attributeparametervalue"),
-                FsdSyntaxHighlighter.ATTRIBUTE_ARGUMENT_KEYS[0]
+                FsdSyntaxHighlighter.ATTRIBUTE_ARGUMENT_KEYS[0],
             ),
         )
     }

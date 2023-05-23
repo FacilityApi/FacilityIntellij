@@ -21,8 +21,8 @@ class ValidateAttributeInspectionTest : BasePlatformTestCase() {
             code,
             listOf(
                 "Missing validate parameters: regex, length",
-                "Invalid validate parameter \"count\" for type string"
-            )
+                "Invalid validate parameter \"count\" for type string",
+            ),
         )
     }
 
@@ -41,8 +41,8 @@ class ValidateAttributeInspectionTest : BasePlatformTestCase() {
             code,
             listOf(
                 "Missing validate parameters: value",
-                "Invalid validate parameter \"count\" for type int32"
-            )
+                "Invalid validate parameter \"count\" for type int32",
+            ),
         )
     }
 
@@ -61,8 +61,8 @@ class ValidateAttributeInspectionTest : BasePlatformTestCase() {
             code,
             listOf(
                 "Missing validate parameters: count",
-                "Invalid validate parameter \"value\" for type int32[]"
-            )
+                "Invalid validate parameter \"value\" for type int32[]",
+            ),
         )
     }
 
@@ -82,8 +82,8 @@ class ValidateAttributeInspectionTest : BasePlatformTestCase() {
         checkInspection(
             code,
             listOf(
-                "Invalid validate parameter \"value\" for type MessageKind"
-            )
+                "Invalid validate parameter \"value\" for type MessageKind",
+            ),
         )
     }
 
@@ -159,7 +159,7 @@ class ValidateAttributeInspectionTest : BasePlatformTestCase() {
             code,
             listOf(
                 "Invalid count value \"ten\" for attribute validate",
-            )
+            ),
         )
     }
 
@@ -178,7 +178,7 @@ class ValidateAttributeInspectionTest : BasePlatformTestCase() {
             code,
             listOf(
                 "Invalid count value \"1..0\" for attribute validate",
-            )
+            ),
         )
     }
 

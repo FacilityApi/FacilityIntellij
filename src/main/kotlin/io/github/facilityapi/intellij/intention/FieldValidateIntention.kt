@@ -59,7 +59,7 @@ class FieldValidateIntention : PsiElementBaseIntentionAction() {
                 project,
                 """[dummy]
                 |${previousNewline.text}service Test {}
-                """.trimMargin()
+                """.trimMargin(),
             ).filterIsInstance<PsiWhiteSpace>().first()
 
             decoratedField.parent.addBefore(newWhitespace, decoratedField)

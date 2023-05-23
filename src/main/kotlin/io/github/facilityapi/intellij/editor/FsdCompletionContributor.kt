@@ -20,7 +20,7 @@ class FsdCompletionContributor : CompletionContributor() {
                 override fun addCompletions(
                     parameters: CompletionParameters,
                     context: ProcessingContext,
-                    resultSet: CompletionResultSet
+                    resultSet: CompletionResultSet,
                 ) {
                     resultSet.addElement(LookupElementBuilder.create("string"))
                     resultSet.addElement(LookupElementBuilder.create("boolean"))
@@ -35,7 +35,7 @@ class FsdCompletionContributor : CompletionContributor() {
                     resultSet.addElement(LookupElementBuilder.create("nullable"))
                     resultSet.addElement(LookupElementBuilder.create("error"))
                 }
-            }
+            },
         )
     }
 }
