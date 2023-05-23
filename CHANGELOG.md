@@ -3,7 +3,6 @@
 # FacilityIntellij Changelog
 
 ## [Unreleased]
-- Added support for the 2023.1 Intellij platform
 - Added support for the `extern` keyword
 
 ## [1.1.2]
