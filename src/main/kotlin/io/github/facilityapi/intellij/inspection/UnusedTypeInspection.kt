@@ -33,7 +33,7 @@ class UnusedTypeInspection : LocalInspectionTool() {
                         namedElement.nameIdentifier!!,
                         message,
                         ProblemHighlightType.LIKE_UNUSED_SYMBOL,
-                        deleteFix
+                        deleteFix,
                     )
                 } else if (!isUsed && isEnumDefinition) {
                     val message = FsdBundle.getMessage("inspections.hints.unused.enum", namedElement.name)
@@ -41,7 +41,7 @@ class UnusedTypeInspection : LocalInspectionTool() {
                         namedElement.nameIdentifier!!,
                         message,
                         ProblemHighlightType.LIKE_UNUSED_SYMBOL,
-                        deleteFix
+                        deleteFix,
                     )
                 }
             }

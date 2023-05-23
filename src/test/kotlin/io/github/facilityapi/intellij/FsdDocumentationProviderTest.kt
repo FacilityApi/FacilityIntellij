@@ -25,7 +25,7 @@ class FsdDocumentationProviderTest : BasePlatformTestCase() {
                         id: int64;
                     }
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
         val originalElement = myFixture.elementAtCaret
         var element = DocumentationManager
@@ -47,7 +47,7 @@ class FsdDocumentationProviderTest : BasePlatformTestCase() {
                 <tr><td valign='top' class='section'>
                 <p>File:</td><td valign='top'><p>aaa.fsd</td>
                 </table>
-            """.trimIndent().replace("\n", "")
+            """.trimIndent().replace("\n", ""),
         )
     }
 
@@ -71,7 +71,7 @@ class FsdDocumentationProviderTest : BasePlatformTestCase() {
                         id: int64;
                     }
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
         val originalElement = myFixture.elementAtCaret
         var element = DocumentationManager
@@ -94,7 +94,7 @@ class FsdDocumentationProviderTest : BasePlatformTestCase() {
                 <tr><td valign='top' class='section'>
                 <p>File:</td><td valign='top'><p>aaa.fsd</td>
                 </table>
-                """.trimIndent().replace("\n", "")
+                """.trimIndent().replace("\n", ""),
             )
     }
 }

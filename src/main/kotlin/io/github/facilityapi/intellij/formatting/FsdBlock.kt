@@ -21,7 +21,7 @@ class FsdBlock(
     node: ASTNode,
     wrap: Wrap?,
     alignment: Alignment?,
-    private val codeStyleSettings: CodeStyleSettings
+    private val codeStyleSettings: CodeStyleSettings,
 ) : AbstractBlock(node, wrap, alignment), BlockWithParent {
 
     private var parent: BlockWithParent? = null
@@ -72,7 +72,9 @@ class FsdBlock(
             return if (reversedBlocks.any { (it as ASTBlock).node?.elementType == FsdTypes.LEFT_BRACE }) {
                 val f = if (previousBlock?.node?.elementType == FsdTypes.RIGHT_BRACKET) {
                     reversedBlocks.firstOrNull { (it as ASTBlock).node?.elementType == FsdTypes.LEFT_BRACKET }
-                } else null
+                } else {
+                    null
+                }
                 ChildAttributes(Indent.getNormalIndent(), f?.alignment)
             } else {
                 ChildAttributes(Indent.getNoneIndent(), alignment)

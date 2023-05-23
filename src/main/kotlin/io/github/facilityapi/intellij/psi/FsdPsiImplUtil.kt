@@ -35,7 +35,7 @@ object FsdPsiImplUtil {
             is FsdMethodSpec -> IconLoader.getIcon("/icons/method.svg", FsdMethodSpec::class.java)
             is FsdServiceSpec -> IconLoader.getIcon("/icons/service.svg", FsdServiceSpec::class.java)
             else -> throw IllegalStateException(
-                "Presentation is unsupported for ${element::class.simpleName}"
+                "Presentation is unsupported for ${element::class.simpleName}",
             )
         }
     }

@@ -8,7 +8,7 @@ import com.intellij.psi.PsiFile
 import io.github.facilityapi.intellij.psi.FsdNamedElement
 
 class FsdStructureViewModel(
-    file: PsiFile
+    file: PsiFile,
 ) : StructureViewModelBase(file, FsdStructureViewElement(file)), StructureViewModel.ElementInfoProvider {
     override fun getSorters() = arrayOf<Sorter>(Sorter.ALPHA_SORTER)
     override fun isAlwaysShowsPlus(element: StructureViewTreeElement?) = false

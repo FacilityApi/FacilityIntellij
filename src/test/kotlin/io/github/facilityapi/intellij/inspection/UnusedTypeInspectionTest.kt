@@ -18,7 +18,7 @@ class UnusedTypeInspectionTest : BasePlatformTestCase() {
 
         checkInspection(
             code,
-            listOf("Data \"Message\" is unused")
+            listOf("Data \"Message\" is unused"),
         )
     }
 
@@ -35,7 +35,7 @@ class UnusedTypeInspectionTest : BasePlatformTestCase() {
 
         checkInspection(
             code,
-            listOf("Enum \"MessageKind\" is unused")
+            listOf("Enum \"MessageKind\" is unused"),
         )
     }
 

@@ -39,6 +39,7 @@ MARKDOWN_TEXT=.+
 %state RESPONSE_SEPARATOR, RESPONSE_BODY, RESPONSE_BODY_TYPE, RESPONSE_BODY_TYPE_END, RESPONSE_BODY_ATTRIBUTE, RESPONSE_BODY_ATTRIBUTE_PARAMETER_LIST, RESPONSE_BODY_ATTRIBUTE_ARGUMENT
 %state DATA_BODY, DATA_BODY_TYPE, DATA_BODY_TYPE_END, DATA_BODY_ATTRIBUTE, DATA_BODY_ATTRIBUTE_PARAMETER_LIST, DATA_BODY_ATTRIBUTE_ARGUMENT
 %state LIST_BODY, LIST_BODY_ATTRIBUTE, LIST_BODY_ATTRIBUTE_PARAMETER_LIST, LIST_BODY_ATTRIBUTE_ARGUMENT
+%state EXTERN_DECL
 
 %%
 <YYINITIAL> {
@@ -81,6 +82,7 @@ MARKDOWN_TEXT=.+
 <SERVICE_BODY> {
   {WHITE_SPACE}                  { return WHITE_SPACE; }
 
+  "extern"                       { yybegin(EXTERN_DECL); return EXTERN; }
   "method"                       { yybegin(METHOD_BODY); return METHOD; }
   "data"                         { yybegin(DATA_BODY); return DATA; }
   "errors"                       { yybegin(LIST_BODY); return ERRORS; }
@@ -401,6 +403,18 @@ MARKDOWN_TEXT=.+
   {WHITE_SPACE}                  { return WHITE_SPACE; }
   ":"                            { return COLON; }
   {ATTRIBUTEPARAMETERVALUE}      { yybegin(LIST_BODY_ATTRIBUTE_PARAMETER_LIST); return ATTRIBUTEPARAMETERVALUE; }
+}
+
+<EXTERN_DECL> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+
+  "data"                         { return DATA; }
+  "enum"                         { return ENUM; }
+
+  ";"                            { yybegin(SERVICE_BODY); return SEMI; }
+
+  {COMMENT}                      { return COMMENT; }
+  {IDENTIFIER}                   { return IDENTIFIER; }
 }
 
 <MARKDOWN_SECTION> {

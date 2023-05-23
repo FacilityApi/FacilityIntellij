@@ -34,7 +34,7 @@ class FsdLexerTest : LexerTestCase() {
                 { ('{')
                 WHITE_SPACE ('\n')
                 } ('}')
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -45,7 +45,7 @@ class FsdLexerTest : LexerTestCase() {
                 service WidgetAPI
                 {
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -53,7 +53,7 @@ class FsdLexerTest : LexerTestCase() {
         checkCorrectRestartOnEveryToken(
             """
                 servi
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 }

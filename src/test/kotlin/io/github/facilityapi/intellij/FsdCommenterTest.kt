@@ -21,7 +21,7 @@ class FsdCommenterTest : BasePlatformTestCase() {
                         <caret>id: int64;
                     }
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
         val commentAction = CommentByLineCommentAction()
         commentAction.actionPerformedImpl(project, myFixture.editor)
@@ -40,7 +40,7 @@ class FsdCommenterTest : BasePlatformTestCase() {
                 //        id: int64;
                     }
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -61,7 +61,7 @@ class FsdCommenterTest : BasePlatformTestCase() {
                 //        id: in<caret>t64;
                     }
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
         val commentAction = CommentByLineCommentAction()
         commentAction.actionPerformedImpl(project, myFixture.editor)
@@ -80,7 +80,7 @@ class FsdCommenterTest : BasePlatformTestCase() {
                         id: int64;
                     }
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 }

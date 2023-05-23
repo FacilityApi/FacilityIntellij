@@ -89,7 +89,7 @@ class ValidateAttributeInspection : LocalInspectionTool() {
             private fun checkAttributeParameters(
                 field: FsdField,
                 attribute: FsdAttribute,
-                parameterNames: Set<String>
+                parameterNames: Set<String>,
             ) {
                 var foundRequiredParameter = false
 
@@ -110,14 +110,14 @@ class ValidateAttributeInspection : LocalInspectionTool() {
                     val message = FsdBundle.getMessage(
                         "inspections.bugs.attribute.parameter.missing",
                         attribute.attributename.text,
-                        parameterNames.joinToString()
+                        parameterNames.joinToString(),
                     )
 
                     holder.registerProblem(
                         attribute,
                         message,
                         ProblemHighlightType.GENERIC_ERROR,
-                        deleteAttributeFix // todo: replace with template?
+                        deleteAttributeFix, // todo: replace with template?
                     )
                 }
             }
@@ -159,14 +159,14 @@ class ValidateAttributeInspection : LocalInspectionTool() {
             private fun reportUnexpectedAttribute(attribute: FsdAttribute) {
                 val message = FsdBundle.getMessage(
                     "inspections.bugs.attribute.unexpected",
-                    attribute.attributename.text
+                    attribute.attributename.text,
                 )
 
                 holder.registerProblem(
                     attribute,
                     message,
                     ProblemHighlightType.ERROR,
-                    deleteAttributeFix
+                    deleteAttributeFix,
                 )
             }
 
@@ -175,14 +175,14 @@ class ValidateAttributeInspection : LocalInspectionTool() {
                     "inspections.bugs.attribute.parameter.value.invalid",
                     parameter.identifier.text,
                     parameter.attributeparametervalue.text,
-                    attribute.attributename.text
+                    attribute.attributename.text,
                 )
 
                 holder.registerProblem(
                     parameter,
                     message,
                     ProblemHighlightType.ERROR,
-                    deleteParameterFix
+                    deleteParameterFix,
                 )
             }
 
@@ -190,20 +190,20 @@ class ValidateAttributeInspection : LocalInspectionTool() {
                 typeName: String,
                 attribute: FsdAttribute,
                 parameter: FsdAttributeParameter,
-                quickFix: LocalQuickFix = deleteParameterFix
+                quickFix: LocalQuickFix = deleteParameterFix,
             ) {
                 val message = FsdBundle.getMessage(
                     "inspections.bugs.attribute.parameter.invalid.type",
                     attribute.attributename.text,
                     parameter.identifier.text,
-                    typeName
+                    typeName,
                 )
 
                 holder.registerProblem(
                     parameter,
                     message,
                     ProblemHighlightType.GENERIC_ERROR,
-                    quickFix
+                    quickFix,
                 )
             }
         }
