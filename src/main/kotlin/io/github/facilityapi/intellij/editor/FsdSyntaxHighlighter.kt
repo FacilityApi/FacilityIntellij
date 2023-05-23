@@ -46,6 +46,7 @@ class FsdSyntaxHighlighter : SyntaxHighlighterBase() {
             FsdTypes.METHOD,
             FsdTypes.ENUM,
             FsdTypes.ERRORS,
+            FsdTypes.EXTERN,
             -> KEYWORD_KEYS
 
             else -> emptyArray()

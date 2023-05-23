@@ -23,6 +23,7 @@ public interface FsdTypes {
   IElementType ERROR_LIST = new FsdElementType("ERROR_LIST");
   IElementType ERROR_SET_SPEC = new FsdElementType("ERROR_SET_SPEC");
   IElementType ERROR_SPEC = new FsdElementType("ERROR_SPEC");
+  IElementType EXTERN_DECL = new FsdElementType("EXTERN_DECL");
   IElementType FIELD = new FsdElementType("FIELD");
   IElementType IDENTIFIER_DECLARATION = new FsdElementType("IDENTIFIER_DECLARATION");
   IElementType MARKDOWN_REMARKS = new FsdElementType("MARKDOWN_REMARKS");
@@ -49,6 +50,7 @@ public interface FsdTypes {
   IElementType ENUM = new FsdElementType("enum");
   IElementType ERROR = new FsdElementType("error");
   IElementType ERRORS = new FsdElementType("errors");
+  IElementType EXTERN = new FsdElementType("extern");
   IElementType IDENTIFIER = new FsdElementType("identifier");
   IElementType INT32 = new FsdElementType("int32");
   IElementType INT64 = new FsdElementType("int64");
@@ -120,6 +122,9 @@ public interface FsdTypes {
       }
       else if (type == ERROR_SPEC) {
         return new FsdErrorSpecImpl(node);
+      }
+      else if (type == EXTERN_DECL) {
+        return new FsdExternDeclImpl(node);
       }
       else if (type == FIELD) {
         return new FsdFieldImpl(node);
