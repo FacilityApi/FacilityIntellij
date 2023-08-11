@@ -31,6 +31,7 @@ class FsdSyntaxHighlighter : SyntaxHighlighterBase() {
             FsdTypes.INT64,
             FsdTypes.DOUBLE,
             FsdTypes.DECIMAL,
+            FsdTypes.DATETIME,
             FsdTypes.BYTES,
             FsdTypes.OBJECT,
             FsdTypes.MAP,

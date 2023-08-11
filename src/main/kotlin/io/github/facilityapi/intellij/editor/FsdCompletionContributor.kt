@@ -28,6 +28,7 @@ class FsdCompletionContributor : CompletionContributor() {
                     resultSet.addElement(LookupElementBuilder.create("int64"))
                     resultSet.addElement(LookupElementBuilder.create("double"))
                     resultSet.addElement(LookupElementBuilder.create("decimal"))
+                    resultSet.addElement(LookupElementBuilder.create("datetime"))
                     resultSet.addElement(LookupElementBuilder.create("bytes"))
                     resultSet.addElement(LookupElementBuilder.create("object"))
                     resultSet.addElement(LookupElementBuilder.create("map"))

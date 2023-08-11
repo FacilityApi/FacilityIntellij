@@ -45,6 +45,7 @@ public interface FsdTypes {
   IElementType COMMA = new FsdElementType(",");
   IElementType COMMENT = new FsdElementType("comment");
   IElementType DATA = new FsdElementType("data");
+  IElementType DATETIME = new FsdElementType("datetime");
   IElementType DECIMAL = new FsdElementType("decimal");
   IElementType DOUBLE = new FsdElementType("double");
   IElementType ENUM = new FsdElementType("enum");
