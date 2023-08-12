@@ -61,6 +61,6 @@ class FsdCompletionTest : BasePlatformTestCase() {
         myFixture.completeBasic()
         assertThat(myFixture.lookupElementStrings, "completion suggestions")
             .isNotNull()
-            .containsExactlyInAnyOrder("double", "decimal")
+            .containsExactlyInAnyOrder("double", "decimal", "datetime")
     }
 }
