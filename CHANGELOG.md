@@ -3,6 +3,8 @@
 # FacilityIntellij Changelog
 
 ## Unreleased
+- Added support for the built-in `datetime` type
+- Added support for the 2023.2 Intellij platform
 
 ## 1.2.0 - 2023-05-23
 - Added support for the `extern` keyword
