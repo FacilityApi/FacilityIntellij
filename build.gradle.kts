@@ -1,6 +1,7 @@
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.grammarkit.tasks.GenerateLexerTask
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun properties(key: String) = project.findProperty(key).toString()
 
@@ -62,11 +63,18 @@ qodana {
     showReport.set(System.getenv("QODANA_SHOW_REPORT").toBoolean())
 }
 
-kotlin {
-    jvmToolchain(properties("javaVersion").toInt())
-}
-
 tasks {
+    // TODO: figure out why gradle jvm toolchains causes issues with GH workflows
+    properties("javaVersion").let {
+        withType<JavaCompile> {
+            sourceCompatibility = it
+            targetCompatibility = it
+        }
+        withType<KotlinCompile> {
+            kotlinOptions.jvmTarget = it
+        }
+    }
+
     wrapper {
         gradleVersion = properties("gradleVersion")
     }
