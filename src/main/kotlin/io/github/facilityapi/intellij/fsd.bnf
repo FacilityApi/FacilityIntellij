@@ -83,7 +83,7 @@ extern_decl ::= extern (data | enum) identifier ';'
 
 decorated_field ::= attribute_list* field { pin=2 }
 field ::= identifier ':' type [ '!' ] ';' { pin=3 }
-type ::= (string | boolean | int32 | int64 | double | decimal | bytes | object | map | result | error | nullable | reference_type) [ type_parameter ] [ ('['']')* ]
+type ::= (string | boolean | int32 | int64 | double | decimal | datetime | bytes | object | map | result | error | nullable | reference_type) [ type_parameter ] [ ('['']')* ]
 type_parameter ::= '<' type '>' { pin=2 }
 reference_type ::= typename
 {

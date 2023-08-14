@@ -171,6 +171,7 @@ MARKDOWN_TEXT=.+
   "int64"                        { yybegin(METHOD_BODY_TYPE_END); return INT64; }
   "double"                       { yybegin(METHOD_BODY_TYPE_END); return DOUBLE; }
   "decimal"                      { yybegin(METHOD_BODY_TYPE_END); return DECIMAL; }
+  "datetime"                     { yybegin(METHOD_BODY_TYPE_END); return DATETIME; }
   "bytes"                        { yybegin(METHOD_BODY_TYPE_END); return BYTES; }
   "object"                       { yybegin(METHOD_BODY_TYPE_END); return OBJECT; }
   "map"                          { yybegin(METHOD_BODY_TYPE_END); return MAP; }
@@ -261,6 +262,7 @@ MARKDOWN_TEXT=.+
   "int64"                        { yybegin(RESPONSE_BODY_TYPE_END); return INT64; }
   "double"                       { yybegin(RESPONSE_BODY_TYPE_END); return DOUBLE; }
   "decimal"                      { yybegin(RESPONSE_BODY_TYPE_END); return DECIMAL; }
+  "datetime"                     { yybegin(RESPONSE_BODY_TYPE_END); return DATETIME; }
   "bytes"                        { yybegin(RESPONSE_BODY_TYPE_END); return BYTES; }
   "object"                       { yybegin(RESPONSE_BODY_TYPE_END); return OBJECT; }
   "map"                          { yybegin(RESPONSE_BODY_TYPE_END); return MAP; }
@@ -338,6 +340,7 @@ MARKDOWN_TEXT=.+
   "int64"                        { yybegin(DATA_BODY_TYPE_END); return INT64; }
   "double"                       { yybegin(DATA_BODY_TYPE_END); return DOUBLE; }
   "decimal"                      { yybegin(DATA_BODY_TYPE_END); return DECIMAL; }
+  "datetime"                     { yybegin(DATA_BODY_TYPE_END); return DATETIME; }
   "bytes"                        { yybegin(DATA_BODY_TYPE_END); return BYTES; }
   "object"                       { yybegin(DATA_BODY_TYPE_END); return OBJECT; }
   "map"                          { yybegin(DATA_BODY_TYPE_END); return MAP; }
