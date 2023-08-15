@@ -3,6 +3,8 @@
 # FacilityIntellij Changelog
 
 ## Unreleased
+
+## 1.3.0 - 2023-08-15
 - Added support for the built-in `datetime` type
 - Added support for the 2023.2 Intellij platform
 
