@@ -24,7 +24,7 @@ class DuplicateAttributeInspection : LocalInspectionTool() {
                     .flatMap { it.attributeList }
                     .groupBy { it.attributename.text }
 
-                for ((attributeName, attributes) in attributesByName.filter { it.value.size > 1 }) {
+                for ((attributeName, attributes) in attributesByName.filter { it.value.size > 1 && SINGLE_ATTRIBUTES.contains(it.key) }) {
                     val message = FsdBundle.getMessage("inspections.bugs.duplicate.attribute", attributeName)
                     for (memberId in attributes) {
                         holder.registerProblem(memberId, message, deleteAttributeFix)
@@ -41,5 +41,10 @@ class DuplicateAttributeInspection : LocalInspectionTool() {
                 }
             }
         }
+    }
+
+    companion object {
+        // names of attributes that can only be used once
+        val SINGLE_ATTRIBUTES = setOf("csharp", "http", "obsolete", "required", "validate")
     }
 }

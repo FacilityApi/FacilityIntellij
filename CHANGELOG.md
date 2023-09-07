@@ -3,6 +3,7 @@
 # FacilityIntellij Changelog
 
 ## Unreleased
+- Only check specific attributes for duplicates
 
 ## 1.3.1 - 2023-09-07
 - Fix support for the 2023.2 Intellij platform
