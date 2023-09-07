@@ -29,7 +29,7 @@ class SplitAttributeListIntention : PsiElementBaseIntentionAction() {
         val attributeList = PsiTreeUtil.getParentOfType(element, FsdAttributeList::class.java) ?: return
         val decoratedElement = PsiTreeUtil.getParentOfType(attributeList, FsdDecoratedElement::class.java) ?: return
 
-        val psiFacade = PsiParserFacade.SERVICE.getInstance(project)
+        val psiFacade = PsiParserFacade.getInstance(project)
         val newline = psiFacade.createWhiteSpaceFromText("\n")
 
         for (attribute in attributeList.attributeList) {

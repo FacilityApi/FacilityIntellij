@@ -62,7 +62,7 @@ fun createFromText(project: Project, text: String): Sequence<PsiElement> {
 }
 
 fun addAttribute(element: PsiElement, attributeText: String) {
-    val psiFacade = PsiParserFacade.SERVICE.getInstance(element.project)
+    val psiFacade = PsiParserFacade.getInstance(element.project)
     val newline = psiFacade.createWhiteSpaceFromText("\n")
 
     val attribute = element.addBefore(createAttribute(element.project, attributeText), element.firstChild)

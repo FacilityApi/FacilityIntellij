@@ -87,6 +87,7 @@
         <defaultLiveTemplates file="/liveTemplates/Facility Service Definition.xml"/>
 
         <liveTemplateContext
+            contextId="FSD"
             implementation="io.github.facilityapi.intellij.tools.FsdLiveTemplateContext"/>
 
         <!-- Check for duplicate names in service definitions -->
