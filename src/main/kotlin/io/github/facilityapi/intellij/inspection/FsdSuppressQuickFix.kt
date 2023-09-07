@@ -21,7 +21,7 @@ class FsdSuppressQuickFix(id: String, @Nls text: String) :
     }
 
     override fun createSuppression(project: Project, element: PsiElement, container: PsiElement) {
-        val psi = PsiParserFacade.SERVICE.getInstance(project)
+        val psi = PsiParserFacade.getInstance(project)
         val newline = psi.createWhiteSpaceFromText("\n")
 
         super.createSuppression(project, element, container)

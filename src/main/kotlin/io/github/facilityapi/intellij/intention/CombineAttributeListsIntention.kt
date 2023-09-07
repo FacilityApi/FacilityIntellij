@@ -33,7 +33,7 @@ class CombineAttributeListsIntention : PsiElementBaseIntentionAction() {
         val attributeListsToDiscard = attributeLists.drop(1)
         val attributesToFold = attributeListsToDiscard.flatMap { it.attributeList }
 
-        val psiFacade = PsiParserFacade.SERVICE.getInstance(project)
+        val psiFacade = PsiParserFacade.getInstance(project)
         val space = psiFacade.createWhiteSpaceFromText(" ")
 
         val comma = createFromText(project, "[first, second] service Dummy { }")
