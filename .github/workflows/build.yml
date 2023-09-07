@@ -35,6 +35,7 @@ jobs:
 
       # Free GitHub Actions Environment Disk Space
       - name: Maximize Build Space
+        if: false # only needed when using Qodana
         run: |
           sudo rm -rf /usr/share/dotnet
           sudo rm -rf /usr/local/lib/android
