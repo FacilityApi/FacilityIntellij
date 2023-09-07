@@ -3,7 +3,7 @@
 # FacilityIntellij Changelog
 
 ## Unreleased
-- Fix support for the 2023.3 Intellij platform
+- Fix support for the 2023.2 Intellij platform
 - Drop support for IntelliJ platform below 2022.3
 
 ## 1.3.0 - 2023-08-15
