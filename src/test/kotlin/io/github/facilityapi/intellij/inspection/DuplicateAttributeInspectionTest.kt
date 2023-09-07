@@ -175,13 +175,13 @@ class DuplicateAttributeInspectionTest : BasePlatformTestCase() {
         service MessageService {
             errors Messages
             {
-                [retired, retired]
+                [required, required]
                 corrupted
             }
         }
         """
 
-        checkInspection(code, listOf("Duplicate attribute: retired", "Duplicate attribute: retired"))
+        checkInspection(code, listOf("Duplicate attribute: required", "Duplicate attribute: required"))
     }
 
     fun `test duplicate required attribute detected with shorthand`() {
@@ -210,6 +210,23 @@ class DuplicateAttributeInspectionTest : BasePlatformTestCase() {
         """
 
         checkInspection(code, listOf("Duplicate attribute: required"))
+    }
+
+    fun `test duplicate tag attribute allowed`() {
+        val code = """
+        service MessageService {
+            [tag(name: this), tag(name: that)]
+            method getMessages
+            {
+                [validate(value: 1..)]
+                limit: int32;
+            }:
+            {
+            }
+        }
+        """
+
+        checkInspection(code, emptyList())
     }
 
     private fun checkInspection(code: String, errorDescriptions: List<String>) {
