@@ -2,7 +2,7 @@
 
 # FacilityIntellij Changelog
 
-## Unreleased
+## 1.3.3
 - Support newer versions of the IntelliJ platform
 
 ## 1.3.2
