@@ -3,6 +3,9 @@
 # FacilityIntellij Changelog
 
 ## Unreleased
+- Support newer versions of the IntelliJ platform
+
+## 1.3.2
 - Fix support for the 2023.3 Intellij platform
 - Only check specific attributes for duplicates
 
