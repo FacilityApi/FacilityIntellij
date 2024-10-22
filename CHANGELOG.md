@@ -3,6 +3,8 @@
 # FacilityIntellij Changelog
 
 ## Unreleased
+
+## 1.3.4 - 2024-10-22
 - Remove use of deprecated APIs
 
 ## 1.3.3
