@@ -43,28 +43,28 @@ class FsdFoldingBuilder : FoldingBuilderEx(), DumbAware {
                     is FsdRequestFields,
                     -> {
                         val startOffset = child.textOffset + 1
-                        val endOffset = child.endOffset - 1
+                        val endOffset = child.textRange.endOffset - 1
                         createFoldingDescriptor(child.node, startOffset, endOffset, "Fsd Method Parameter Body Group")
                     }
 
                     is FsdDataSpec -> {
                         val start = PsiTreeUtil.findSiblingForward(child.firstChild, FsdTypes.LEFT_BRACE, null) ?: return@mapNotNull null
                         val startOffset = start.textOffset + 1
-                        val endOffset = child.endOffset - 1
+                        val endOffset = child.textRange.endOffset - 1
                         createFoldingDescriptor(child.node, startOffset, endOffset, "Fsd Data Body Group")
                     }
 
                     is FsdEnumSpec -> {
                         val start = PsiTreeUtil.findChildOfType(child, FsdEnumValueList::class.java) ?: return@mapNotNull null
                         val startOffset = start.textOffset + 1
-                        val endOffset = child.endOffset - 1
+                        val endOffset = child.textRange.endOffset - 1
                         createFoldingDescriptor(child.node, startOffset, endOffset, "Fsd Enumerated Value Body Group")
                     }
 
                     is FsdErrorSetSpec -> {
                         val start = PsiTreeUtil.findChildOfType(child, FsdErrorList::class.java) ?: return@mapNotNull null
                         val startOffset = start.textOffset + 1
-                        val endOffset = child.endOffset - 1
+                        val endOffset = child.textRange.endOffset - 1
                         createFoldingDescriptor(child.node, startOffset, endOffset, "Fsd Error Set Body Group")
                     }
 

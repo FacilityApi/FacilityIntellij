@@ -3,6 +3,7 @@
 # FacilityIntellij Changelog
 
 ## Unreleased
+- Remove use of deprecated APIs
 
 ## 1.3.3
 - Support newer versions of the IntelliJ platform
