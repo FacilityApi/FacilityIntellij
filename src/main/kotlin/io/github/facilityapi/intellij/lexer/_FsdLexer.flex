@@ -11,7 +11,7 @@ import static io.github.facilityapi.intellij.psi.FsdTypes.*;
 
 %{
   public _FsdLexer() {
-    this((java.io.Reader)null);
+      this((java.io.Reader)null);
   }
 %}
 
@@ -26,61 +26,405 @@ EOL=\R
 WHITE_SPACE=\s+
 
 COMMENT="//"[^\r\n]*
-SPACE=[ \t\n\x0B\f\r]+
-IDENTIFIER=[a-zA-Z_0-9]+
-TYPENAME=[a-zA-Z_0-9]+
-ATTRIBUTENAME=[a-zA-Z_0-9]+
+IDENTIFIER=[a-zA-Z0-9_]+
 ATTRIBUTEPARAMETERVALUE=\"(([^\"\\]+|\\[\"\\/bfnrt]|\\u[0-9a-fA-f]{4})*)\"|([0-9a-zA-Z.+_-]+)
 NUMBER=[0-9]+(\.[0-9]*)?
-MARKDOWNHEADING=#[^\r\n]*
-MARKDOWNTEXT=.+
+MARKDOWN_HEADING=#[^\r\n]*
+MARKDOWN_TEXT=.+
+
+%state MARKDOWN_SECTION
+%state SERVICE_ATTRIBUTE, SERVICE_ATTRIBUTE_PARAMETER_LIST, SERVICE_ATTRIBUTE_ARGUMENT
+%state SERVICE_BODY, SERVICE_BODY_ATTRIBUTE, SERVICE_BODY_ATTRIBUTE_PARAMETER_LIST, SERVICE_BODY_ATTRIBUTE_ARGUMENT
+%state METHOD_BODY, METHOD_BODY_TYPE, METHOD_BODY_TYPE_END, METHOD_BODY_ATTRIBUTE, METHOD_BODY_ATTRIBUTE_PARAMETER_LIST, METHOD_BODY_ATTRIBUTE_ARGUMENT
+%state RESPONSE_SEPARATOR, RESPONSE_BODY, RESPONSE_BODY_TYPE, RESPONSE_BODY_TYPE_END, RESPONSE_BODY_ATTRIBUTE, RESPONSE_BODY_ATTRIBUTE_PARAMETER_LIST, RESPONSE_BODY_ATTRIBUTE_ARGUMENT
+%state DATA_BODY, DATA_BODY_TYPE, DATA_BODY_TYPE_END, DATA_BODY_ATTRIBUTE, DATA_BODY_ATTRIBUTE_PARAMETER_LIST, DATA_BODY_ATTRIBUTE_ARGUMENT
+%state LIST_BODY, LIST_BODY_ATTRIBUTE, LIST_BODY_ATTRIBUTE_PARAMETER_LIST, LIST_BODY_ATTRIBUTE_ARGUMENT
+%state EXTERN_DECL
 
 %%
 <YYINITIAL> {
-  {WHITE_SPACE}                   { return WHITE_SPACE; }
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
 
-  "("                             { return LEFT_PAREN; }
-  ")"                             { return RIGHT_PAREN; }
-  "{"                             { return LEFT_BRACE; }
-  "}"                             { return RIGHT_BRACE; }
-  "["                             { return LEFT_BRACKET; }
-  "]"                             { return RIGHT_BRACKET; }
-  "<"                             { return LEFT_ANGLE; }
-  ">"                             { return RIGHT_ANGLE; }
-  ","                             { return COMMA; }
-  ";"                             { return SEMI; }
-  ":"                             { return COLON; }
-  "!"                             { return BANG; }
-  "service"                       { return SERVICE; }
-  "extern"                        { return EXTERN; }
-  "enum"                          { return ENUM; }
-  "data"                          { return DATA; }
-  "errors"                        { return ERRORS; }
-  "method"                        { return METHOD; }
-  "string"                        { return STRING; }
-  "boolean"                       { return BOOLEAN; }
-  "int32"                         { return INT32; }
-  "int64"                         { return INT64; }
-  "double"                        { return DOUBLE; }
-  "decimal"                       { return DECIMAL; }
-  "datetime"                      { return DATETIME; }
-  "bytes"                         { return BYTES; }
-  "object"                        { return OBJECT; }
-  "map"                           { return MAP; }
-  "result"                        { return RESULT; }
-  "error"                         { return ERROR; }
-  "nullable"                      { return NULLABLE; }
+  "service"                      { yybegin(SERVICE_BODY); return SERVICE; }
 
-  {COMMENT}                       { return COMMENT; }
-  {SPACE}                         { return SPACE; }
-  {IDENTIFIER}                    { return IDENTIFIER; }
-  {TYPENAME}                      { return TYPENAME; }
-  {ATTRIBUTENAME}                 { return ATTRIBUTENAME; }
-  {ATTRIBUTEPARAMETERVALUE}       { return ATTRIBUTEPARAMETERVALUE; }
-  {NUMBER}                        { return NUMBER; }
-  {MARKDOWNHEADING}               { return MARKDOWNHEADING; }
-  {MARKDOWNTEXT}                  { return MARKDOWNTEXT; }
+  "["                            { yybegin(SERVICE_ATTRIBUTE); return LEFT_BRACKET; }
+  "]"                            { return RIGHT_BRACKET; }
 
+  {COMMENT}                      { return COMMENT; }
+}
+
+<SERVICE_ATTRIBUTE> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+
+  "("                            { yybegin(SERVICE_ATTRIBUTE_PARAMETER_LIST); return LEFT_PAREN; }
+  ")"                            { return RIGHT_PAREN; }
+
+  {IDENTIFIER}                   { return ATTRIBUTENAME; }
+  ,                              { return COMMA; }
+  ]                              { yybegin(YYINITIAL); return RIGHT_BRACKET; }
+}
+
+<SERVICE_ATTRIBUTE_PARAMETER_LIST> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+
+  ")"                            { yybegin(SERVICE_ATTRIBUTE); return RIGHT_PAREN; }
+  ,                              { return COMMA; }
+
+  {IDENTIFIER}                   { yybegin(SERVICE_ATTRIBUTE_ARGUMENT); return IDENTIFIER; }
+}
+
+<SERVICE_ATTRIBUTE_ARGUMENT> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+  ":"                            { return COLON; }
+  {ATTRIBUTEPARAMETERVALUE}      { yybegin(SERVICE_ATTRIBUTE_PARAMETER_LIST); return ATTRIBUTEPARAMETERVALUE; }
+}
+
+<SERVICE_BODY> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+
+  "extern"                       { yybegin(EXTERN_DECL); return EXTERN; }
+  "method"                       { yybegin(METHOD_BODY); return METHOD; }
+  "data"                         { yybegin(DATA_BODY); return DATA; }
+  "errors"                       { yybegin(LIST_BODY); return ERRORS; }
+  "enum"                         { yybegin(LIST_BODY); return ENUM; }
+
+  "{"                            { return LEFT_BRACE; }
+  "}"                            { yybegin(MARKDOWN_SECTION); return RIGHT_BRACE; }
+  "["                            { yybegin(SERVICE_BODY_ATTRIBUTE); return LEFT_BRACKET; }
+  "]"                            { return RIGHT_BRACKET; }
+
+  {IDENTIFIER}                   { return IDENTIFIER; }
+  {COMMENT}                      { return COMMENT; }
+}
+
+<SERVICE_BODY_ATTRIBUTE> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+
+  "("                            { yybegin(SERVICE_BODY_ATTRIBUTE_PARAMETER_LIST); return LEFT_PAREN; }
+  ")"                            { return RIGHT_PAREN; }
+
+  {IDENTIFIER}                   { return ATTRIBUTENAME; }
+  ,                              { return COMMA; }
+  ]                              { yybegin(SERVICE_BODY); return RIGHT_BRACKET; }
+}
+
+<SERVICE_BODY_ATTRIBUTE_PARAMETER_LIST> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+
+  ")"                            { yybegin(SERVICE_BODY_ATTRIBUTE); return RIGHT_PAREN; }
+  ,                              { return COMMA; }
+
+  {IDENTIFIER}                   { yybegin(SERVICE_BODY_ATTRIBUTE_ARGUMENT); return IDENTIFIER; }
+}
+
+<SERVICE_BODY_ATTRIBUTE_ARGUMENT> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+  ":"                            { return COLON; }
+  {ATTRIBUTEPARAMETERVALUE}      { yybegin(SERVICE_BODY_ATTRIBUTE_PARAMETER_LIST); return ATTRIBUTEPARAMETERVALUE; }
+}
+
+<METHOD_BODY> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+
+  "{"                            { return LEFT_BRACE; }
+  "}"                            { yybegin(RESPONSE_SEPARATOR); return RIGHT_BRACE; }
+  ":"                            { yybegin(METHOD_BODY_TYPE); return COLON; }
+  "["                            { yybegin(METHOD_BODY_ATTRIBUTE); return LEFT_BRACKET; }
+  "]"                            { return RIGHT_BRACKET; }
+  {COMMENT}                      { return COMMENT; }
+  {IDENTIFIER}                   { return IDENTIFIER; }
+}
+
+<METHOD_BODY_ATTRIBUTE> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+
+  "("                            { yybegin(METHOD_BODY_ATTRIBUTE_PARAMETER_LIST); return LEFT_PAREN; }
+  ")"                            { return RIGHT_PAREN; }
+
+  {IDENTIFIER}                   { return ATTRIBUTENAME; }
+  ,                              { return COMMA; }
+  ]                              { yybegin(METHOD_BODY); return RIGHT_BRACKET; }
+}
+
+<METHOD_BODY_ATTRIBUTE_PARAMETER_LIST> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+
+  ")"                            { yybegin(METHOD_BODY_ATTRIBUTE); return RIGHT_PAREN; }
+  ,                              { return COMMA; }
+
+  {IDENTIFIER}                   { yybegin(METHOD_BODY_ATTRIBUTE_ARGUMENT); return IDENTIFIER; }
+}
+
+<METHOD_BODY_ATTRIBUTE_ARGUMENT> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+  ":"                            { return COLON; }
+  {ATTRIBUTEPARAMETERVALUE}      { yybegin(METHOD_BODY_ATTRIBUTE_PARAMETER_LIST); return ATTRIBUTEPARAMETERVALUE; }
+}
+
+<METHOD_BODY_TYPE> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+  {COMMENT}                      { return COMMENT; }
+
+  "string"                       { yybegin(METHOD_BODY_TYPE_END); return STRING; }
+  "boolean"                      { yybegin(METHOD_BODY_TYPE_END); return BOOLEAN; }
+  "int32"                        { yybegin(METHOD_BODY_TYPE_END); return INT32; }
+  "int64"                        { yybegin(METHOD_BODY_TYPE_END); return INT64; }
+  "double"                       { yybegin(METHOD_BODY_TYPE_END); return DOUBLE; }
+  "decimal"                      { yybegin(METHOD_BODY_TYPE_END); return DECIMAL; }
+  "datetime"                     { yybegin(METHOD_BODY_TYPE_END); return DATETIME; }
+  "bytes"                        { yybegin(METHOD_BODY_TYPE_END); return BYTES; }
+  "object"                       { yybegin(METHOD_BODY_TYPE_END); return OBJECT; }
+  "map"                          { yybegin(METHOD_BODY_TYPE_END); return MAP; }
+  "result"                       { yybegin(METHOD_BODY_TYPE_END); return RESULT; }
+  "nullable"                     { yybegin(METHOD_BODY_TYPE_END); return NULLABLE; }
+  "error"                        { yybegin(METHOD_BODY_TYPE_END); return ERROR; }
+
+  {IDENTIFIER}                   { yybegin(METHOD_BODY_TYPE_END); return TYPENAME; }
+
+  "}"                            { yybegin(RESPONSE_SEPARATOR); return RIGHT_BRACE; }
+}
+
+<METHOD_BODY_TYPE_END> {
+    {WHITE_SPACE}                  { return WHITE_SPACE; }
+    {COMMENT}                      { return COMMENT; }
+
+    "<"                            { yybegin(METHOD_BODY_TYPE); return LEFT_ANGLE; }
+    ">"                            { return RIGHT_ANGLE; }
+    "["                            { return LEFT_BRACKET; }
+    "]"                            { return RIGHT_BRACKET; }
+    "!"                            { return BANG; }
+
+    ";"                            { yybegin(METHOD_BODY); return SEMI; }
+
+    // Identifiers shouldn't be here, so break back into the body definition
+    {IDENTIFIER}                   { yybegin(METHOD_BODY); return IDENTIFIER; }
+    "}"                            { yybegin(RESPONSE_SEPARATOR); return RIGHT_BRACE; }
+}
+
+<RESPONSE_SEPARATOR> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+  {COMMENT}                      { return COMMENT; }
+
+  ":"                            { yybegin(RESPONSE_BODY); return COLON; }
+  "}"                            { yybegin(MARKDOWN_SECTION); return RIGHT_BRACE; }
+
+  "method"                       { yybegin(METHOD_BODY); return METHOD; }
+  "data"                         { yybegin(DATA_BODY); return DATA; }
+  "errors"                       { yybegin(LIST_BODY); return ERRORS; }
+  "enum"                         { yybegin(LIST_BODY); return ENUM; }
+}
+
+<RESPONSE_BODY> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+
+  "{"                            { return LEFT_BRACE; }
+  "}"                            { yybegin(SERVICE_BODY); return RIGHT_BRACE; }
+  ":"                            { yybegin(RESPONSE_BODY_TYPE); return COLON; }
+  "["                            { yybegin(RESPONSE_BODY_ATTRIBUTE); return LEFT_BRACKET; }
+  "]"                            { return RIGHT_BRACKET; }
+  {COMMENT}                      { return COMMENT; }
+  {IDENTIFIER}                   { return IDENTIFIER; }
+}
+
+<RESPONSE_BODY_ATTRIBUTE> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+
+  "("                            { yybegin(RESPONSE_BODY_ATTRIBUTE_PARAMETER_LIST); return LEFT_PAREN; }
+  ")"                            { return RIGHT_PAREN; }
+
+  {IDENTIFIER}                   { return ATTRIBUTENAME; }
+  ,                              { return COMMA; }
+  ]                              { yybegin(RESPONSE_BODY); return RIGHT_BRACKET; }
+}
+
+<RESPONSE_BODY_ATTRIBUTE_PARAMETER_LIST> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+
+  ")"                            { yybegin(RESPONSE_BODY_ATTRIBUTE); return RIGHT_PAREN; }
+  ,                              { return COMMA; }
+
+  {IDENTIFIER}                   { yybegin(RESPONSE_BODY_ATTRIBUTE_ARGUMENT); return IDENTIFIER; }
+}
+
+<RESPONSE_BODY_ATTRIBUTE_ARGUMENT> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+  ":"                            { return COLON; }
+  {ATTRIBUTEPARAMETERVALUE}      { yybegin(RESPONSE_BODY_ATTRIBUTE_PARAMETER_LIST); return ATTRIBUTEPARAMETERVALUE; }
+}
+
+<RESPONSE_BODY_TYPE> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+  {COMMENT}                      { return COMMENT; }
+
+  "string"                       { yybegin(RESPONSE_BODY_TYPE_END); return STRING; }
+  "boolean"                      { yybegin(RESPONSE_BODY_TYPE_END); return BOOLEAN; }
+  "int32"                        { yybegin(RESPONSE_BODY_TYPE_END); return INT32; }
+  "int64"                        { yybegin(RESPONSE_BODY_TYPE_END); return INT64; }
+  "double"                       { yybegin(RESPONSE_BODY_TYPE_END); return DOUBLE; }
+  "decimal"                      { yybegin(RESPONSE_BODY_TYPE_END); return DECIMAL; }
+  "datetime"                     { yybegin(RESPONSE_BODY_TYPE_END); return DATETIME; }
+  "bytes"                        { yybegin(RESPONSE_BODY_TYPE_END); return BYTES; }
+  "object"                       { yybegin(RESPONSE_BODY_TYPE_END); return OBJECT; }
+  "map"                          { yybegin(RESPONSE_BODY_TYPE_END); return MAP; }
+  "result"                       { yybegin(RESPONSE_BODY_TYPE_END); return RESULT; }
+  "nullable"                     { yybegin(RESPONSE_BODY_TYPE_END); return NULLABLE; }
+  "error"                        { yybegin(RESPONSE_BODY_TYPE_END); return ERROR; }
+
+  {IDENTIFIER}                   { yybegin(RESPONSE_BODY_TYPE_END); return TYPENAME; }
+
+  "}"                            { yybegin(SERVICE_BODY); return RIGHT_BRACE; }
+}
+
+<RESPONSE_BODY_TYPE_END> {
+    {WHITE_SPACE}                  { return WHITE_SPACE; }
+    {COMMENT}                      { return COMMENT; }
+
+    "<"                            { yybegin(RESPONSE_BODY_TYPE); return LEFT_ANGLE; }
+    ">"                            { return RIGHT_ANGLE; }
+    "["                            { return LEFT_BRACKET; }
+    "]"                            { return RIGHT_BRACKET; }
+    "!"                            { return BANG; }
+
+    ";"                            { yybegin(RESPONSE_BODY); return SEMI; }
+
+    // Identifiers shouldn't be here, so break back into the body definition
+    {IDENTIFIER}                   { yybegin(RESPONSE_BODY); return IDENTIFIER; }
+    "}"                            { yybegin(SERVICE_BODY); return RIGHT_BRACE; }
+}
+
+<DATA_BODY> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+
+  "{"                            { return LEFT_BRACE; }
+  "}"                            { yybegin(SERVICE_BODY); return RIGHT_BRACE; }
+  ":"                            { yybegin(DATA_BODY_TYPE); return COLON; }
+  "["                            { yybegin(DATA_BODY_ATTRIBUTE); return LEFT_BRACKET; }
+  "]"                            { return RIGHT_BRACKET; }
+  {COMMENT}                      { return COMMENT; }
+  {IDENTIFIER}                   { return IDENTIFIER; }
+}
+
+<DATA_BODY_ATTRIBUTE> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+
+  "("                            { yybegin(DATA_BODY_ATTRIBUTE_PARAMETER_LIST); return LEFT_PAREN; }
+  ")"                            { return RIGHT_PAREN; }
+
+  {IDENTIFIER}                   { return ATTRIBUTENAME; }
+  ,                              { return COMMA; }
+  ]                              { yybegin(DATA_BODY); return RIGHT_BRACKET; }
+}
+
+<DATA_BODY_ATTRIBUTE_PARAMETER_LIST> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+
+  ")"                            { yybegin(DATA_BODY_ATTRIBUTE); return RIGHT_PAREN; }
+  ,                              { return COMMA; }
+
+  {IDENTIFIER}                   { yybegin(DATA_BODY_ATTRIBUTE_ARGUMENT); return IDENTIFIER; }
+}
+
+<DATA_BODY_ATTRIBUTE_ARGUMENT> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+  ":"                            { return COLON; }
+  {ATTRIBUTEPARAMETERVALUE}      { yybegin(DATA_BODY_ATTRIBUTE_PARAMETER_LIST); return ATTRIBUTEPARAMETERVALUE; }
+}
+
+<DATA_BODY_TYPE> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+  {COMMENT}                      { return COMMENT; }
+
+  "string"                       { yybegin(DATA_BODY_TYPE_END); return STRING; }
+  "boolean"                      { yybegin(DATA_BODY_TYPE_END); return BOOLEAN; }
+  "int32"                        { yybegin(DATA_BODY_TYPE_END); return INT32; }
+  "int64"                        { yybegin(DATA_BODY_TYPE_END); return INT64; }
+  "double"                       { yybegin(DATA_BODY_TYPE_END); return DOUBLE; }
+  "decimal"                      { yybegin(DATA_BODY_TYPE_END); return DECIMAL; }
+  "datetime"                     { yybegin(DATA_BODY_TYPE_END); return DATETIME; }
+  "bytes"                        { yybegin(DATA_BODY_TYPE_END); return BYTES; }
+  "object"                       { yybegin(DATA_BODY_TYPE_END); return OBJECT; }
+  "map"                          { yybegin(DATA_BODY_TYPE_END); return MAP; }
+  "result"                       { yybegin(DATA_BODY_TYPE_END); return RESULT; }
+  "nullable"                     { yybegin(DATA_BODY_TYPE_END); return NULLABLE; }
+  "error"                        { yybegin(DATA_BODY_TYPE_END); return ERROR; }
+
+  {IDENTIFIER}                   { yybegin(DATA_BODY_TYPE_END); return TYPENAME; }
+
+  "}"                            { yybegin(SERVICE_BODY); return RIGHT_BRACE; }
+}
+
+<DATA_BODY_TYPE_END> {
+    {WHITE_SPACE}                  { return WHITE_SPACE; }
+    {COMMENT}                      { return COMMENT; }
+
+    "<"                            { yybegin(DATA_BODY_TYPE); return LEFT_ANGLE; }
+    ">"                            { return RIGHT_ANGLE; }
+    "["                            { return LEFT_BRACKET; }
+    "]"                            { return RIGHT_BRACKET; }
+    "!"                            { return BANG; }
+
+    ";"                            { yybegin(DATA_BODY); return SEMI; }
+
+    // Identifiers shouldn't be here, so break back into the body definition
+    {IDENTIFIER}                   { yybegin(DATA_BODY); return IDENTIFIER; }
+    "}"                            { yybegin(SERVICE_BODY); return RIGHT_BRACE; }
+}
+
+<LIST_BODY> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+
+  "{"                            { return LEFT_BRACE; }
+  "}"                            { yybegin(SERVICE_BODY); return RIGHT_BRACE; }
+  ","                            { return COMMA; }
+  "["                            { yybegin(LIST_BODY_ATTRIBUTE); return LEFT_BRACKET; }
+  "]"                            { return RIGHT_BRACKET; }
+  {COMMENT}                      { return COMMENT; }
+  {IDENTIFIER}                   { return IDENTIFIER; }
+}
+
+<LIST_BODY_ATTRIBUTE> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+
+  "("                            { yybegin(LIST_BODY_ATTRIBUTE_PARAMETER_LIST); return LEFT_PAREN; }
+  ")"                            { return RIGHT_PAREN; }
+
+  {IDENTIFIER}                   { return ATTRIBUTENAME; }
+  ,                              { return COMMA; }
+  ]                              { yybegin(LIST_BODY); return RIGHT_BRACKET; }
+}
+
+<LIST_BODY_ATTRIBUTE_PARAMETER_LIST> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+
+  ")"                            { yybegin(LIST_BODY_ATTRIBUTE); return RIGHT_PAREN; }
+  ,                              { return COMMA; }
+
+  {IDENTIFIER}                   { yybegin(LIST_BODY_ATTRIBUTE_ARGUMENT); return IDENTIFIER; }
+}
+
+<LIST_BODY_ATTRIBUTE_ARGUMENT> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+  ":"                            { return COLON; }
+  {ATTRIBUTEPARAMETERVALUE}      { yybegin(LIST_BODY_ATTRIBUTE_PARAMETER_LIST); return ATTRIBUTEPARAMETERVALUE; }
+}
+
+<EXTERN_DECL> {
+  {WHITE_SPACE}                  { return WHITE_SPACE; }
+
+  "data"                         { return DATA; }
+  "enum"                         { return ENUM; }
+
+  ";"                            { yybegin(SERVICE_BODY); return SEMI; }
+
+  {COMMENT}                      { return COMMENT; }
+  {IDENTIFIER}                   { return IDENTIFIER; }
+}
+
+<MARKDOWN_SECTION> {
+  \r                              { return WHITE_SPACE; }
+  \n                              { return WHITE_SPACE; }
+  {MARKDOWN_HEADING}              { return MARKDOWNHEADING; }
+  {MARKDOWN_TEXT}                 { return MARKDOWNTEXT; }
 }
 
 [^] { return BAD_CHARACTER; }
