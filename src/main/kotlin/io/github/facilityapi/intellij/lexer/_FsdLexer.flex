@@ -88,6 +88,7 @@ MARKDOWN_TEXT=.+
   "errors"                       { yybegin(LIST_BODY); return ERRORS; }
   "enum"                         { yybegin(LIST_BODY); return ENUM; }
 
+  ";"                            { return SEMI; }
   "{"                            { return LEFT_BRACE; }
   "}"                            { yybegin(MARKDOWN_SECTION); return RIGHT_BRACE; }
   "["                            { yybegin(SERVICE_BODY_ATTRIBUTE); return LEFT_BRACKET; }

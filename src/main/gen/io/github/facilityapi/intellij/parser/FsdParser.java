@@ -787,7 +787,7 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ('{' decorated_service_item* '}') | ';' decorated_service_item* | decorated_service_item
+  // ('{' decorated_service_item* '}') | (';' decorated_service_item*) | decorated_service_item
   public static boolean service_items(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "service_items")) return false;
     boolean r;

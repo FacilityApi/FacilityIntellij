@@ -43,7 +43,7 @@
 definition ::= (attribute_list* service_spec) markdown_remarks*
 
 service_spec ::= service identifier service_items { pin=1 }
-service_items ::= ('{' decorated_service_item* '}') | ';' decorated_service_item* | decorated_service_item
+service_items ::= ('{' decorated_service_item* '}') | (';' decorated_service_item*) | decorated_service_item
 decorated_service_item ::= attribute_list* service_item
 private service_item ::=  (extern_decl | enum_spec | data_spec | method_spec | error_set_spec) { recoverWhile=service_item_recover }
 private service_item_recover ::= !('[' | '}' | extern | enum | data | errors | method)
