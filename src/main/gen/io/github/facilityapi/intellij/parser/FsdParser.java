@@ -787,14 +787,13 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ('{' decorated_service_item* '}') | (';' decorated_service_item* &('#' | <<eof>>)) | decorated_service_item
+  // ('{' decorated_service_item* '}') | ([';'] decorated_service_item*)
   public static boolean service_items(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "service_items")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, SERVICE_ITEMS, "<service items>");
     r = service_items_0(b, l + 1);
     if (!r) r = service_items_1(b, l + 1);
-    if (!r) r = decorated_service_item(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -822,16 +821,22 @@ public class FsdParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // ';' decorated_service_item* &('#' | <<eof>>)
+  // [';'] decorated_service_item*
   private static boolean service_items_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "service_items_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, SEMI);
+    r = service_items_1_0(b, l + 1);
     r = r && service_items_1_1(b, l + 1);
-    r = r && service_items_1_2(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  // [';']
+  private static boolean service_items_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "service_items_1_0")) return false;
+    consumeToken(b, SEMI);
+    return true;
   }
 
   // decorated_service_item*
@@ -843,27 +848,6 @@ public class FsdParser implements PsiParser, LightPsiParser {
       if (!empty_element_parsed_guard_(b, "service_items_1_1", c)) break;
     }
     return true;
-  }
-
-  // &('#' | <<eof>>)
-  private static boolean service_items_1_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "service_items_1_2")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _AND_);
-    r = service_items_1_2_0(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // '#' | <<eof>>
-  private static boolean service_items_1_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "service_items_1_2_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, "#");
-    if (!r) r = eof(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */
