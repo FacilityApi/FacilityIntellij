@@ -28,15 +28,9 @@ public class FsdMarkdownRemarksImpl extends ASTWrapperPsiElement implements FsdM
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getMarkdownheading() {
-    return findChildByType(MARKDOWNHEADING);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getMarkdowntext() {
-    return findChildByType(MARKDOWNTEXT);
+    return findNotNullChildByType(MARKDOWNHEADING);
   }
 
 }

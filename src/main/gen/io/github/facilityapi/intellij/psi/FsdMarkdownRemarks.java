@@ -7,10 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface FsdMarkdownRemarks extends PsiElement {
 
-  @Nullable
+  @NotNull
   PsiElement getMarkdownheading();
-
-  @Nullable
-  PsiElement getMarkdowntext();
 
 }
