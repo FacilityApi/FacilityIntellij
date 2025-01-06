@@ -787,13 +787,13 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ('{' decorated_service_item* '}') | decorated_service_item
+  // ('{' decorated_service_item* '}') | ([';'] decorated_service_item*)
   public static boolean service_items(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "service_items")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, SERVICE_ITEMS, "<service items>");
     r = service_items_0(b, l + 1);
-    if (!r) r = decorated_service_item(b, l + 1);
+    if (!r) r = service_items_1(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -817,6 +817,35 @@ public class FsdParser implements PsiParser, LightPsiParser {
       int c = current_position_(b);
       if (!decorated_service_item(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "service_items_0_1", c)) break;
+    }
+    return true;
+  }
+
+  // [';'] decorated_service_item*
+  private static boolean service_items_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "service_items_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = service_items_1_0(b, l + 1);
+    r = r && service_items_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // [';']
+  private static boolean service_items_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "service_items_1_0")) return false;
+    consumeToken(b, SEMI);
+    return true;
+  }
+
+  // decorated_service_item*
+  private static boolean service_items_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "service_items_1_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!decorated_service_item(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "service_items_1_1", c)) break;
     }
     return true;
   }
