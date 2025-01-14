@@ -67,6 +67,10 @@ public class FsdVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitEventSpec(@NotNull FsdEventSpec o) {
+    visitPsiElement(o);
+  }
+
   public void visitExternDecl(@NotNull FsdExternDecl o) {
     visitPsiElement(o);
   }

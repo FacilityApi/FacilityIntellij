@@ -53,6 +53,12 @@ public class FsdDecoratedServiceItemImpl extends ASTWrapperPsiElement implements
 
   @Override
   @Nullable
+  public FsdEventSpec getEventSpec() {
+    return findChildByClass(FsdEventSpec.class);
+  }
+
+  @Override
+  @Nullable
   public FsdExternDecl getExternDecl() {
     return findChildByClass(FsdExternDecl.class);
   }

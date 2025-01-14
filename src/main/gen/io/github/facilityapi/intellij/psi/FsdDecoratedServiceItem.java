@@ -20,6 +20,9 @@ public interface FsdDecoratedServiceItem extends FsdDecoratedElement {
   FsdErrorSetSpec getErrorSetSpec();
 
   @Nullable
+  FsdEventSpec getEventSpec();
+
+  @Nullable
   FsdExternDecl getExternDecl();
 
   @Nullable

@@ -571,6 +571,23 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // event identifier_declaration request_fields ':' response_fields
+  public static boolean event_spec(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "event_spec")) return false;
+    if (!nextTokenIs(b, EVENT)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, EVENT_SPEC, null);
+    r = consumeToken(b, EVENT);
+    p = r; // pin = 1
+    r = r && report_error_(b, identifier_declaration(b, l + 1));
+    r = p && report_error_(b, request_fields(b, l + 1)) && r;
+    r = p && report_error_(b, consumeToken(b, COLON)) && r;
+    r = p && response_fields(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
   // extern (data | enum) identifier ';'
   public static boolean extern_decl(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "extern_decl")) return false;
@@ -747,7 +764,7 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // extern_decl | enum_spec | data_spec | method_spec | error_set_spec
+  // extern_decl | enum_spec | data_spec | method_spec | event_spec | error_set_spec
   static boolean service_item(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "service_item")) return false;
     boolean r;
@@ -756,6 +773,7 @@ public class FsdParser implements PsiParser, LightPsiParser {
     if (!r) r = enum_spec(b, l + 1);
     if (!r) r = data_spec(b, l + 1);
     if (!r) r = method_spec(b, l + 1);
+    if (!r) r = event_spec(b, l + 1);
     if (!r) r = error_set_spec(b, l + 1);
     exit_section_(b, l, m, r, false, FsdParser::service_item_recover);
     return r;
