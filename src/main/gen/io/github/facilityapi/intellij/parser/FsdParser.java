@@ -836,7 +836,7 @@ public class FsdParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (string | boolean | int32 | int64 | double | decimal | datetime | bytes | object | map | result | error | nullable | reference_type) [ type_parameter ] [ ('['']')* ]
+  // (string | boolean | int32 | int64 | double | decimal | float | datetime | bytes | object | map | result | error | nullable | reference_type) [ type_parameter ] [ ('['']')* ]
   public static boolean type(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "type")) return false;
     boolean r;
@@ -848,7 +848,7 @@ public class FsdParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // string | boolean | int32 | int64 | double | decimal | datetime | bytes | object | map | result | error | nullable | reference_type
+  // string | boolean | int32 | int64 | double | decimal | float | datetime | bytes | object | map | result | error | nullable | reference_type
   private static boolean type_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "type_0")) return false;
     boolean r;
@@ -858,6 +858,7 @@ public class FsdParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, INT64);
     if (!r) r = consumeToken(b, DOUBLE);
     if (!r) r = consumeToken(b, DECIMAL);
+    if (!r) r = consumeToken(b, FLOAT);
     if (!r) r = consumeToken(b, DATETIME);
     if (!r) r = consumeToken(b, BYTES);
     if (!r) r = consumeToken(b, OBJECT);

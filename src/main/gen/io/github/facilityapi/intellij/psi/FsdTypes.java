@@ -52,6 +52,7 @@ public interface FsdTypes {
   IElementType ERROR = new FsdElementType("error");
   IElementType ERRORS = new FsdElementType("errors");
   IElementType EXTERN = new FsdElementType("extern");
+  IElementType FLOAT = new FsdElementType("float");
   IElementType IDENTIFIER = new FsdElementType("identifier");
   IElementType INT32 = new FsdElementType("int32");
   IElementType INT64 = new FsdElementType("int64");
