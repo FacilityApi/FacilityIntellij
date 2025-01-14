@@ -27,6 +27,7 @@ class FsdSyntaxHighlighter : SyntaxHighlighterBase() {
 
             FsdTypes.STRING,
             FsdTypes.BOOLEAN,
+            FsdTypes.FLOAT,
             FsdTypes.INT32,
             FsdTypes.INT64,
             FsdTypes.DOUBLE,

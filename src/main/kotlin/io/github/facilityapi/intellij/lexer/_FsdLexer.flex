@@ -167,6 +167,7 @@ MARKDOWN_TEXT=.+
 
   "string"                       { yybegin(METHOD_BODY_TYPE_END); return STRING; }
   "boolean"                      { yybegin(METHOD_BODY_TYPE_END); return BOOLEAN; }
+  "float"                        { yybegin(METHOD_BODY_TYPE_END); return FLOAT; }
   "int32"                        { yybegin(METHOD_BODY_TYPE_END); return INT32; }
   "int64"                        { yybegin(METHOD_BODY_TYPE_END); return INT64; }
   "double"                       { yybegin(METHOD_BODY_TYPE_END); return DOUBLE; }
