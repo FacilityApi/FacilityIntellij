@@ -46,6 +46,7 @@ class FsdSyntaxHighlighter : SyntaxHighlighterBase() {
             FsdTypes.SERVICE,
             FsdTypes.DATA,
             FsdTypes.METHOD,
+            FsdTypes.EVENT,
             FsdTypes.ENUM,
             FsdTypes.ERRORS,
             FsdTypes.EXTERN,

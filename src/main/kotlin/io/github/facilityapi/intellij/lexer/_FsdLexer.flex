@@ -84,6 +84,7 @@ MARKDOWN_TEXT=.+
 
   "extern"                       { yybegin(EXTERN_DECL); return EXTERN; }
   "method"                       { yybegin(METHOD_BODY); return METHOD; }
+  "event"                        { yybegin(METHOD_BODY); return EVENT; }
   "data"                         { yybegin(DATA_BODY); return DATA; }
   "errors"                       { yybegin(LIST_BODY); return ERRORS; }
   "enum"                         { yybegin(LIST_BODY); return ENUM; }

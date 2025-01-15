@@ -45,7 +45,7 @@ definition ::= (attribute_list* service_spec) markdown_remarks*
 service_spec ::= service identifier service_items { pin=1 }
 service_items ::= ('{' decorated_service_item* '}') | decorated_service_item
 decorated_service_item ::= attribute_list* service_item
-private service_item ::=  (extern_decl | enum_spec | data_spec | method_spec | error_set_spec) { recoverWhile=service_item_recover }
+private service_item ::=  (extern_decl | enum_spec | data_spec | method_spec | event_spec | error_set_spec) { recoverWhile=service_item_recover }
 private service_item_recover ::= !('[' | '}' | extern | enum | data | errors | method)
 
 private field_list ::= '{' (comment+ | decorated_field)* '}' { pin=1 }
@@ -53,6 +53,7 @@ private field_list ::= '{' (comment+ | decorated_field)* '}' { pin=1 }
 request_fields ::= field_list
 response_fields ::= field_list
 method_spec ::= method identifier_declaration request_fields ':' response_fields { pin=1 }
+event_spec ::= event identifier_declaration request_fields ':' response_fields { pin=1 }
 
 data_spec ::= data identifier_declaration field_list { pin=1 }
 
