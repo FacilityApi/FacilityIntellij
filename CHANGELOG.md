@@ -4,6 +4,10 @@
 
 ## Unreleased
 
+## 1.3.5 - 2025-01-15
+- Add support for `float` keyword
+- Add support for `event` keyword
+
 ## 1.3.4 - 2024-10-22
 - Remove use of deprecated APIs
 
